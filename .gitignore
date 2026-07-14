@@ -36,9 +36,25 @@
 *.asv
 *.m~
 *.mex*
-slprj/
-*.slxc
 *.autosave
+
+# ---- Simulink / Embedded Coder generated build artifacts ----
+slprj/
+sccprj/
+*.slxc
+*_ert_rtw/
+*_grt_rtw/
+*_rtw/
+codegen/
+buildInfo.mat
+rtw_proj.tmw
+sl_proj.tmw
+# Arduino / embedded build outputs
+*.elf
+*.eep
+*.hex
+*.o
+*.obj
 
 # ---- OS / editor ----
 Thumbs.db
