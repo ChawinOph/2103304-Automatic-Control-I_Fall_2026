@@ -1,0 +1,296 @@
+\documentclass[12pt, aspectratio=169]{beamer}
+% \documentclass[12pt, aspectratio=169, handout]{beamer}
+% [8pt], [9pt], [10pt], [11pt], [12pt], [14pt], [17pt], [20pt], [bigger], and [small]
+
+\input{../preamble.tex}
+
+% https://www.overleaf.com/learn/latex/Beamer#Beamer_main_features
+%------------------------------------------------------------
+%This block of code defines the information to appear in the
+%Title page
+\title[Lecture 1: Introduction to Control Systems (3 August 2026)] %optional
+{\textbf{Lecture 1: Introduction to Control Systems}}
+
+\subtitle{Analysis, Design, and Applications}
+
+%------------------------------------------------------------
+\begin{document}
+
+%The next statement creates the title page.
+% \frame{\titlepage}
+\maketitle
+
+%---------------------------------------------------------
+%This block of code is for the table of contents after
+%the title page
+\begin{frame}
+\frametitle{Lecture Outline}
+\tableofcontents
+\end{frame}
+%---------------------------------------------------------
+\section{Course Logistics}
+
+% What Class Logistics Covers: Class logistics generally answer the following operational questions:Meetings: Where and when the class takes place, as well as whether attendance is mandatory.Instructor Contact: Office hours, email addresses, and the best way to get in touch.Grading Policy: How your final grade is calculated (e.g., exams, participation, or group projects).Deadlines: The dates for submitting homework and taking tests.Materials: The textbooks, software, or tools required for the course.
+
+\begin{frame}{Course Logistics}
+% \large
+    \begin{itemize}
+        \item Instructors: 
+        \begin{itemize}
+            \item Chawin Ophaswongse, Ph.D. \\
+            \item Assoc. Prof. Thitima Jintanawan, Ph.D. (Co-Instructor)% (TJW)
+        \end{itemize}
+        \item Main Communication: MyCourseVille (Vote here ...)
+        \item Office Hours: TBD \\ Hans Buntli Building, 4th Floor, Room 400
+        % \item Encourage running MATLAB code during lectures
+        \item TAs: Namo (Discord Admin)
+        \item Uploaded lecture notes and technical handouts
+        \item See additional details in syllabus
+        \item Install MATLAB Control System Toolbox
+    \end{itemize}
+\end{frame}
+
+\include{tex_files/assessment}
+
+% Move toward the end after introducing control?
+%--------------------------------------------------------
+
+% \include{tex_files/weekly_lecture_plan_simplified}
+
+%--------------------------------------------------------
+
+\begin{frame}{Textbooks}
+Primary
+\begin{itemize}
+    \item Nise, N. S. (2011). Control Systems Engineering (6th ed.). John Wiley \& Sons.
+\end{itemize}
+Supplementary
+\begin{itemize}
+    \item Ogata, K. (2010). Modern Control Engineering (5th ed.). Prentice Hall.
+    \item  Dorf, R. C., \& Bishop, R. H. (2017). Modern Control Systems (13th ed.). Pearson.
+\end{itemize}
+\end{frame}
+
+%---------------------------------------------------------
+\section{Course Overview}
+
+%---------------------------------------------------------
+
+\begin{frame}{}
+\begin{center}
+    \Large \textbf{What Are Control Systems? \newline \newline Why Do We Need Them?}
+\end{center}
+\end{frame}
+
+\begin{frame}{}
+    \begin{center}
+    \href{https://www.youtube.com/watch?v=hI9HQfCAw64}{Starship's Fifth Flight Test (Oct. 13, 2024)}\footnote{\tiny SpaceX: \url{https://www.youtube.com/watch?v=hI9HQfCAw64} (Duration 3:27 min)}
+    \includegraphics[width=0.85\textwidth]{SpaceX_chopstick_landing.png} \\ \tiny (Image Credit: SpaceX)
+    \end{center}
+\end{frame}
+
+\begin{frame}{}
+    \begin{columns}
+    \centering
+    \begin{column}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{SPACEX_STARSHIP_INFOGRAPHIC.png}
+        \\ \tiny (Image Credit: SpaceX)
+    \end{column}
+    \begin{column}{0.5\textwidth}
+    The launch, flight, and landing paths of the Super Heavy Booster and Starship
+    \\[10pt]
+    \begin{itemize}
+        \item How do they achieve these complex spacecraft maneuvers?
+        % landing leg, Grid Fins, multi-engine systems
+        % Cold gas Thusters
+        % Inertia Navigation System and GPS
+        \item<2> More importantly, how do they make sure the rockets did not deviate from their course?
+        % Many uncertainties (atmospheric disturbance, wind, temperature, model error)
+        % It has to know where it is (GPS, Inertia Navigation System)
+        % it know deviations from the predefined paths
+        % correct its course by 
+    \end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Basic Anatomy of Control System}
+    \input{tex_files/diagram_example}
+    % add a block diagram of a control system with input, output, and feedback loop
+    % match each block with the rocket example (system, sensor, controller, actuator)
+\end{frame}
+
+\begin{frame}{Inverted Pendulum Example}
+    Simplification of rocket dynamics: The Furuta Pendulum (Physical Demo in Classroom)
+    Analogy Diagram of system-sensor-controller-actuator
+\end{frame}
+
+\begin{frame}{}
+    % \begin{tikzpicture}[remember picture, overlay]
+    % \node [anchor=north east, inner sep=0pt, label={[text width=4cm]below:My text is here, my very very long long text is here.}] (img) at (current page.north east)
+    % {\includegraphics[height=3cm]{example-image-a}};
+    % \end{tikzpicture}
+    Pictures of Elvators, Air Conditioners, Process Plants, Industrial Robots, Humanoid Robots, Biped Robots, Surgical Robots (Da Vinci), etc.
+\end{frame}
+% \footnotetext{\url{}} 
+    % SpaceX Rocket 
+    % Elevators
+    % Process Plant
+    % industrial robots
+    % Humanoid Robot (RL + PD stack)
+    % biped robot
+    % surgical robot (davinci) (teleoperation + precision, safety, stability)
+
+
+\begin{frame}
+How to model each of the dynamical system/block (Plants, Actuators, Controllers, etc.)?
+% show a plant block with input and output
+\end{frame}
+
+\begin{frame}{What you will learn in this course}
+    % What we will learn in this course:
+    % \begin{itemize}
+    %     \item How to model a dynamical system (plant) and its components (actuators, sensors, controllers, etc.)
+    %     \item How to analyze the system's behavior (stability, transient response, steady-state error, etc.)
+    %     \item How to design a controller to achieve desired performance (PID, lead-lag, state feedback, etc.)
+    %     \item How to implement the controller in real-time (using microcontrollers etc.)
+    %     \item How to test and validate the system's performance (simulation, experiments, etc.)
+    % \end{itemize}
+
+    By midterm, you will have enough knowledge to prevent your system from blowing up (System Stability).
+    \newline \newline \pause
+    By end of course, you will have enough knowledge to make your system work as intended.
+\end{frame}
+
+\begin{frame}{Course Schedule (1st Semester 2026)}
+
+    \renewcommand{\arraystretch}{1.25}
+    \setlength{\tabcolsep}{3pt}
+    \tiny
+    % \begin{tabular}{@{}p{0.4cm}p{3.5cm}p{5.0cm}p{2.6cm}@{}}
+    % สอบกลางภาค
+    % 23 ก.ย. 2569 13:00 - 16:00
+    % สอบปลายภาค
+    % 30 พ.ย. 2569 08:30 - 11:30
+    % Homework due 10 days after assigned, unless otherwise specified
+    
+    \begin{tabular}{c|r|l|l|c|l}
+    \hline
+    \rowcolor{brandred20}
+    \textbf{Week} & \textbf{Date} & \textbf{Topic} & \textbf{Details} & \textbf{Assignment} &\textbf{Servo Mini-lab (45 mins)} \\
+    \hline
+    1 & 3 Aug & Intro \& Math Primer & Open-/Closed-Loop Control $\cdot$ ODEs $\cdot$ Laplace & HW1 & \\
+    % Open/closed loop, anatomy; m-s-d ODE; Laplace; LTI \& convolution; \alert{SS preview} &
+    % Laplace Transform; LTI \& Convolution; State Space &
+    % \fillin{form teams / kit pickup?} \\
+    % \hline
+    2 & 10 Aug & Modeling I & LTI $\cdot$ Transfer Functions $\cdot$ Elec./Mech. Systems & & Lab1: Intro \& Setup\\
+    % State Space; $A,B,C,D$; $e^{At}$, eigenvalues ue theo
+    % \fillin{...} \\
+    % \hline
+    3 & 17 Aug & Modeling II & State Space $\cdot$ Nonlinearities $\cdot$ Linearization & HW2 & \\
+    % % \alert{TF $\leftrightarrow$ SS}, canonical forms; MIMO; DC motor + gears; linearization &
+    % % \fillin{motor sys-ID / bench setup?} \\
+    % \hline
+    4 & 24 Aug & Time Response & 1st/2nd-order $\cdot$ Transient-Response Specifications& HW3 & Lab2: Time Response\\
+    % % 1st/2nd-order; poles/zeros; $\zeta,\omega_n$; rise / OS / settling &
+    % % \fillin{...} \\
+    % \hline
+    5 & 31 Aug & Block Diagrams & Reduction $\cdot$ Equivalent Forms $\cdot$ Feedback Loop  & &\\
+    % % Reduction; closed-loop TF; \alert{SS feedback $A-BK$}; cascade control &
+    % % \fillin{...} \\
+    % \hline
+    6 & 7 Sep & Stability & Routh--Hurwitz Criterion $\cdot$ Gain Range for Stability & HW4 & Lab3: P-Control \& Stability \\
+    % % Routh--Hurwitz; \alert{eig$(A)=$ poles}; $K_p$ range &
+    % \alert{Motor setup report due} \\
+    % \hline
+    7 & 14 Sep & Midterm Review & Cover Topics from Weeks 1--6 & & \\
+    % Problems first; synthesis second &
+    % % \fillin{...} \\
+    \midrule
+    \multicolumn{6}{l}{Midterm Exam: Wednesday, 23 Sep 2026, 13:00 - 16:00} \\
+    \midrule
+    \pause
+    8 & 28 Sep & Steady-State Errors & System Type $\cdot$ Gain Design $\cdot$ Disturbances & HW5 & \\
+    % System type; state aug. $\dot x_e{=}r{-}y$; \alert{integral action; PID} &
+    % % \fillin{controller spec/design start?} \\
+    % \hline
+    9 & 5 Oct & Root Locus I & Rules for Sketching $\cdot$ Transient Response via Gain & HW6 & \\
+    % The 8 rules; \alert{RL $\equiv$ SS char.\ poly}; sketching &
+    % \fillin{...} \\
+    % \hline
+    10 & 12 Oct & Root Locus II & PI/PD/PID Controller $\cdot$ Lead/Lag Compensation& & Lab4: Root Locus \\
+    % Lead/lag; PID via RL; \alert{Ziegler--Nichols}; PZC pitfalls &
+    % % \fillin{controller design due?} \\
+    % \hline
+    11 & 19 Oct & Frequency Response I & Asymptotic Bode Plots $\cdot$ Bandwidth & HW7 & \\
+    % Asymptotic Bode; construction; \alert{SS frequency response} &
+    % \fillin{...} \\
+    % \hline
+    12 & 26 Oct & Frequency Response II & Nyquist \& Stability Margins $\cdot$ Lead/Lag $\cdot$ PI/PD/PID & &  Lab5: Frequency Response\\
+    % Nyquist; gain/phase margins; sensitivity $S$, $T$ &
+    % % \fillin{implementation / HIL?} \\
+    % \hline
+    13 & 2 Nov & Design via State Space & Controllability $\cdot$ Full-State Feedback (Pole Placement) & HW8 & Lab6: Pole Placement\\
+    % Controllability \& observability; \alert{pole placement, Ackermann}; observer &
+    % % \fillin{dry-run / checkoff?} \\
+    % \hline
+    14 & 9 Nov & Project Demo Day & Group Presentations $\cdot$ Control Competition & \\
+    % Diagnostic-fix presentations; tracking competition; judging &
+    % % \alert{Demo + competition} \\
+    % \hline
+    15 & 16 Nov & Final Review & Cover ALL Topics& \\
+    % Recap W8--13; common pitfalls; exam strategy &
+    % % \fillin{final report due?} \\
+    % % \hline
+    \midrule
+    \multicolumn{5}{l}{Final Exam: Monday, 30 Nov 2026, 8:30 - 11:30} \\
+    \midrule
+    \multicolumn{6}{r}{\textbullet~\textit{Pre-lab handout released \textbf{one week} before each mini-lab; reading required before the session.}} \\
+    \multicolumn{6}{r}{\textbullet~\textit{Lab Report (Up to 4 people per group) is due \textbf{one week} after the lab session.}} \\
+    \end{tabular} 
+\end{frame}
+
+\begin{frame}{Final Project}
+    \begin{columns}
+
+        \begin{column}{0.6\textwidth}
+            \begin{itemize}
+                \item Up to 4 people per group
+                \item Design and implement a controller for a given plant (Brushed DC motor system with a load like inertia disk or a pendulum)
+                \item Use the knowledge and skills learned in the course to achieve desired performance
+                \item Present your design and results on the final project demo day
+                \item Submit milestone reports and final report 
+            \end{itemize}
+        \end{column}
+
+        \begin{column}{0.4\textwidth}
+            Picture of Brushed DC Motor with Load (or other plant)
+        \end{column}
+
+    \end{columns}
+\end{frame}
+
+\begin{frame}{}
+    \begin{columns}
+        \begin{column}{0.15\textwidth}
+        The Bigger Picture... \newline \newline
+        How much of this do you think we cover?
+        \end{column}
+        \begin{column}{0.85\textwidth}
+            \centering
+            \only<1>{\includegraphics[width=0.9\textwidth]{Control_Map_ver5.png}}%
+            \only<2>{\includegraphics[width=0.9\textwidth]{Control_Map_Annotated.png}}%
+            \\ \tiny (Image Credit: Brian Douglas)
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\section{Dynamic Modeling, ODEs, and Laplace Transform}
+
+\begin{frame}{Dynamic Modeling}
+    Consider a mass-spring-damper
+\end{frame}
+
+\end{document}

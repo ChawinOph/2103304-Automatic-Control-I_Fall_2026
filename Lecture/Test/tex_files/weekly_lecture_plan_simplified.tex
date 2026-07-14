@@ -1,0 +1,267 @@
+%=========================================================
+% Weekly Lecture Plan — SIMPLIFIED VERSION
+% Three frames: Weeks 1–7, Weeks 8–15, Acronyms reference.
+% Optimized for compactness: 1–2 ultra-short bullets per cell.
+% Designed for \input{} into a beamer deck.
+%=========================================================
+
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Weeks 1--7 (Pre-Midterm)}
+
+\renewcommand{\arraystretch}{1.0}
+\tiny
+\begin{tabular}{@{}p{0.4cm}p{1.9cm}p{3.4cm}p{3.4cm}p{2.6cm}@{}}
+\toprule
+\rowcolor{brandred20}
+\textbf{Wk} & \textbf{Theme} & \textbf{First half} & \textbf{Second half} & \textbf{Handout} \\
+\midrule
+1 & Intro \& Modeling primer &
+\textbullet\ Intro: motivation, open / closed, anatomy \newline
+\textbullet\ m-s-d ODE; Laplace inverse &
+\textbullet\ LTI; convolution; impulse \newline
+\textbullet\ \alert{SS form preview} &
+LA primer; Laplace tables \\
+\midrule
+2 & Modeling I (SS deep) &
+\textbullet\ \alert{Cast m-s-d in SS}; $A, B, C, D$ \newline
+\textbullet\ $e^{At}$; eigenvalues &
+\textbullet\ IVT / FVT; all 4 methods agree &
+Convolution; higher-order \\
+\midrule
+3 & Modeling II: TF $\leftrightarrow$ SS, MIMO &
+\textbullet\ \alert{TF $\leftrightarrow$ SS}; canonical forms &
+\textbullet\ MIMO; DC motor + gears \newline
+\textbullet\ Linearization; equivalents &
+Koopman; PINNs \\
+\midrule
+4 & Time Response &
+\textbullet\ 1st / 2nd-order; poles / zeros &
+\textbullet\ $\zeta$, $\omega_n$; rise / OS / settling \newline
+\textbullet\ \alert{From $e^{At}$} &
+Dominant poles; non-min phase \\
+\midrule
+5 & Block Diagrams \& Cascade &
+\textbullet\ Reduction; closed-loop TF \newline
+\textbullet\ \alert{SS feedback $A - BK$} &
+\textbullet\ \alert{Cascade control} &
+Mason; networked \\
+\midrule
+6 & \alert{Stability + eigenvalues} &
+\textbullet\ Routh--Hurwitz \newline
+\textbullet\ \alert{Shortcut to eig$(A_\mathrm{cl})$} &
+\textbullet\ $K_p$ range; \alert{eig$(A) =$ poles} &
+Routh edge cases; LMIs \\
+\midrule
+7 & Midterm Review (\alert{flipped}) &
+\textbullet\ Problems first &
+\textbullet\ Synthesis second &
+Survival guide \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.05cm}
+\scriptsize\textit{Midterm covers Weeks 1--6.}
+
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Weeks 8--15 (Post-Midterm)}
+
+\renewcommand{\arraystretch}{1.0}
+\tiny
+\begin{tabular}{@{}p{0.4cm}p{1.9cm}p{3.4cm}p{3.4cm}p{2.6cm}@{}}
+\toprule
+\rowcolor{brandred20}
+\textbf{Wk} & \textbf{Theme} & \textbf{First half} & \textbf{Second half} & \textbf{Handout} \\
+\midrule
+8 & \alert{SSE \& PID intro} &
+\textbullet\ SSE; system type \newline
+\textbullet\ State aug.\ $\dot x_e {=} r {-} y$ &
+\textbullet\ \alert{Integral action; PID intro} &
+Anti-windup; MRAC \\
+\midrule
+9 & \alert{Root Locus (RL) I} &
+\textbullet\ The 8 rules \newline
+\textbullet\ \alert{Bridge: RL $\equiv$ SS char.\ poly} &
+\textbullet\ Sketching examples &
+RL multi-parameter \\
+\midrule
+10 & RL II: design &
+\textbullet\ Lead / lag; PID via RL &
+\textbullet\ \alert{Z--N}; PZC pitfalls \newline
+\textbullet\ Pole-placement preview &
+Z--N variants; MPC \\
+\midrule
+11 & Freq.\ Response I &
+\textbullet\ Asymptotic Bode &
+\textbullet\ Bode plot construction \newline
+\textbullet\ \alert{SS frequency response} &
+$\mathcal{H}_\infty$ preview \\
+\midrule
+12 & Freq.\ Response II &
+\textbullet\ Nyquist; gain / phase margins &
+\textbullet\ \alert{Bode-domain compensator design} \newline
+\textbullet\ Sensitivity $S$, $T$ &
+System ID; $\mathcal{H}_\infty$ \\
+\midrule
+13 & \alert{State Space} &
+\textbullet\ State eqs (recap W2) \newline
+\textbullet\ Controllability \& observability &
+\textbullet\ \alert{Pole placement; Ackermann} \newline
+\textbullet\ Luenberger observer &
+\alert{SS Advanced} ($\sim$25pp) \\
+\midrule
+14 & \alert{Project Demo Day} &
+\textbullet\ Diagnostic-fix presentations &
+\textbullet\ Tracking competition; judging &
+--- \\
+\midrule
+15 & \alert{Final Review} &
+\textbullet\ Recap W8--13 &
+\textbullet\ Common pitfalls; exam strategy &
+Frontiers; ``things forgotten'' \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.05cm}
+\scriptsize\textit{Final exam: SSE $\cdot$ RL design $\cdot$ Bode $\cdot$ state space.}
+
+\end{frame}
+
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Acronyms Used in the Weekly Plan}
+
+\scriptsize
+\begin{columns}[t]
+\column{0.5\textwidth}
+\textbf{Modeling \& Analysis}
+\begin{itemize}\setlength\itemsep{0.05cm}
+    \item \textbf{ODE} --- ordinary differential equation
+    \item \textbf{LTI} --- linear time-invariant
+    \item \textbf{SS} --- state space
+    \item \textbf{TF} --- transfer function
+    \item \textbf{SS2TF / TF2SS} --- state-space $\leftrightarrow$ transfer-function conversion
+    \item \textbf{IVT / FVT} --- initial / final value theorem
+    \item \textbf{MIMO} --- multi-input multi-output
+    \item \textbf{DC} --- direct current
+    \item \textbf{m-s-d} --- mass-spring-damper
+\end{itemize}
+
+\vspace{0.15cm}
+\textbf{Stability}
+\begin{itemize}\setlength\itemsep{0.05cm}
+    \item \textbf{LMI} --- linear matrix inequality
+\end{itemize}
+
+\column{0.5\textwidth}
+\textbf{Control Design}
+\begin{itemize}\setlength\itemsep{0.05cm}
+    \item \textbf{SSE} --- steady-state error
+    \item \textbf{PID} --- proportional--integral--derivative
+    \item \textbf{PI} --- proportional--integral
+    \item \textbf{RL} --- root locus (\emph{not} reinforcement learning, except W15)
+    \item \textbf{Z--N} --- Ziegler--Nichols
+    \item \textbf{PZC} --- pole-zero cancellation
+    \item \textbf{OS} --- overshoot
+\end{itemize}
+
+\vspace{0.15cm}
+\textbf{Modern / Advanced}
+\begin{itemize}\setlength\itemsep{0.05cm}
+    \item \textbf{MRAC} --- model reference adaptive control
+    \item \textbf{MPC} --- model predictive control
+    \item \textbf{LQR} --- linear quadratic regulator
+    \item \textbf{LQG} --- linear quadratic Gaussian
+    \item \textbf{LIP} --- linear inverted pendulum
+    \item \textbf{DCM} --- divergent component of motion
+    \item \textbf{PRBS} --- pseudo-random binary sequence
+    \item \textbf{PINN} --- physics-informed neural network
+\end{itemize}
+
+\end{columns}
+
+\end{frame}
+
+\begin{frame}{Course Schedule \& Project Milestones (15 Weeks)}
+
+    \renewcommand{\arraystretch}{1.1}
+    \setlength{\tabcolsep}{3pt}
+    \tiny
+    % \begin{tabular}{@{}p{0.4cm}p{3.5cm}p{5.0cm}p{2.6cm}@{}}
+
+%     สอบกลางภาค
+% 23 ก.ย. 2569 13:00 - 16:00
+% สอบปลายภาค
+% 30 พ.ย. 2569 08:30 - 11:30
+    
+    \begin{tabular}{llgl}
+    \hline
+    \rowcolor{brandred20}
+    \textbf{Wk} & \textbf{Main topics} & \textbf{Details} & \textbf{Project/Lab milestone} \\
+    \hline
+    1  & Intro \& Modeling primer &
+    Open/closed loop, anatomy; m-s-d ODE; Laplace; LTI \& convolution; \alert{SS preview} &
+    \fillin{form teams / kit pickup?} \\
+    \hline
+    2  & Modeling I (SS deep) &
+    \alert{Cast m-s-d in SS}; $A,B,C,D$; $e^{At}$, eigenvalues; IVT/FVT &
+    \fillin{...} \\
+    \hline
+    3  & Modeling II: TF $\leftrightarrow$ SS, MIMO &
+    \alert{TF $\leftrightarrow$ SS}, canonical forms; MIMO; DC motor + gears; linearization &
+    \fillin{motor sys-ID / bench setup?} \\
+    \hline
+    4  & Time Response &
+    1st/2nd-order; poles/zeros; $\zeta,\omega_n$; rise / OS / settling &
+    \fillin{...} \\
+    \hline
+    5  & Block Diagrams \& Cascade &
+    Reduction; closed-loop TF; \alert{SS feedback $A-BK$}; cascade control &
+    \fillin{...} \\
+    \hline
+    6  & \alert{Stability + eigenvalues} &
+    Routh--Hurwitz; \alert{eig$(A)=$ poles}; $K_p$ range &
+    \alert{Motor setup report due} \\
+    \hline
+    7  & Midterm Review (\alert{flipped}) &
+    Problems first; synthesis second &
+    \fillin{...} \\
+    \hline
+    8  & \alert{SSE \& PID intro} &
+    System type; state aug. $\dot x_e{=}r{-}y$; \alert{integral action; PID} &
+    \fillin{controller spec/design start?} \\
+    \hline
+    9  & \alert{Root Locus (RL) I} &
+    The 8 rules; \alert{RL $\equiv$ SS char.\ poly}; sketching &
+    \fillin{...} \\
+    \hline
+    10 & RL II: design &
+    Lead/lag; PID via RL; \alert{Ziegler--Nichols}; PZC pitfalls &
+    \fillin{controller design due?} \\
+    \hline
+    11 & Freq.\ Response I &
+    Asymptotic Bode; construction; \alert{SS frequency response} &
+    \fillin{...} \\
+    \hline
+    12 & Freq.\ Response II &
+    Nyquist; gain/phase margins; sensitivity $S$, $T$ &
+    \fillin{implementation / HIL?} \\
+    \hline
+    13 & \alert{State Space} &
+    Controllability \& observability; \alert{pole placement, Ackermann}; observer &
+    \fillin{dry-run / checkoff?} \\
+    \hline
+    14 & \alert{Project Demo Day} &
+    Diagnostic-fix presentations; tracking competition; judging &
+    \alert{Demo + competition} \\
+    \hline
+    15 & \alert{Final Review} &
+    Recap W8--13; common pitfalls; exam strategy &
+    \fillin{final report due?} \\
+    \hline
+    \end{tabular}
+
+\end{frame}

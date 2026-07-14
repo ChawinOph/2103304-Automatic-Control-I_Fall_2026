@@ -1,0 +1,122 @@
+\documentclass[12pt, aspectratio=169]{beamer}
+% \documentclass[12pt, aspectratio=169, handout]{beamer}
+% [8pt], [9pt], [10pt], [11pt], [12pt], [14pt], [17pt], [20pt], [bigger], and [small]
+
+\input{../preamble.tex}
+
+% Title page (lecture-specific)
+\title[Lecture 0: Test] %optional
+{\textbf{Lecture 0: Test}}
+\subtitle{Sample Formats, Code Block, and Visualization}
+
+\begin{document}
+    \maketitle
+
+    \begin{frame}
+        \frametitle{Hello! Welcome to the course!}
+        \tableofcontents
+    \end{frame}
+
+\section{Dummy Section}
+
+%---------------------------------------------------------
+
+%Highlighting text
+\begin{frame}
+\frametitle{Sample frame title}
+
+In this slide, some important text will be
+\alert{highlighted} because it's important.
+Please, don't abuse it.
+
+\begin{block}{Remark}
+Sample text
+\end{block}
+
+\begin{alertblock}{Important theorem}
+Sample text in red box
+\end{alertblock}
+
+\begin{theorem}[hello]<2>
+    $a^2+b^2=c^2$
+\end{theorem}
+
+\begin{examples}
+Sample text in green box. The title of the block is ``Examples".
+\end{examples}
+\end{frame}
+%---------------------------------------------------------
+
+\subsection{dummy subsection}
+%---------------------------------------------------------
+%Two columns
+\begin{frame}
+\frametitle{Two-column slide}
+
+\begin{columns}
+
+\column{0.5\textwidth}
+This is a text in first column.
+$$E=mc^2$$
+\begin{itemize}
+\item First item
+\item Second item
+\end{itemize}
+
+\column{0.25\textwidth}
+This text will be in the second column
+and on a second tought this is a nice looking
+layout in some cases.
+\end{columns}
+\end{frame}
+%---------------------------------------------------------
+
+\subsection{Root Locus Example}
+
+\begin{frame}
+    \frametitle{Root Locus Plot}
+    \begin{columns}
+    \column{0.5\textwidth}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.8\linewidth]{rlocus_plot_test.pdf}
+        \caption{Enter Caption}
+        \label{fig:placeholder}
+    \end{figure}
+    \column{0.3\textwidth}
+    Root Locus Plot of $$G(s) = \frac{K(s+3)}{s(s+1)(s^2+4s+16)}$$
+    \lstinputlisting[
+    frame=single,
+    numbers=left,
+    style=Matlab-Pyglike,
+    basicstyle=\tiny, %or \small or \footnotesize etc.
+    ]{matlab_files/rlocus_plot_test.m}
+    \end{columns}
+\end{frame}
+
+\subsection{Diagram Example}
+\begin{frame}{Basic Anatomy of Control System}
+\input{tex_files/diagram_example}
+\end{frame}
+
+\begin{frame}{Frame Title}
+    \input{tex_files/diagram_example_2}
+\end{frame}
+
+\begin{frame}{Root Locus Plot}
+    Root Locus Plot of $$G(s) = \frac{K(s+3)}{s(s+1)(s^2+4s+16)}$$
+    \input{tex_files/root_locus_plot}
+\end{frame}
+
+% \begin{frame}{Electromechanical Diagram}
+    % \include{electromechanical_system_example}
+% \end{frame}
+
+\mode<beamer>{
+  \begin{frame}
+    This slide has intense animations and will ONLY appear in the presentation.
+    It will be completely skipped in handout mode.
+  \end{frame}
+}
+
+\end{document}

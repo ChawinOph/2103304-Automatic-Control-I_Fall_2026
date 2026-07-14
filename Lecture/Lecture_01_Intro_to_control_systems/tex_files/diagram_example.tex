@@ -1,0 +1,64 @@
+\tikzstyle{block} = [draw, fill=white, rectangle, 
+    minimum height=3em, minimum width=6em]
+\tikzstyle{sum} = [draw, fill=white, circle, node distance=1cm]
+\tikzstyle{input} = [coordinate]
+\tikzstyle{output} = [coordinate]
+\tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
+
+% TO DO 
+% Spreadout and build step by step
+% Plant alone with input (u) and output relationship P(s)
+% Insert Measurement
+% Insert Reference
+% Insert Error 
+% Insert Controller and control law (u)
+% Insert Disturbance
+% Insert Sensor Noise/Bias
+
+\begin{center}
+\begin{tikzpicture}[auto, node distance=2cm,>=latex',
+    block/.style={
+            draw, 
+            rectangle, 
+            minimum height=3em, 
+            minimum width=6em,
+            % thick
+        },
+        sum/.style={
+            draw, 
+            circle, 
+            node distance=1.5cm,
+            path picture={
+                \draw
+                    (path picture bounding box.south west) -- (path picture bounding box.north east)
+                    (path picture bounding box.north west) -- (path picture bounding box.south east);
+            }
+        },
+        input/.style={coordinate},
+        output/.style={coordinate},
+        pinstyle/.style={pin edge={to-,thin,black}}
+]
+
+    \node [input, name=input] {};
+    \node [sum, right of=input] (sum) {};
+    \node [block, right of=sum] (controller) {Controller};
+    \node [block, right of=controller, pin={[pinstyle]above:D},
+            node distance=3cm] (system) {System};
+
+    \draw [->] (controller) -- node[name=u] {$u$} (system);
+    \node [output, right of=system] (output) {};
+    \node [block, below of=u] (sensors) {Sensor};
+    % \coordinate [below of=u] (sensors) {};
+
+    \draw [->] (input) -- node {$r$} node[pos=0.9, above] {$+$} (sum);
+    \draw [->] (sum) -- node {$e$} (controller);
+    \draw [->] (system) -- node [name=y] {$y$}(output);
+    %\draw [->] (y) |- (sensors);
+    \draw [->] (y) |- (sensors);
+    %\draw [->] (sensors) -| node[pos=0.99] {$-$} 
+    \draw [->] (sensors) -| node [near end] {$y_m$} (sum) node[pos=0.95, right] {$-$} (sum);
+        
+    %\draw [->] 
+\end{tikzpicture}    
+\end{center}
+

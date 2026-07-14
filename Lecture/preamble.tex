@@ -1,0 +1,137 @@
+% ============================================================
+% Shared preamble for 2103304 Automatic Control I (Fall 2026)
+% Lectures. Load from each main.tex with: \input{../preamble.tex}
+% Per-lecture \title/\subtitle/\author/\date/\logo stay in main.tex.
+% ============================================================
+
+% Resolve graphics from each lecture's standard subfolders, then shared root.
+% Paths are relative to the main.tex being compiled, so this works for any
+% lecture that follows the convention and sits one level under Lecture/.
+\graphicspath{{./}{./graphic_files/}{./tex_files/}{./matlab_files/}{../shared_graphics/}{../shared_graphics/Logo/}}
+
+\usepackage[utf8]{inputenc}
+\usepackage{matlab-prettifier}
+% \usepackage{setspace} % line space control (corrupted footnote)
+
+%maths
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+
+%tikzpicture
+\usepackage{tikz}
+\usepackage{scalerel}
+\usepackage{pict2e}
+\usepackage{tkz-euclide}
+\usetikzlibrary{calc}
+\usetikzlibrary{patterns,arrows.meta}
+\usetikzlibrary{shadows}
+\usetikzlibrary{external}
+\usepackage[american,siunitx]{circuitikz} %for drawing circuit
+
+%pgfplots
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+\usepgfplotslibrary{statistics}
+\usepgfplotslibrary{fillbetween}
+
+\usepackage{nicefrac}
+\usepackage{booktabs}
+
+% set up chula color theme
+\usepackage{xcolor}
+\usepackage{colortbl}
+
+% Brand colors
+\definecolor{brandred}{HTML}{8B2332}
+\definecolor{brandblack}{HTML}{231F20}
+\definecolor{brandredME}{HTML}{4C1E29} % Mechanical Engineering dark maroon
+
+% Optional: lighter tints (matching the % shades in your palette)
+\definecolor{brandred80}{HTML}{A24F5B}
+\definecolor{brandred60}{HTML}{BC8088}
+\definecolor{brandred40}{HTML}{D5AFB4}
+\definecolor{brandred20}{HTML}{ECD7D9}
+\definecolor{brandgray60}{HTML}{6F6D6E}
+\definecolor{brandgray30}{HTML}{B7B6B6}
+
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{shapes.misc}
+\usepgfplotslibrary{fillbetween}
+
+% use the colortbl package to define a new column i
+\newcolumntype{a}{>{\columncolor{brandred20}}c}
+
+% \usetheme{Copenhagen}
+% \usetheme{Berlin}
+% \usetheme{Antibes}
+
+\usetheme{Luebeck}
+% \usetheme{Madrid}
+
+% \usecolortheme{default}
+% \usecolortheme{seahorse}
+
+% use chula color theme
+% Structure (titles, headings, etc.)
+\setbeamercolor{structure}{fg=brandred}
+% Title page
+\setbeamercolor{title}{fg=white, bg=brandred}
+\setbeamercolor{frametitle}{fg=white, bg=brandred}
+% Body text
+\setbeamercolor{normal text}{fg=brandblack}
+% Blocks
+\setbeamercolor{block title}{fg=white, bg=brandred}
+\setbeamercolor{block body}{fg=brandblack, bg=brandred20}
+
+% Bullets / itemize
+\setbeamercolor{itemize item}{fg=brandred}
+\setbeamercolor{itemize subitem}{fg=brandgray60}
+
+% convert to handout
+% \usepackage{pgfpages}
+% \pgfpagesuselayout{4 on 1}{a4paper, border shrink=5mm}
+
+\setbeamertemplate{navigation symbols}{} % hide navigation symbol
+\setbeamertemplate{page number in head/foot}{\insertframenumber \slash \inserttotalframenumber}
+
+% \setbeamercovered{transparent}
+% \setbeamercovered{invisible}
+
+\setbeamertemplate{headline}{} % hide navigation bar at the top
+
+\usepackage{bm}
+\usefonttheme[onlymath]{serif}
+
+% spacing in table https://latex-beamer.com/tutorials/beamer-table/#insert-table-beamer
+% Change horizontal spacing
+\setlength{\tabcolsep}{20pt}
+% Change vertical spacing
+\renewcommand{\arraystretch}{1.25}
+% use the colortbl package to define a new column
+\newcolumntype{g}{>{\columncolor{brandgray30}}l}
+
+% Fill-in convention: \fillin{...} renders a gray italic placeholder.
+\newcommand{\fillin}[1]{\textcolor{gray}{\textit{[#1]}}}
+
+% Show a section-outline frame at the start of each \section
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Lecture Outline}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+%------------------------------------------------------------
+% Title are set in each lecture's main.tex, not here.
+%------------------------------------------------------------
+
+\author[2103304 Automatic Control I (Fall 2026)] % (optional, for multiple authors)
+{\textbf{Chawin Ophaswongse, Ph.D.}}
+
+\date[Mech. Eng., Chulalongkorn University] % (optional)
+{2103304 Automatic Control I (Fall 2026) \newline \newline Department of Mechanical Engineering \newline Faculty of Engineering, Chulalongkorn University}
+
+\logo{\includegraphics[height=0.5cm]{Logo CHULA ENG.pdf}}

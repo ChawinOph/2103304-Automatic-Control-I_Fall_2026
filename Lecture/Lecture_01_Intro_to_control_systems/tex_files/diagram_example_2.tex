@@ -1,0 +1,46 @@
+\begin{center}
+\resizebox{0.9\textwidth}{!}{%
+\begin{tikzpicture}[
+    auto,
+    node distance=2cm,
+    >=latex',
+    block/.style={
+        draw, 
+        rectangle, 
+        minimum height=3em, 
+        minimum width=6em,
+        thick
+    },
+    sum/.style={
+        draw, 
+        circle, 
+        node distance=1.5cm,
+        path picture={
+            \draw[thick]
+                (path picture bounding box.south west) -- (path picture bounding box.north east)
+                (path picture bounding box.north west) -- (path picture bounding box.south east);
+        }
+    },
+    input/.style={coordinate},
+    output/.style={coordinate},
+    pinstyle/.style={pin edge={to-,thin,black}}
+]
+
+% Nodes
+\node [input, name=input] {};
+\node [sum, right of=input] (sum) {};
+\node [block, right of=sum, node distance=5cm] (controller) 
+    {$\dfrac{K(s+3)}{s(s+1)(s^2+4s+16)}$};
+\node [output, right of=controller, node distance=5cm] (output) {};
+
+% Arrows and labels
+\draw [->, thick] (input) -- node[pos=0.3] {$R(s)$} node[pos=0.9, above] {$+$} (sum);
+\draw [->, thick] (sum) -- node {$E(s)$} (controller);
+\draw [->, thick] (controller) -- node [name=y] {} node[pos=0.95, above] {$C(s)$} (output);
+
+% Feedback loop
+\draw [->, thick] (y) |- ([yshift=-1.2cm]sum.south) -| node[pos=0.95, right] {$-$} (sum);
+
+\end{tikzpicture}
+}
+\end{center}
