@@ -1,0 +1,200 @@
+% \documentclass[aspectratio=169]{beamer}
+% \usetheme{metropolis}
+% \usepackage{tikz}
+% \usetikzlibrary{arrows.meta,positioning,calc}
+% \usepackage{amsmath,amssymb}
+% \usepackage{booktabs}
+
+% % Fallback if metropolis is unavailable
+% \makeatletter
+% \@ifclasswith{beamer}{}{}{}
+% \makeatother
+
+% \title{Control Systems Stability Analysis}
+% \subtitle{Routh--Hurwitz Criterion: Step-by-Step}
+% \author{}
+% \date{}
+
+% \setbeamertemplate{navigation symbols}{}
+
+\documentclass[12pt, aspectratio=169]{beamer}
+% \documentclass[12pt, aspectratio=169, handout]{beamer}
+% [8pt], [9pt], [10pt], [11pt], [12pt], [14pt], [17pt], [20pt], [bigger], and [small]
+
+\input{../preamble.tex}
+
+% Title page (lecture-specific)
+\title{Control Systems Stability Analysis}
+\subtitle{Routh--Hurwitz Criterion: Step-by-Step}
+
+\begin{document}
+
+%----------------------------------------------------------
+\begin{frame}
+  \titlepage
+\end{frame}
+
+%----------------------------------------------------------
+\begin{frame}{Problem Statement}
+  \begin{center}
+    \textbf{Find the range of gain, $K$, that will cause the system to be stable.}
+  \end{center}
+  \vspace{1em}
+  \begin{center}
+  \begin{tikzpicture}[>=Latex, node distance=1.4cm, auto,
+      block/.style={draw, fill=blue!8, minimum height=1.4cm, minimum width=3.6cm},
+      sum/.style={draw, circle, minimum size=8mm}]
+    \node (input) {};
+    \node[sum, right=1.2cm of input] (sum) {};
+    \draw (sum.north west) -- (sum.south east);
+    \draw (sum.north east) -- (sum.south west);
+    \node[block, right=1.6cm of sum] (plant) {$\dfrac{K(s-1)}{s(s+2)(s+3)}$};
+    \node[right=1.8cm of plant] (output) {};
+
+    \draw[->] (input) -- node[above]{$R(s)$} (sum);
+    \draw[->] (sum) -- node[above]{$E(s)$} (plant);
+    \draw[->] (plant) -- node[above, pos=0.8]{$C(s)$} (output);
+
+    \coordinate (branch) at ($(plant.east)+(1.0,0)$);
+    \draw[->] (branch) -- ++(0,-1.8) -| node[pos=0.95, left]{$-$} (sum.south);
+  \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+%----------------------------------------------------------
+\begin{frame}{Closed-Loop Transfer Function}
+  Unity negative feedback:
+  \[
+    T(s)=\frac{G(s)}{1+G(s)},\qquad G(s)=\frac{K(s-1)}{s(s+2)(s+3)}
+  \]
+  \pause
+  Expand the denominator:
+  \[
+    s(s+2)(s+3)+K(s-1)=s^{3}+5s^{2}+6s+Ks-K
+  \]
+  \pause
+  Transfer function:
+  % \begin{block}{Transfer Function}
+  \[
+    T(s)=\frac{K(s-1)}{s^{3}+5s^{2}+(K+6)s-K}
+  \]
+  % \end{block}
+  Characteristic polynomial: $s^{3}+5s^{2}+(K+6)s-K$.
+\end{frame}
+
+%----------------------------------------------------------
+\begin{frame}{Routh Table: First Two Rows}
+  \[
+    s^{3}+5s^{2}+(K+6)s-K
+  \]
+  \vspace{0.5em}
+  \begin{center}
+  \renewcommand{\arraystretch}{1.8}
+  \begin{tabular}{c c c}
+    \toprule
+    $s^{3}$ & \onslide<2->{$1$} & \onslide<2->{$K+6$} \\
+    $s^{2}$ & \onslide<3->{$5$} & \onslide<3->{$-K$} \\
+    $s^{1}$ & & \\
+    $s^{0}$ & & \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  \vspace{0.5em}
+  \onslide<2->{Odd-power coefficients: $1$ and $K+6$.}\\
+  \onslide<3->{Even-power coefficients: $5$ and $-K$.}
+\end{frame}
+
+%----------------------------------------------------------
+\begin{frame}{Routh Table: The $s^{1}$ Row}
+  \begin{center}
+  \renewcommand{\arraystretch}{2.2}
+  \begin{tabular}{c c c}
+    \toprule
+    $s^{3}$ & $1$ & $K+6$ \\
+    $s^{2}$ & $5$ & $-K$ \\
+    $s^{1}$ &
+      \only<1>{$-\dfrac{\begin{vmatrix} \, & \, \\ \, & \, \end{vmatrix}}{5}$}%
+      \only<2>{$-\dfrac{\begin{vmatrix} 1 & K+6 \\ 5 & -K \end{vmatrix}}{5}$}%
+      \only<3->{$1.2K+6$}
+      &
+      \onslide<4->{$0$} \\
+    $s^{0}$ & & \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  \vspace{0.4em}
+  \onslide<3->{%
+    \[
+      -\frac{(1)(-K)-(5)(K+6)}{5}=\frac{6K+30}{5}=1.2K+6
+    \]}
+\end{frame}
+
+%----------------------------------------------------------
+\begin{frame}{Routh Table: The $s^{0}$ Row}
+  \begin{center}
+  \renewcommand{\arraystretch}{2.2}
+  \begin{tabular}{c c c}
+    \toprule
+    $s^{3}$ & $1$ & $K+6$ \\
+    $s^{2}$ & $5$ & $-K$ \\
+    $s^{1}$ & $1.2K+6$ & $0$ \\
+    $s^{0}$ &
+      \only<1>{$-\dfrac{\begin{vmatrix} 5 & -K \\ 1.2K+6 & 0 \end{vmatrix}}{1.2K+6}$}%
+      \only<2->{$-K$}
+      &
+      \onslide<3->{$0$} \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  \vspace{0.4em}
+  \onslide<2->{%
+    \[
+      -\frac{(5)(0)-(1.2K+6)(-K)}{1.2K+6}
+      =-\frac{K(1.2K+6)}{1.2K+6}=-K
+    \]}
+\end{frame}
+
+%----------------------------------------------------------
+\begin{frame}{Routh--Hurwitz Criterion}
+  \begin{center}
+  \renewcommand{\arraystretch}{1.8}
+  \begin{tabular}{c c c}
+    \toprule
+    $s^{3}$ & $1$ & $K+6$ \\
+    $s^{2}$ & $5$ & $-K$ \\
+    $s^{1}$ & $1.2K+6$ & $0$ \\
+    $s^{0}$ & $-K$ & $0$ \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  \pause
+  \vspace{0.6em}
+  \begin{alertblock}{Routh--Hurwitz Criterion}
+    The number of sign changes in the first column equals the number of poles
+    in the right half of the $s$-plane. \textbf{Stability requires no sign
+    changes}: every first-column entry must be positive.
+  \end{alertblock}
+\end{frame}
+
+%----------------------------------------------------------
+\begin{frame}{Stability Conditions}
+  First-column entries $1$ and $5$ are already positive, so we need:
+  \vspace{0.5em}
+  \pause
+  \[
+    1.2K+6>0 \quad\Longrightarrow\quad K>-5
+  \]
+  \pause
+  \[
+    -K>0 \quad\Longrightarrow\quad K<0
+  \]
+  \pause
+  \vspace{0.4em}
+  % \begin{block}{Answer}
+    \[
+      \boxed{\,-5<K<0\,}
+    \]
+  % \end{block}
+\end{frame}
+
+\end{document}
