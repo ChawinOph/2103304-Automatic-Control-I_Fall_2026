@@ -13,10 +13,10 @@
         clip=false,
     ]
         % arrow of "unit area" at t=0 (standard impulse convention)
-        \addplot[very thick, blue, -{Stealth[length=3mm]}] coordinates {(0,0) (0,1)};
+        \addplot[very thick, red, -{Stealth[length=3mm]}] coordinates {(0,0) (0,1)};
         % baseline
-        \addplot[very thick, blue] coordinates {(-0.15,0) (0.15,0)};
-        % \addplot[only marks, mark=o, blue, fill=white] coordinates {(0,0)};
-        \node[blue, anchor=south west] at (axis cs:0.05,0.95) {\small (area $=1$)};
+        \addplot[very thick, red] coordinates {(-0.15,0) (0.15,0)};
+        % \addplot[only marks, mark=o, red, fill=white] coordinates {(0,0)};
+        \node[red, anchor=south west] at (axis cs:0.05,0.95) {\small (area $=1$)};
     \end{axis}
 \end{tikzpicture}

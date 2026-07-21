@@ -1,0 +1,24 @@
+% Simple input -> system -> output block diagram.
+% Placeholders (all optional): #1 = input label, #2 = block text, #3 = output label, #4 = scale
+% Usage: \ioDiagram                        (defaults: r / System / y, scale 1)
+%        \ioDiagram[$u$][Plant $P(s)$][$y$]
+%        \ioDiagram[$\delta(t)$][System][$h(t)$][0.6]
+\NewDocumentCommand{\ioDiagram}{ O{$r$} O{System} O{$y$} O{1} }{%
+\begin{center}
+\begin{tikzpicture}[
+    auto, >=latex',
+    scale=#4, transform shape,
+    node distance=3cm,
+    block/.style={draw, rectangle, minimum height=3em, minimum width=6em},
+    input/.style={coordinate},
+    output/.style={coordinate},
+]
+    \node [input] (input) {};
+    \node [block, right of=input] (system) {#2};
+    \node [output, right of=system] (output) {};
+
+    \draw [->] (input)  -- node [name=r] {#1} (system);
+    \draw [->] (system) -- node [name=y] {#3} (output);
+\end{tikzpicture}
+\end{center}%
+}

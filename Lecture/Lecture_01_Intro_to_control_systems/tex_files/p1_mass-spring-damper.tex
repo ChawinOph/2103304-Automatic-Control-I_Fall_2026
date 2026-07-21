@@ -1,0 +1,35 @@
+% Mass-spring-damper diagram.
+% Usage: \massSpringDamper           (default scale 1.0)
+%        \massSpringDamper[0.7]      (custom scale)
+\newcommand{\massSpringDamper}[1][1.0]{%
+    \begin{circuitikz}[scale=#1, transform shape]
+        % --- ground / floor ---
+        \fill[pattern=north east lines] (0,-0.25) rectangle (6,0);
+        \draw[thick] (0,0) -- (6,0);
+
+        % --- fixed wall on the left ---
+        \fill[pattern=north east lines] (0,0) rectangle (0.25,2.6);
+        \draw[thick] (0.25,0) -- (0.25,2.6);
+
+        % --- mass block ---
+        \def\mx{3}   % left edge of mass
+        \draw[thick, fill=brandred20] (\mx,0.0) rectangle (\mx+1.4,2.15);
+        % \node at (\mx+0.7,1.0) {$m = \SI{1}{kg}$};
+        \node at (\mx+0.7,1.0) {$m$};
+
+        % --- spring (top) and damper (bottom) in parallel ---
+        \draw (0.25,1.6) to[spring, l={$k$}] (\mx,1.6);
+        % \draw (0.25,1.6) to[spring, l={$k=\SI{3}{N/m}$}] (\mx,1.6);
+        \draw (0.25,0.5) to[damper, l={$c$}] (\mx,0.5);
+        % \draw (0.25,0.5) to[damper, l={$c=\SI{2}{N.s/m}$}] (\mx,0.5);
+
+        % --- applied force F(t) ---
+        \draw[very thick, red, -{Stealth[length=3mm]}] (\mx+1.4,1.0) -- (\mx+2.6,1.0)
+            node[midway, above, red] {$f(t)$};
+
+        % --- displacement x(t) ---
+        \draw[dashed] (\mx+0.7,2.15) -- (\mx+0.7,2.9);
+        \draw[-{Stealth[length=2mm]}] (\mx+0.7,2.5) -- (\mx+1.7,2.5)
+            node[midway, above] {$x(t)$};
+    \end{circuitikz}%
+}
