@@ -124,7 +124,8 @@
 
 \begin{frame}{Basic Anatomy of Control System}
     \input{tex_files/diagram_example}
-    \footnote{use Dorf Diagram}
+    Diagram to be refined\footnote{use Dorf Diagram}
+    % start with openloop system -> close loop
     % add a block diagram of a control system with input, output, and feedback loop
     % match each block with the rocket example (system, sensor, controller, actuator)
 \end{frame}
@@ -805,7 +806,7 @@ Basically the input/output relationship
     \end{columns}
     % \centering
     \vspace{1em}
-    An \emph{LTI} system is \emph{linear} (homogeneity $+$ additivity) and \emph{time-invariant}. Hence a weighted sum of shifted impulses produces the same weighted sum of shifted impulse responses:
+    An \emph{LTI} system is \emph{linear} (homogeneity $+$ additivity = superposition) and \emph{time-invariant}. Hence a weighted sum of shifted impulses produces the same weighted sum of shifted impulse responses:
     \[
         f(t) = \sum_i a_i\,\delta(t - t_i) \;\longrightarrow\; x(t) = \sum_i a_i\,h(t - t_i).
     \]
@@ -880,7 +881,7 @@ Basically the input/output relationship
     \end{columns}
     % \centering
     \vspace{1em}
-    An \emph{LTI} system is \emph{linear} (homogeneity $+$ additivity) and \emph{time-invariant}. Hence a weighted sum of shifted impulses produces the same weighted sum of shifted impulse responses:
+    An \emph{LTI} system is \emph{linear} (homogeneity $+$ additivity = superposition) and \emph{time-invariant}. Hence a weighted sum of shifted impulses produces the same weighted sum of shifted impulse responses:
     \[
         f(t) = \sum_i a_i\,\delta(t - t_i) \;\longrightarrow\; x(t) = \sum_i a_i\,h(t - t_i).
     \]
@@ -900,12 +901,19 @@ Basically the input/output relationship
     \]
 \end{frame}
 
-    % let's assume the system is linear and all parameters are constant 
-    % input-output signals: 
-    % linear: amplification $ax(t)$ $ay(t)$, addition
-    % time invariant: shifted input shifted output
-    % (LTI will be covered in the next lecture: Linear Time-Invariant Systems)
-    % intuition is the system will response the same way to the same input regardless of when the input is applied (time shift)
+% link sifing property
+% link to convolution a way to describe arbritary function f(t)
+% taking convolution integral on both input and output sides
+% Get back to the square pulse
+% Get back to the sinuosoidal function and solving using the convolution method
+% Suggest an easiler way -> We know integral of impulse function is one
+% Let's do integral transform to handle all diff equation in the s-domain than transform to time-domain again
+% Show that Impulse Response of the system F(s) = 1 so X(s) = (1/(s^2+2s+3))F(s)
+% Show that the step input u(t) is 1/s
+% Show Laplace Table and inverse Laplace Table (emphasize on zero initial condition)
+% Now we have the new tool to manipulate and solve ODEs
+% Revisit the square pulse solution using Laplace method
+% Revisit the sinuosolidal problem using the Laplace method
 
 \begin{frame}
     % \begin{tikzpicture}
