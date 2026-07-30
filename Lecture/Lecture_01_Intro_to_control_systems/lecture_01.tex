@@ -140,7 +140,11 @@
     % \node [anchor=north east, inner sep=0pt, label={[text width=4cm]below:My text is here, my very very long long text is here.}] (img) at (current page.north east)
     % {\includegraphics[height=3cm]{example-image-a}};
     % \end{tikzpicture}
-    Pictures of Elvators, Air Conditioners, Crane, Process Plants, Industrial Robots, Humanoid Robots, Biped Robots, Surgical Robots (Da Vinci), etc.
+    Pictures of Elvators, Air Conditioners, Crane, Autonomous, Process Plants, Industrial Robots, Humanoid Robots, Biped Robots, Surgical Robots (Da Vinci), etc.
+\end{frame}
+
+\begin{frame}
+    The very first control system: Governor Mechanism
 \end{frame}
 % \footnotetext{\url{}} 
     % SpaceX Rocket 
@@ -346,6 +350,8 @@ Basically the input/output relationship
     particular solution, homogeneous solution, and general solution 
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{frame}{Non-continuous Forcing Function}
     \begin{columns}
         \begin{column}{0.5\textwidth}
@@ -387,6 +393,8 @@ Basically the input/output relationship
     \end{columns}
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{frame}{Dirac Delta Function}
     The \emph{Dirac delta function} $\delta(t)$, also known as the ``unit'' impulse function.
     \vspace{1em}
@@ -412,6 +420,8 @@ Basically the input/output relationship
     \vspace{1em}
     It is the basic building block for constructing any input signal. So how does a system response to it?
 \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}{Unit Impulse Response}
     \begin{columns}
@@ -463,6 +473,8 @@ Basically the input/output relationship
         \end{column}
     \end{columns}
 \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}{Unit Impulse Response}
     \begin{columns}[c]
@@ -936,12 +948,16 @@ Basically the input/output relationship
                     width=\linewidth, height=3.5cm,
                     xlabel={$t$}, ylabel={$\sin(2\,\pi\,t)$},
                     xmin=0, xmax=3.5, ymin=-1.5, ymax=1.5,
-                    x tick label style ={
-                        anchor=west, % shift alignment
-                        xshift=3pt,   % extrahotizontal shift 
-                        yshift=-3pt
-                    },
-                    xtick={0.875}, xticklabels={$t_0$}, ytick={1},
+                    % xtick style={draw=none},
+                    ticks=none,
+                    % x tick label style ={
+                    %     % anchor=west, % shift alignment
+                    %     xshift=10pt,   % extrahotizontal shift 
+                    %     yshift=-3pt
+                    % },
+                    % xtick={0.875}, 
+                    % xticklabels={$t_0$}, 
+                    ytick={1},
                     axis x line=middle, axis y line=middle,
                     every axis x label/.style={at={(current axis.right of origin)},anchor=north west},
                     every axis y label/.style={at={(current axis.above origin)},anchor=south},
@@ -962,13 +978,198 @@ Basically the input/output relationship
 \end{frame}
 
 \begin{frame}{Decomposition Property of Impulse Function}
-    From sifting property which we only evaluate the integral where the impulse occure at $t_0$
-    To 
+    The sifting property evaluates only the function value where the impulse occurs at fixed $t_0$.
+    What if we want to evalaute an arbitrary function at a particular time ``$t$''?
+    Let's introduce a new variable ``\alert{$\tau$}'', then rewrite the previous expression to
     \[
-        \int_{-\infty}^{\infty}\!\! f(t_0)\,\delta(t-t_0)\,dt = f(t_0).
+        f(t)\,=\,\int_{-\infty}^{\infty}\!\! f(\tau)\,\delta(t-\tau)\,d\tau 
     \]
-    If we want to evaluate the function $f(t)$ through this integral, change 
-    Any Arbitry function can be represented as a weighted time shift of impulse function
+    \alert{\emph{The impulse decomposition property}}: An arbitrary function (continuous or discrete) $f(t)$ can be decomposed into an infinite continuum of scaled and shifted unit impulse function.
+\end{frame}
+
+% t = -1
+\begin{frame}{Decomposition Property of Impulse Function}
+    Let's visualize this property with the square pulse function. Varying the time $t$
+    \vspace{1em}
+    \centering
+    \begin{tikzpicture}
+        \begin{groupplot}[
+            group style={
+                group size=1 by 2,
+                vertical sep=45pt,
+                x descriptions at=all, 
+            },
+            width=0.6\linewidth, height=3.2cm,
+            xmin=-1.1, xmax=4,
+            % ticks=none,
+            xtick={-1, 1, 2}, ytick={1},
+            xlabel={$\tau$},
+            axis lines=center,
+            axis line style={-{Stealth[length=2mm]}},
+            every axis x label/.style={at={(current axis.right of origin)},anchor=north west},
+            every axis y label/.style={at={(current axis.above origin)},anchor=south},
+            clip=false,
+        ]
+            \nextgroupplot[ylabel={$f(t)$}, ymin=0, ymax=1.4]
+                    \addplot[very thick, red, const plot mark left] coordinates {
+                        (-1.1,0) (1,0) (1,1) (2,1) (2,0) (3.5,0)
+                    };
+                    \addplot[very thick, blue, -{Stealth[length=2.5mm]}] coordinates {(-1,0) (-1,1)};
+                    \addplot[very thick, black, opacity=0.25, -{Stealth[length=2.5mm]}] coordinates {(-0.9,0.5) (-0.3,0.5)};
+                    \node[blue, anchor=center] at (axis cs:-1,1.2) {\small $\delta(- 1 - \tau)$};
+            \nextgroupplot[ylabel={$\int_{-\infty}^{\infty}~\!\! f(\tau)\,\delta(t-\tau)\,d\tau$}, ymin=0, ymax=1.4]
+                \addplot[
+                    only marks,
+                    mark=*,
+                    black,
+                    mark size=1.5pt
+                ] coordinates {
+                        (-1.1,0) (-1,0)
+                };
+                % \addplot[very thick, blue, smooth, samples=200, domain=0:4] {1/sqrt(2) * exp(-x) * sin(deg(sqrt(2)*x))};
+                % \node[blue, anchor=south west] at (axis cs:0.4,0.3) {\small $h(t)$};
+        \end{groupplot}
+    \end{tikzpicture}
+\end{frame}
+
+% t = 1.5
+\begin{frame}{Decomposition Property of Impulse Function}
+    Let's visualize this property with the square pulse function. Varying the time $t$
+    \vspace{1em}
+    \centering
+    \begin{tikzpicture}
+        \begin{groupplot}[
+            group style={
+                group size=1 by 2,
+                vertical sep=45pt,
+                x descriptions at=all, 
+            },
+            width=0.6\linewidth, height=3.2cm,
+            xmin=-1.1, xmax=4,
+            % ticks=none,
+            xtick={-1, 1, 2}, ytick={1},
+            xlabel={$\tau$},
+            axis lines=center,
+            axis line style={-{Stealth[length=2mm]}},
+            every axis x label/.style={at={(current axis.right of origin)},anchor=north west},
+            every axis y label/.style={at={(current axis.above origin)},anchor=south},
+            clip=false,
+        ]
+            \nextgroupplot[ylabel={$f(t)$}, ymin=0, ymax=1.4]
+                    \addplot[very thick, red, const plot mark left] coordinates {
+                        (-1.1,0) (1,0) (1,1) (2,1) (2,0) (3.5,0)
+                    };
+                    \addplot[very thick, blue, -{Stealth[length=2.5mm]}] coordinates {(1.5,0) (1.5,1)};
+                    \addplot[very thick, black, opacity=0.25, -{Stealth[length=2.5mm]}] coordinates {(1.6,0.5) (2.2,0.5)};
+                    \node[blue, anchor=center] at (axis cs:1.5,1.2) {\small $\delta(1.5 - \tau)$};
+            \nextgroupplot[ylabel={$\int_{-\infty}^{\infty}~\!\! f(\tau)\,\delta(t-\tau)\,d\tau$}, ymin=0, ymax=1.4]
+                \addplot[
+                    only marks,
+                    mark=*,
+                    black,
+                    mark size=1.5pt
+                ] coordinates {
+                        (-1.1,0) (-1,0) (-0.9,0) (-0.8,0) (-0.7,0) (-0.6,0) 
+                        (-0.5,0) (0.-0.4,0) (-0.3,0) (-0.2,0) (-0.1,0) 
+                        (0,0) (0.1,0) (0.2,0) (0.3,0) (0.4,0) (0.5,0)
+                        (0.6,0) (0.7,0) (0.8,0) (0.9,0) (1,1) 
+                        (1.1,1) (1.2,1) (1.3,1) (1.4,1) (1.5,1) 
+                };
+                % \addplot[very thick, blue, smooth, samples=200, domain=0:4] {1/sqrt(2) * exp(-x) * sin(deg(sqrt(2)*x))};
+                % \node[blue, anchor=south west] at (axis cs:0.4,0.3) {\small $h(t)$};
+        \end{groupplot}
+    \end{tikzpicture}
+\end{frame}
+
+% t = 3
+\begin{frame}{Decomposition Property of Impulse Function}
+    Let's visualize this property with the square pulse function. Varying the time $t$
+    \vspace{1em}
+    \centering
+    \begin{tikzpicture}
+        \begin{groupplot}[
+            group style={
+                group size=1 by 2,
+                vertical sep=45pt,
+                x descriptions at=all, 
+            },
+            width=0.6\linewidth, height=3.2cm,
+            xmin=-1.1, xmax=4,
+            % ticks=none,
+            xtick={-1, 1, 2}, ytick={1},
+            xlabel={$\tau$},
+            axis lines=center,
+            axis line style={-{Stealth[length=2mm]}},
+            every axis x label/.style={at={(current axis.right of origin)},anchor=north west},
+            every axis y label/.style={at={(current axis.above origin)},anchor=south},
+            clip=false,
+        ]
+            \nextgroupplot[ylabel={$f(t)$}, ymin=0, ymax=1.4]
+                    \addplot[very thick, red, const plot mark left] coordinates {
+                        (-1.1,0) (1,0) (1,1) (2,1) (2,0) (3.5,0)
+                    };
+                    \addplot[very thick, blue, -{Stealth[length=2.5mm]}] coordinates {(3.0,0) (3.0,1)};
+                    \addplot[very thick, black, opacity=0.25, -{Stealth[length=2.5mm]}] coordinates {(3.1,0.5) (3.7,0.5)};
+                    \node[blue, anchor=center] at (axis cs:3.0,1.2) {\small $\delta(3.0 - \tau)$};
+            \nextgroupplot[ylabel={$\int_{-\infty}^{\infty}~\!\! f(\tau)\,\delta(t-\tau)\,d\tau$}, ymin=0, ymax=1.4]
+                \addplot[
+                    only marks,
+                    mark=*,
+                    black,
+                    mark size=1.5pt
+                ] coordinates {
+                        (-1.1,0) (-1,0) (-0.9,0) (-0.8,0) (-0.7,0) (-0.6,0) 
+                        (-0.5,0) (0.-0.4,0) (-0.3,0) (-0.2,0) (-0.1,0) 
+                        (0,0) (0.1,0) (0.2,0) (0.3,0) (0.4,0) (0.5,0)
+                        (0.6,0) (0.7,0) (0.8,0) (0.9,0) (1,1) 
+                        (1.1,1) (1.2,1) (1.3,1) (1.4,1) (1.5,1) 
+                        (1.6,1) (1.7,1) (1.8,1) (1.9,1) (2.0,0) 
+                        (2.1,0) (2.2,0) (2.3,0) (2.4,0) (2.5,0) 
+                        (2.6,0) (2.7,0) (2.8,0) (2.9,0) (3.0,0) 
+                };
+                % \addplot[very thick, blue, smooth, samples=200, domain=0:4] {1/sqrt(2) * exp(-x) * sin(deg(sqrt(2)*x))};
+                % \node[blue, anchor=south west] at (axis cs:0.4,0.3) {\small $h(t)$};
+        \end{groupplot}
+    \end{tikzpicture}
+\end{frame}
+
+% summary
+\begin{frame}{Decomposition Property of Impulse Function}
+    Let's visualize this property with the square pulse function. Varying the time $t$
+    \vspace{1em}
+    \centering
+    \begin{tikzpicture}
+        \begin{groupplot}[
+            group style={
+                group size=1 by 2,
+                vertical sep=45pt,
+                x descriptions at=all, 
+            },
+            width=0.6\linewidth, height=3.2cm,
+            xmin=-1.1, xmax=4,
+            % ticks=none,
+            xtick={-1, 1, 2}, ytick={1},
+            xlabel={$\tau$},
+            axis lines=center,
+            axis line style={-{Stealth[length=2mm]}},
+            every axis x label/.style={at={(current axis.right of origin)},anchor=north west},
+            every axis y label/.style={at={(current axis.above origin)},anchor=south},
+            clip=false,
+        ]
+            \nextgroupplot[ylabel={$f(t)$}, ymin=0, ymax=1.4]
+                    \addplot[very thick, red, const plot mark left] coordinates {
+                        (-1.1,0) (1,0) (1,1) (2,1) (2,0) (3.5,0)
+                    };
+                    % \addplot[very thick, blue, -{Stealth[length=2.5mm]}] coordinates {(3.0,0) (3.0,1)};
+                    % \node[blue, anchor=center] at (axis cs:3.0,1.2) {\small $\delta(3.0 - \tau)$};
+            \nextgroupplot[ylabel={$\int_{-\infty}^{\infty}~\!\! f(\tau)\,\delta(t-\tau)\,d\tau \textcolor{red}{\,= f(t)}$}, ymin=0, ymax=1.4]
+                \addplot[very thick, black, const plot mark left] coordinates {
+                        (-1.1,0) (1,0) (1,1) (2,1) (2,0) (3.5,0)
+                };
+                % \addplot[very thick, blue, smooth, samples=200, domain=0:4] {1/sqrt(2) * exp(-x) * sin(deg(sqrt(2)*x))};
+                % \node[blue, anchor=south west] at (axis cs:0.4,0.3) {\small $h(t)$};
+        \end{groupplot}
+    \end{tikzpicture}
 \end{frame}
 
 % f(t) become weight/height of the impulse function
