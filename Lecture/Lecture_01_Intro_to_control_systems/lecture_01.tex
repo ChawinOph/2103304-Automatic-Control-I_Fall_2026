@@ -55,9 +55,11 @@
             \item Namo (Discord Admin)
             \item Mix
         \end{itemize}
-        \item Office Hours: TBD at Hans Buntli Building, 4th Floor, Room 407
+        \item Office Hours: TBD at Hans Buntli Building, 3th Floor, Room 30
     \end{itemize}
-    Refer to the syllabus for further information
+    \begin{center}
+        Refer to the syllabus and MyCourseVille (MCV) for further information
+    \end{center}
 \end{frame}
 
 %%
@@ -76,16 +78,18 @@
 
 %--------------------------------------------------------
 
-\begin{frame}{Textbooks}
+\begin{frame}{References}
+    % Nise, N. S. (2011). \emph{Control Systems Engineering} (6th ed.). Wiley
 \textbf{Primary}
 \begin{itemize}
-    \item Nise, N. S. (2011). \emph{Control Systems Engineering} (6th ed.). Wiley. \\ \textcolor{brandred}{Beginner-friendly}
+    \item Nise, N. S. (2011). \emph{Control Systems Engineering} (6th ed.). Wiley. % \\ \textcolor{brandred}{Beginner-friendly}
+    \item Lecture and Supplementary Handouts
 \end{itemize}
-\textbf{Supplementary}
-\begin{itemize}
-    \item Ogata, K. (2010). \emph{Modern Control Engineering} (5th ed.). Prentice Hall. \\ \textcolor{brandred}{More mathematically rigorous}
-    \item Dorf, R. C., \& Bishop, R. H. (2017). \emph{Modern Control Systems} (13th ed.). Pearson. \\ \textcolor{brandred}{Rich in illustrative examples}
-\end{itemize}
+% \textbf{Supplementary}
+% \begin{itemize}
+%     \item Ogata, K. (2010). \emph{Modern Control Engineering} (5th ed.). Prentice Hall. \\ \textcolor{brandred}{More mathematically rigorous}
+%     \item Dorf, R. C., \& Bishop, R. H. (2017). \emph{Modern Control Systems} (13th ed.). Pearson. \\ \textcolor{brandred}{Rich in illustrative examples}
+% \end{itemize}
 \end{frame}
 
 %---------------------------------------------------------
@@ -990,7 +994,7 @@ Basically the input/output relationship
 
 \begin{frame}{Decomposition Property of Impulse Function}
     The sifting property evaluates only the function value where the impulse occurs at fixed $t_0$.
-    What if we want to evalaute an arbitrary function at a particular time ``$t$''?
+    What if we want to evaluate an arbitrary function at a particular time ``$t$''?
     Let's introduce a new variable ``\alert{$\tau$}'', then rewrite the previous expression to
     \[
         f(t)\,=\,\int_{-\infty}^{\infty}\!\! f(\tau)\,\delta(t-\tau)\,d\tau 
@@ -1183,6 +1187,103 @@ Basically the input/output relationship
     \end{tikzpicture}
 \end{frame}
 
+% 
+\begin{frame}{LTI: Input-Output}
+    \begin{columns}[c]
+        % --- input: faded pieces + combined input f(t) ---
+        \begin{column}{0.33\textwidth}
+            \centering
+            \begin{tikzpicture}
+                
+                \begin{axis}[
+                    width=\linewidth, height=4cm,
+                    xmin=0, xmax=4.5, ymin=-0.1, ymax=1.4,
+                    ticks=none,
+                    xlabel={$t$}, ylabel={$f(t)$},
+                    axis lines=center,
+                    axis line style={-{Stealth[length=2mm]}},
+                    every axis x label/.style={at={(current axis.right of origin)},anchor=north west},
+                    every axis y label/.style={at={(current axis.above origin)},anchor=south},
+                    clip=false,
+                ]
+
+                    \only{
+                        \addplot[thick, red, -{Stealth[length=2.5mm]}] coordinates {(1,0) (1,1)};
+                        \addplot[thick, red, -{Stealth[length=2.5mm]}] coordinates {(1.2,0) (1.2,1)};
+                        \addplot[thick, red, , -{Stealth[length=2.5mm]}] coordinates {(1.4,0) (1.4,1)};
+                        \addplot[thick, red, , -{Stealth[length=2.5mm]}] coordinates {(1.6,0) (1.6,1)};
+                        \addplot[thick, red, , -{Stealth[length=2.5mm]}] coordinates {(1.8,0) (1.8,1)};
+                    }<1>
+
+                    \only{\addplot[very thick, red, const plot mark left] coordinates {
+                        (0,0) (1,0) (1,1) (2,1) (2,0) (3.5,0)
+                    };}<2>
+
+                \end{axis}
+            \end{tikzpicture}
+        \end{column}
+        % --- block diagram ---
+        \begin{column}{0.33\textwidth}
+            \begin{center}
+                \massSpringDamper[0.5]
+                \ioDiagram[$f(t)$][\shortstack{LTI\\System}][$x(t)$][0.9]
+            \end{center}
+        \end{column}
+        % --- output: faded pieces + combined response x(t) ---
+        \begin{column}{0.33\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \begin{axis}[
+                    width=\linewidth, height=3.6cm,
+                    xmin=0, xmax=4.5, ymin=-0.1, ymax=1.4,
+                    ticks=none,
+                    xlabel={$t$}, ylabel={$x(t)$},
+                    axis lines=center,
+                    axis line style={-{Stealth[length=2mm]}},
+                    every axis x label/.style={at={(current axis.right of origin)},anchor=north west},
+                    every axis y label/.style={at={(current axis.above origin)},anchor=south},
+                    clip=false,
+                ]
+
+                    \only{
+                        \addplot[thick, red,   opacity=0.25, smooth, samples=200, domain=1:4]
+                        {1/sqrt(2) * exp(-x + 1) * sin(deg(sqrt(2)*(x - 1)))};
+                        \addplot[thick, red,   opacity=0.25, smooth, samples=200, domain=1.2:4]
+                        {1/sqrt(2) * exp(-x + 1.2) * sin(deg(sqrt(2)*(x-1.2)))};
+                        \addplot[thick, red,   opacity=0.25, smooth, samples=200, domain=1.4:4]
+                        {1/sqrt(2) * exp(-x + 1.4) * sin(deg(sqrt(2)*(x - 1.4)))};
+                        \addplot[thick, red,   opacity=0.25, smooth, samples=200, domain=1.6:4]
+                        {1/sqrt(2) * exp(-x + 1.6) * sin(deg(sqrt(2)*(x - 1.6)))};
+                         \addplot[thick, red,  opacity=0.25, smooth, samples=200, domain=1.8:4]
+                        {1/sqrt(2) * exp(-x + 1.8) * sin(deg(sqrt(2)*(x - 1.8)))};
+                        \addplot[very thick, red,   opacity=1.0, smooth, samples=200, domain=1:4]
+                        {(x>=1)*1/sqrt(2) * exp(-x + 1) * sin(deg(sqrt(2)*(x - 1))) + 
+                        (x>=1.2)*1/sqrt(2) * exp(-x + 1.2) * sin(deg(sqrt(2)*(x-1.2))) + 
+                        (x>=1.4)*1/sqrt(2) * exp(-x + 1.4) * sin(deg(sqrt(2)*(x - 1.4))) + 
+                        (x>=1.6)*1/sqrt(2) * exp(-x + 1.6) * sin(deg(sqrt(2)*(x - 1.6))) + 
+                        (x>=1.8)*1/sqrt(2) * exp(-x + 1.8) * sin(deg(sqrt(2)*(x - 1.8)))};
+                    }<1>
+
+                \end{axis}
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
+    % \centering
+    \vspace{1em}
+    LTI system: a weighted sum of shifted impulses produces the same weighted sum of shifted impulse responses
+    \only{\[
+        f(t) = \sum_i a_i\,\delta(t - t_i) \;\longrightarrow\; x(t) = \sum_i a_i\,h(t - t_i).
+    \]}<1>
+    \only{\[
+        f(t) =\,\int_{-\infty}^{\infty}\!\! f(\tau)\,\delta(t-\tau)\,d\tau \;\longrightarrow\; x(t) =\,\int_{-\infty}^{\infty}\!\! f(\tau)\, h(t-\tau)\,d\tau.
+    \]}<2>
+\end{frame}
+
+% Convolution
+\begin{frame}{Convolution: Interpretation}
+    
+\end{frame}
+
 % f(t) become weight/height of the impulse function
 % taking convolution integral on both input and output sides
 % Any Arbitry function can be represented as a weighted time shift of impulse function
@@ -1327,6 +1428,10 @@ Basically the input/output relationship
 
 \begin{frame}
     MATLAB DEMO: Laplace Transform and Inverse Laplace Transform
+\end{frame}
+
+\begin{frame}
+    Form a group of 3-4 student and register in MCV
 \end{frame}
 
 \end{document}
