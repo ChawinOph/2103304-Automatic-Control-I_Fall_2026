@@ -1197,8 +1197,9 @@ Basically the input/output relationship
                 
                 \begin{axis}[
                     width=\linewidth, height=4cm,
-                    xmin=0, xmax=4.5, ymin=-0.1, ymax=1.4,
-                    ticks=none,
+                    xmin=0, xmax=6, ymin=-0.1, ymax=1.4,
+                    % ticks=none,
+                    xtick={1, 2}, ytick={1},
                     xlabel={$t$}, ylabel={$f(t)$},
                     axis lines=center,
                     axis line style={-{Stealth[length=2mm]}},
@@ -1208,16 +1209,31 @@ Basically the input/output relationship
                 ]
 
                     \only{
-                        \addplot[thick, red, -{Stealth[length=2.5mm]}] coordinates {(1,0) (1,1)};
-                        \addplot[thick, red, -{Stealth[length=2.5mm]}] coordinates {(1.2,0) (1.2,1)};
-                        \addplot[thick, red, , -{Stealth[length=2.5mm]}] coordinates {(1.4,0) (1.4,1)};
-                        \addplot[thick, red, , -{Stealth[length=2.5mm]}] coordinates {(1.6,0) (1.6,1)};
-                        \addplot[thick, red, , -{Stealth[length=2.5mm]}] coordinates {(1.8,0) (1.8,1)};
+                        \addplot[thick, red,   opacity=0.5, -{Stealth[length=2.5mm]}] coordinates {(1,0) (1,1)};
+                        \addplot[thick, red,   opacity=0.5, -{Stealth[length=2.5mm]}] coordinates {(1.2,0) (1.2,1)};
+                        \addplot[thick, red,   opacity=0.5, -{Stealth[length=2.5mm]}] coordinates {(1.4,0) (1.4,1)};
+                        \addplot[thick, red,   opacity=0.5, -{Stealth[length=2.5mm]}] coordinates {(1.6,0) (1.6,1)};
+                        \addplot[thick, red,   opacity=0.5, -{Stealth[length=2.5mm]}] coordinates {(1.8,0) (1.8,1)};
                     }<1>
 
+                    % sample f(t) every \Delta\tau = 0.2: impulse of area f(\tau_i)\Delta\tau at each \tau_i
+                    \only{
+                        \addplot[very thick, red, opacity=1.0, const plot mark left] coordinates {
+                            (0,0) (1,0) (1,1) (2,1) (2,0) (6,0)
+                        };
+                        \addplot[thick, red,    opacity=0.4, -{Stealth[length=2.5mm]}] coordinates {(1.1,0) (1.1,1)};
+                        \addplot[thick, red,    opacity=0.4, -{Stealth[length=2.5mm]}] coordinates {(1.3,0) (1.3,1)};
+                        \addplot[thick, red,    opacity=0.4, -{Stealth[length=2.5mm]}] coordinates {(1.5,0) (1.5,1)};
+                        \addplot[thick, red,    opacity=0.4, -{Stealth[length=2.5mm]}] coordinates {(1.7,0) (1.7,1)};
+                        \addplot[thick, red,    opacity=0.4, -{Stealth[length=2.5mm]}] coordinates {(1.9,0) (1.9,1)};
+                        \draw[|-|, thin] (axis cs:1.7,1.12) -- (axis cs:1.9,1.12);
+                        \draw[thin, gray] (axis cs:1.8,1.12) -- (axis cs:2.5,1.3)
+                            node[anchor=west, inner sep=1pt, black] {\scriptsize $\Delta\tau$};
+                    }<2>
+
                     \only{\addplot[very thick, red, const plot mark left] coordinates {
-                        (0,0) (1,0) (1,1) (2,1) (2,0) (3.5,0)
-                    };}<2>
+                        (0,0) (1,0) (1,1) (2,1) (2,0) (6,0)
+                    };}<3>
 
                 \end{axis}
             \end{tikzpicture}
@@ -1235,8 +1251,9 @@ Basically the input/output relationship
             \begin{tikzpicture}
                 \begin{axis}[
                     width=\linewidth, height=3.6cm,
-                    xmin=0, xmax=4.5, ymin=-0.1, ymax=1.4,
-                    ticks=none,
+                    xmin=0, xmax=6, ymin=-0.1, ymax=0.6,
+                    % ticks=none,
+                    xtick={1, 2}, ytick={0.25, 0.5},
                     xlabel={$t$}, ylabel={$x(t)$},
                     axis lines=center,
                     axis line style={-{Stealth[length=2mm]}},
@@ -1246,23 +1263,53 @@ Basically the input/output relationship
                 ]
 
                     \only{
-                        \addplot[thick, red,   opacity=0.25, smooth, samples=200, domain=1:4]
+                        \addplot[thick, red,   opacity=0.5, smooth, samples=200, domain=1:6]
                         {1/sqrt(2) * exp(-x + 1) * sin(deg(sqrt(2)*(x - 1)))};
-                        \addplot[thick, red,   opacity=0.25, smooth, samples=200, domain=1.2:4]
+                        \addplot[thick, red,   opacity=0.5, smooth, samples=200, domain=1.2:6]
                         {1/sqrt(2) * exp(-x + 1.2) * sin(deg(sqrt(2)*(x-1.2)))};
-                        \addplot[thick, red,   opacity=0.25, smooth, samples=200, domain=1.4:4]
+                        \addplot[thick, red,   opacity=0.5, smooth, samples=200, domain=1.4:6]
                         {1/sqrt(2) * exp(-x + 1.4) * sin(deg(sqrt(2)*(x - 1.4)))};
-                        \addplot[thick, red,   opacity=0.25, smooth, samples=200, domain=1.6:4]
+                        \addplot[thick, red,   opacity=0.5, smooth, samples=200, domain=1.6:6]
                         {1/sqrt(2) * exp(-x + 1.6) * sin(deg(sqrt(2)*(x - 1.6)))};
-                         \addplot[thick, red,  opacity=0.25, smooth, samples=200, domain=1.8:4]
+                         \addplot[thick, red,  opacity=0.5, smooth, samples=200, domain=1.8:6]
                         {1/sqrt(2) * exp(-x + 1.8) * sin(deg(sqrt(2)*(x - 1.8)))};
-                        \addplot[very thick, red,   opacity=1.0, smooth, samples=200, domain=1:4]
-                        {(x>=1)*1/sqrt(2) * exp(-x + 1) * sin(deg(sqrt(2)*(x - 1))) + 
-                        (x>=1.2)*1/sqrt(2) * exp(-x + 1.2) * sin(deg(sqrt(2)*(x-1.2))) + 
-                        (x>=1.4)*1/sqrt(2) * exp(-x + 1.4) * sin(deg(sqrt(2)*(x - 1.4))) + 
-                        (x>=1.6)*1/sqrt(2) * exp(-x + 1.6) * sin(deg(sqrt(2)*(x - 1.6))) + 
-                        (x>=1.8)*1/sqrt(2) * exp(-x + 1.8) * sin(deg(sqrt(2)*(x - 1.8)))};
+                        % \addplot[very thick, red,   opacity=1.0, smooth, samples=200, domain=1:6]
+                        % {(x>=1)*1/sqrt(2) * exp(-x + 1) * sin(deg(sqrt(2)*(x - 1))) + 
+                        % (x>=1.2)*1/sqrt(2) * exp(-x + 1.2) * sin(deg(sqrt(2)*(x-1.2))) + 
+                        % (x>=1.4)*1/sqrt(2) * exp(-x + 1.4) * sin(deg(sqrt(2)*(x - 1.4))) + 
+                        % (x>=1.6)*1/sqrt(2) * exp(-x + 1.6) * sin(deg(sqrt(2)*(x - 1.6))) + 
+                        % (x>=1.8)*1/sqrt(2) * exp(-x + 1.8) * sin(deg(sqrt(2)*(x - 1.8)))};
                     }<1>
+
+                    % each impulse of area f(\tau_i)\Delta\tau = 0.2 gives 0.2\,h(t-\tau_i);
+                    % their sum is the Riemann approximation of the exact response on <3>
+                    \only{
+                        \addplot[thick, red, opacity=0.4, smooth, samples=200, domain=1.1:6]
+                        {0.2/sqrt(2) * exp(-(x-1.1)) * sin(deg(sqrt(2)*(x-1.1)))};
+                        \addplot[thick, red, opacity=0.4, smooth, samples=200, domain=1.3:6]
+                        {0.2/sqrt(2) * exp(-(x-1.3)) * sin(deg(sqrt(2)*(x-1.3)))};
+                        \addplot[thick, red, opacity=0.4, smooth, samples=200, domain=1.5:6]
+                        {0.2/sqrt(2) * exp(-(x-1.5)) * sin(deg(sqrt(2)*(x-1.5)))};
+                        \addplot[thick, red, opacity=0.4, smooth, samples=200, domain=1.7:6]
+                        {0.2/sqrt(2) * exp(-(x-1.7)) * sin(deg(sqrt(2)*(x-1.7)))};
+                        \addplot[thick, red, opacity=0.4, smooth, samples=200, domain=1.9:6]
+                        {0.2/sqrt(2) * exp(-(x-1.9)) * sin(deg(sqrt(2)*(x-1.9)))};
+                        \addplot[very thick, red, smooth, samples=300, domain=0:6]
+                        {(x>=1.1)*0.2/sqrt(2) * exp(-(x-1.1)) * sin(deg(sqrt(2)*(x-1.1))) +
+                         (x>=1.3)*0.2/sqrt(2) * exp(-(x-1.3)) * sin(deg(sqrt(2)*(x-1.3))) +
+                         (x>=1.5)*0.2/sqrt(2) * exp(-(x-1.5)) * sin(deg(sqrt(2)*(x-1.5))) +
+                         (x>=1.7)*0.2/sqrt(2) * exp(-(x-1.7)) * sin(deg(sqrt(2)*(x-1.7))) +
+                         (x>=1.9)*0.2/sqrt(2) * exp(-(x-1.9)) * sin(deg(sqrt(2)*(x-1.9)))};
+                    }<2>
+
+                    % response to the unit pulse f(t) = u(t-1) - u(t-2)
+                    % = step response s(t-1) - s(t-2), with
+                    % s(t) = 1/3 - 1/3 e^{-t} cos(sqrt(2) t) - sqrt(2)/6 e^{-t} sin(sqrt(2) t)
+                    \only{
+                        \addplot[very thick, red, smooth, samples=300, domain=0:6]
+                        {(x>=1)*(1/3 - 1/3*exp(-(x-1))*cos(deg(sqrt(2)*(x-1))) - sqrt(2)/6*exp(-(x-1))*sin(deg(sqrt(2)*(x-1))))
+                         - (x>=2)*(1/3 - 1/3*exp(-(x-2))*cos(deg(sqrt(2)*(x-2))) - sqrt(2)/6*exp(-(x-2))*sin(deg(sqrt(2)*(x-2))))};
+                    }<3>
 
                 \end{axis}
             \end{tikzpicture}
@@ -1270,18 +1317,199 @@ Basically the input/output relationship
     \end{columns}
     % \centering
     \vspace{1em}
-    LTI system: a weighted sum of shifted impulses produces the same weighted sum of shifted impulse responses
+    \only{LTI system: a weighted sum of shifted impulses produces the same weighted sum of shifted impulse responses}<1>
+    \only{Any input is a train of impulses with areas $f(\tau_i)\,\Delta\tau$, so the output is the same weighted sum of shifted impulse responses}<2>
+    \only{As $\Delta \tau \to 0$, both sums become integrals: the output is an integral of shifted impulse responses weighted by the input}<3>
     \only{\[
-        f(t) = \sum_i a_i\,\delta(t - t_i) \;\longrightarrow\; x(t) = \sum_i a_i\,h(t - t_i).
+        f(t) = \sum_i a_i\,\delta(t - t_i) \;\longrightarrow\; x(t) = \sum_i a_i\,h(t - t_i)
     \]}<1>
     \only{\[
-        f(t) =\,\int_{-\infty}^{\infty}\!\! f(\tau)\,\delta(t-\tau)\,d\tau \;\longrightarrow\; x(t) =\,\int_{-\infty}^{\infty}\!\! f(\tau)\, h(t-\tau)\,d\tau.
+        f(t) = \textcolor{red}{ \lim_{\Delta \tau \to 0}\sum_{i=-\infty}^{\infty} f(\tau_i)}\,\delta(t - \tau_i)\, \textcolor{red}{\Delta \tau} \;\longrightarrow\; x(t) = \textcolor{red}{ \lim_{\Delta \tau \to 0}\sum_{i=-\infty}^{\infty} f(\tau_i)}\,h(t - \tau_i)\, \textcolor{red}{\Delta \tau}
     \]}<2>
+    \only{\[
+        f(t) =\,\int_{-\infty}^{\infty}\!\! f(\tau)\,\delta(t-\tau)\,d\tau \;\longrightarrow\; x(t) =\,\int_{-\infty}^{\infty}\!\! f(\tau)\, h(t-\tau)\,d\tau.
+    \]}<3>
 \end{frame}
 
 % Convolution
-\begin{frame}{Convolution: Interpretation}
-    
+\begin{frame}{Convolution: Definition}
+    The output of an LTI system is the \textbf{convolution} of the input $f(t)$ with the impulse response $h(t)$:
+    \[
+        x(t) \;=\; \int_{-\infty}^{\infty}\!\! f(\tau)\,h(t-\tau)\,d\tau \;\triangleq\; (f * h)(t)
+    \]
+    \begin{itemize}
+        \item $f(\tau)\,d\tau$: area (weight) of the impulse applied at time $\tau$
+        \item $h(t-\tau)$: what that impulse contributes at the later time $t$
+        \item Commutative: $(f*h)(t) = (h*f)(t) = \displaystyle\int_{-\infty}^{\infty}\!\! h(\tau)\,f(t-\tau)\,d\tau$
+    \end{itemize}
+    \vspace{0.5em}
+    For a causal system ($h(t) = 0$ for $t<0$) with input starting at $t = 0$:
+    \[
+        x(t) = \int_{0}^{t}\! f(\tau)\,h(t-\tau)\,d\tau, \qquad t \ge 0
+    \]
+\end{frame}
+
+% t = -1
+\begin{frame}{Convolution: Visualization}
+    Flip and slide $h$: $x(t)$ is the area under the product $f(\tau)\,h(t-\tau)$, here the \textcolor{blue}{overlap area} since $f$ is a \emph{unit} pulse
+    \par\vspace{1em}
+    \centering
+    \begin{tikzpicture}
+        \begin{groupplot}[
+            group style={
+                group size=1 by 2,
+                vertical sep=45pt,
+                x descriptions at=all,
+            },
+            width=0.78\linewidth, height=3.2cm,
+            xmin=-2.6, xmax=7,
+            xtick={-1, 1, 2, 3, 4, 5, 6}, ytick={1},
+            axis lines=center,
+            axis line style={-{Stealth[length=2mm]}},
+            every axis x label/.style={at={(current axis.right of origin)},anchor=north west},
+            every axis y label/.style={at={(current axis.above origin)},anchor=south},
+            clip=false,
+        ]
+            \nextgroupplot[xlabel={$\tau$}, ylabel={$f(\tau)\,,\; h(t-\tau)$}, ymin=-0.1, ymax=1.4]
+                \addplot[very thick, red, const plot mark left] coordinates {
+                    (-2.6,0) (1,0) (1,1) (2,1) (2,0) (6.9,0)
+                };
+                \addplot[very thick, blue, smooth, samples=200, domain=-2.6:-1]
+                    {1/sqrt(2) * exp(-(-1-x)) * sin(deg(sqrt(2)*(-1-x)))};
+                \node[blue, anchor=south east] at (axis cs:-1.6,0.32) {\small $h(-1-\tau)$};
+            \nextgroupplot[xlabel={$t$}, ylabel={$x(t) =\,\int_{-\infty}^{\infty}\!\! f(\tau)\,h(t-\tau)\,d\tau$},
+                           ymin=-0.1, ymax=0.4, ytick={0.25}]
+                \addplot[very thick, red] coordinates {(-2.6,0) (-1,0)};
+                \addplot[only marks, mark=*, blue, mark size=1.5pt] coordinates {(-1,0)};
+                \node[anchor=west] at (axis cs:1.0,0.28) {\small no overlap $\Rightarrow x(-1) = 0$};
+        \end{groupplot}
+    \end{tikzpicture}
+\end{frame}
+
+% t = 1.5
+\begin{frame}{Convolution: Visualization}
+    Flip and slide $h$: $x(t)$ is the area under the product $f(\tau)\,h(t-\tau)$, here the \textcolor{blue}{overlap area} since $f$ is a \emph{unit} pulse
+    \par\vspace{1em}
+    \centering
+    \begin{tikzpicture}
+        \begin{groupplot}[
+            group style={
+                group size=1 by 2,
+                vertical sep=45pt,
+                x descriptions at=all,
+            },
+            width=0.78\linewidth, height=3.2cm,
+            xmin=-2.6, xmax=7,
+            xtick={-1, 1, 2, 3, 4, 5, 6}, ytick={1},
+            axis lines=center,
+            axis line style={-{Stealth[length=2mm]}},
+            every axis x label/.style={at={(current axis.right of origin)},anchor=north west},
+            every axis y label/.style={at={(current axis.above origin)},anchor=south},
+            clip=false,
+        ]
+            \nextgroupplot[xlabel={$\tau$}, ylabel={$f(\tau)\,,\; h(t-\tau)$}, ymin=-0.1, ymax=1.4]
+                \addplot[very thick, red, const plot mark left] coordinates {
+                    (-2.6,0) (1,0) (1,1) (2,1) (2,0) (6.9,0)
+                };
+                % overlap region: f(\tau) = 1 on [1, t]
+                \addplot[draw=blue!60!black, thin, fill=blue!60, opacity=0.45, samples=100, domain=1:1.5]
+                    {1/sqrt(2) * exp(-(1.5-x)) * sin(deg(sqrt(2)*(1.5-x)))} \closedcycle;
+                \addplot[very thick, blue, smooth, samples=200, domain=-2.6:1.5]
+                    {1/sqrt(2) * exp(-(1.5-x)) * sin(deg(sqrt(2)*(1.5-x)))};
+                \node[blue, anchor=south east] at (axis cs:-0.1,0.28) {\small $h(1.5-\tau)$};
+            \nextgroupplot[xlabel={$t$}, ylabel={$x(t) =\,\int_{-\infty}^{\infty}\!\! f(\tau)\,h(t-\tau)\,d\tau$},
+                           ymin=-0.1, ymax=0.4, ytick={0.25}]
+                \addplot[very thick, red] coordinates {(-2.6,0) (1,0)};
+                \addplot[very thick, red, smooth, samples=200, domain=1:1.5]
+                    {1/3 - 1/3*exp(-(x-1))*cos(deg(sqrt(2)*(x-1))) - sqrt(2)/6*exp(-(x-1))*sin(deg(sqrt(2)*(x-1)))};
+                \addplot[only marks, mark=*, blue, mark size=1.5pt] coordinates {(1.5,0.0868)};
+        \end{groupplot}
+    \end{tikzpicture}
+\end{frame}
+
+% t = 3
+\begin{frame}{Convolution: Visualization}
+    Flip and slide $h$: $x(t)$ is the area under the product $f(\tau)\,h(t-\tau)$, here the \textcolor{blue}{overlap area} since $f$ is a \emph{unit} pulse
+    \par\vspace{1em}
+    \centering
+    \begin{tikzpicture}
+        \begin{groupplot}[
+            group style={
+                group size=1 by 2,
+                vertical sep=45pt,
+                x descriptions at=all,
+            },
+            width=0.78\linewidth, height=3.2cm,
+            xmin=-2.6, xmax=7,
+            xtick={-1, 1, 2, 3, 4, 5, 6}, ytick={1},
+            axis lines=center,
+            axis line style={-{Stealth[length=2mm]}},
+            every axis x label/.style={at={(current axis.right of origin)},anchor=north west},
+            every axis y label/.style={at={(current axis.above origin)},anchor=south},
+            clip=false,
+        ]
+            \nextgroupplot[xlabel={$\tau$}, ylabel={$f(\tau)\,,\; h(t-\tau)$}, ymin=-0.1, ymax=1.4]
+                \addplot[very thick, red, const plot mark left] coordinates {
+                    (-2.6,0) (1,0) (1,1) (2,1) (2,0) (6.9,0)
+                };
+                % overlap region: f(\tau) = 1 on [1, 2], fully covered
+                \addplot[draw=blue!60!black, thin, fill=blue!60, opacity=0.45, samples=100, domain=1:2]
+                    {1/sqrt(2) * exp(-(3-x)) * sin(deg(sqrt(2)*(3-x)))} \closedcycle;
+                \addplot[very thick, blue, smooth, samples=200, domain=-2.6:3]
+                    {1/sqrt(2) * exp(-(3-x)) * sin(deg(sqrt(2)*(3-x)))};
+                \node[blue, anchor=south west] at (axis cs:2.4,0.32) {\small $h(3-\tau)$};
+            \nextgroupplot[xlabel={$t$}, ylabel={$x(t) =\,\int_{-\infty}^{\infty}\!\! f(\tau)\,h(t-\tau)\,d\tau$},
+                           ymin=-0.1, ymax=0.4, ytick={0.25}]
+                \addplot[very thick, red] coordinates {(-2.6,0) (1,0)};
+                \addplot[very thick, red, smooth, samples=300, domain=1:3]
+                    {(x>=1)*(1/3 - 1/3*exp(-(x-1))*cos(deg(sqrt(2)*(x-1))) - sqrt(2)/6*exp(-(x-1))*sin(deg(sqrt(2)*(x-1))))
+                     - (x>=2)*(1/3 - 1/3*exp(-(x-2))*cos(deg(sqrt(2)*(x-2))) - sqrt(2)/6*exp(-(x-2))*sin(deg(sqrt(2)*(x-2))))};
+                \addplot[only marks, mark=*, blue, mark size=1.5pt] coordinates {(3,0.1379)};
+        \end{groupplot}
+    \end{tikzpicture}
+\end{frame}
+
+% t = 6
+\begin{frame}{Convolution: Visualization}
+    Flip and slide $h$: $x(t)$ is the area under the product $f(\tau)\,h(t-\tau)$, here the \textcolor{blue}{overlap area} since $f$ is a \emph{unit} pulse
+    \par\vspace{1em}
+    \centering
+    \begin{tikzpicture}
+        \begin{groupplot}[
+            group style={
+                group size=1 by 2,
+                vertical sep=45pt,
+                x descriptions at=all,
+            },
+            width=0.78\linewidth, height=3.2cm,
+            xmin=-2.6, xmax=7,
+            xtick={-1, 1, 2, 3, 4, 5, 6}, ytick={1},
+            axis lines=center,
+            axis line style={-{Stealth[length=2mm]}},
+            every axis x label/.style={at={(current axis.right of origin)},anchor=north west},
+            every axis y label/.style={at={(current axis.above origin)},anchor=south},
+            clip=false,
+        ]
+            \nextgroupplot[xlabel={$\tau$}, ylabel={$f(\tau)\,,\; h(t-\tau)$}, ymin=-0.1, ymax=1.4]
+                \addplot[very thick, red, const plot mark left] coordinates {
+                    (-2.6,0) (1,0) (1,1) (2,1) (2,0) (6.9,0)
+                };
+                % overlap region: f(\tau) = 1 on [1, 2], but h has almost decayed there
+                \addplot[draw=blue!60!black, thin, fill=blue!60, opacity=0.45, samples=100, domain=1:2]
+                    {1/sqrt(2) * exp(-(6-x)) * sin(deg(sqrt(2)*(6-x)))} \closedcycle;
+                \addplot[very thick, blue, smooth, samples=200, domain=-2.6:6]
+                    {1/sqrt(2) * exp(-(6-x)) * sin(deg(sqrt(2)*(6-x)))};
+                \node[blue, anchor=south] at (axis cs:5.3,0.33) {\small $h(6-\tau)$};
+            \nextgroupplot[xlabel={$t$}, ylabel={$x(t) =\,\int_{-\infty}^{\infty}\!\! f(\tau)\,h(t-\tau)\,d\tau$},
+                           ymin=-0.1, ymax=0.4, ytick={0.25}]
+                \node[anchor=west] at (axis cs:3.0,0.3) {\small $h$ has decayed $\Rightarrow x(6) \approx 0$};
+                \addplot[very thick, red] coordinates {(-2.6,0) (1,0)};
+                \addplot[very thick, red, smooth, samples=400, domain=1:6]
+                    {(x>=1)*(1/3 - 1/3*exp(-(x-1))*cos(deg(sqrt(2)*(x-1))) - sqrt(2)/6*exp(-(x-1))*sin(deg(sqrt(2)*(x-1))))
+                     - (x>=2)*(1/3 - 1/3*exp(-(x-2))*cos(deg(sqrt(2)*(x-2))) - sqrt(2)/6*exp(-(x-2))*sin(deg(sqrt(2)*(x-2))))};
+                \addplot[only marks, mark=*, blue, mark size=1.5pt] coordinates {(6,-0.0003)};
+        \end{groupplot}
+    \end{tikzpicture}
 \end{frame}
 
 % f(t) become weight/height of the impulse function
@@ -1430,8 +1658,9 @@ Basically the input/output relationship
     MATLAB DEMO: Laplace Transform and Inverse Laplace Transform
 \end{frame}
 
-\begin{frame}
-    Form a group of 3-4 student and register in MCV
+\begin{frame}{Announcement}
+    Form a group of 3-4 student and register in MCV for Mini-Lab 1
+    HW 1 (due 10 days after publishing) and Lab 1 Handout will be published this week
 \end{frame}
 
 \end{document}
