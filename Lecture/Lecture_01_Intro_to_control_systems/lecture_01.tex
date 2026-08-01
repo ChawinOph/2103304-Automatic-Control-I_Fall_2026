@@ -7,6 +7,14 @@
 % figure/diagram command definitions
 \input{tex_files/p1_mass-spring-damper}
 \input{tex_files/diagram_input-output}
+% control-loop build-up (5 steps)
+\input{tex_files/diagram_loop_1_plant}
+\input{tex_files/diagram_loop_2_feedforward}
+\input{tex_files/diagram_loop_3_disturbance}
+\input{tex_files/diagram_loop_4_feedback}
+\input{tex_files/diagram_loop_5_actuator}
+\input{tex_files/diagram_loop_6_noise}
+\input{tex_files/diagram_loop_7_summary}
 
 % https://www.overleaf.com/learn/latex/Beamer#Beamer_main_features
 %------------------------------------------------------------
@@ -52,13 +60,13 @@
         \end{itemize}
         \item Teaching Assistants (TAs):
         \begin{itemize}
-            \item Namo (Discord Admin)
-            \item Mix
+            \item Namo Ekpattharasakul (Namo)
+            \item Kantanat Phochanasombut (Mix)
         \end{itemize}
-        \item Office Hours: TBD at Hans Buntli Building, 3th Floor, Room 30
+        \item Office Hours: [TBD] at Hans Buntli Building, 3th Floor, Room 301/1
     \end{itemize}
     \begin{center}
-        Refer to the syllabus and MyCourseVille (MCV) for further information
+        \alert{Refer to the syllabus and MyCourseVille for further information}
     \end{center}
 \end{frame}
 
@@ -92,15 +100,16 @@
 % \end{itemize}
 \end{frame}
 
+
 %---------------------------------------------------------
-\section{Introduction}
+\section{Introduction to Control Systems}
 
 %---------------------------------------------------------
 
 \begin{frame}{}
 % \begin{center}
 \centering
-    \Large What are \textbf{Control Systems?} \newline \newline Why Do We Need Them?
+    \Large What are \textbf{Control Systems?} \newline \newline Why do we need them?
 % \end{center}
 \end{frame}
 
@@ -127,7 +136,7 @@
         % landing leg, Grid Fins, multi-engine systems
         % Cold gas Thusters
         % Inertia Navigation System and GPS
-        \item<2> More importantly, how do they make sure the rockets did not deviate from their course?
+        \item<2> More importantly, how do they make sure the rockets \alert{do not deviate} from their course?
         % Many uncertainties (atmospheric disturbance, wind, temperature, model error)
         % It has to know where it is (GPS, Inertia Navigation System)
         % it know deviations from the predefined paths
@@ -137,40 +146,346 @@
 \end{columns}
 \end{frame}
 
-\begin{frame}{Basic Anatomy of Control System}
-    \input{tex_files/diagram_example}
-    Diagram to be refined\footnote{use Dorf Diagram}
-    % start with openloop system -> close loop
-    % add a block diagram of a control system with input, output, and feedback loop
-    % match each block with the rocket example (system, sensor, controller, actuator)
+\begin{frame}{Key Systems of SpaceX Reusable Rockets}
+    \begin{columns}[t]
+        \begin{column}{0.32\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{SpaceX_Boosters.jpeg}\\[4pt]
+            \textbf{\small Engine Clusters}\\[2pt]
+            {\footnotesize Tilting the engines steers the thrust vector; throttling sets
+            its magnitude} % The main actuator in \alert{all} flight phases.}
+        \end{column}
+        \begin{column}{0.32\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{SpaceX_Super-Heavy-Grid-Fin-Design.jpg}\\[4pt]
+            \textbf{\small Grid Fins}\\[2pt]
+            {\footnotesize Aerodynamic steering while descending through the thick atmosphere}
+            % \alert{thick atmosphere}; they need dynamic pressure to produce any force.}
+        \end{column}
+        \begin{column}{0.32\textwidth}
+            \centering
+            \includegraphics[height=2.5cm]{SpaceX_cold_gas_thruster.jpeg}\\[4pt]
+            \textbf{\small Cold-Gas Thrusters}\\[2pt]
+            {\footnotesize Attitude control in vacuum}
+            %, where fins are useless: the flip maneuver and coasting orientation.}
+        \end{column}
+    \end{columns}
+    \vspace{0.6em}
+    
+    \begin{center}
+        \alert{So, how do they coordinate all these systems to achieve the desired trajectory?}
+    \end{center}
+    % All three are \alert{actuators}: each has authority in a different flight regime,
+    % so the controller must hand over between them.
+    \vspace{4pt}
+
+    \blfootnote{\tiny All images credit: SpaceX}
 \end{frame}
 
-\begin{frame}{Inverted Pendulum Example}
-    Simplification of rocket dynamics: The Furuta Pendulum (Physical Demo in Classroom)
-    Analogy Diagram of system-sensor-controller-actuator
+% --- Anatomy of a control system: built up one component at a time ----
+% Running example: the plant is the SpaceX booster.
+
+\begin{frame}{Control System: The Plant}
+    \loopPlant[0.95]
+    \vspace{0.5em}
+    The \alert{plant} (or \alert{process}) is the system we want to control: the rocket.
+    \begin{itemize}
+        \item Input $u$: the command we can apply (thrust, engine/fin gimbal angle).
+        \item Output $y$: what we care about (position, velocity, attitude).
+        \item Modeling means writing how $u$ produces $y$.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Control System: Reference and Open-Loop Controller}
+    \loopFeedforward[0.82]
+    \vspace{0.5em}
+    Add the \alert{reference} $r$ (desired trajectory) and a \alert{controller} that
+    turns it into $u$.
+    \begin{itemize}
+        \item Purely \alert{feedforward}: commands pre-scheduled before flight.
+        \item \alert{Open-loop}: nothing measures the state of the rocket. 
+        \item Works only if the model is perfect and the world is predictable.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Control System: Disturbance}
+    \loopDisturbance[0.75]
+    \vspace{0.5em}
+    A \alert{disturbance} $d$ acts on the plant.
+    \begin{itemize}
+        \item External: wind gusts, air density, unmodeled aerodynamics.
+        \item Internal: model uncertainty, e.g.\ mass and CG shifting as propellant burns.
+        \item Feedforward alone never corrects the resulting error.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Control System: Feedback and Closed-Loop Controller}
+    \loopFeedback[0.70]
+    \vspace{0.3em}
+    Close the loop with a \alert{sensor} and a \alert{comparator}.
+    \begin{itemize}
+        \item The sensor (IMU, GPS) reports the measured output $y_m$.
+        \item The error $e = r - y_m$ drives the controller: \alert{closed-loop} control.
+        \item Feedback rejects $d$ despite an imperfect model.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Control System: Inside the Plant}
+    \loopActuatorPlant[0.65]
+    \vspace{0.3em}
+    Split the plant into the parts we model separately.
+    \begin{itemize}
+        \item \alert{Actuator}: command $\to$ force or torque (engines, fins, thrusters).
+        \item \alert{Dynamic system}: rigid-body dynamics of the rocket.
+        \item $d$ is added to the command entering the actuator.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Control System: Measurement Noise}
+    \loopNoise[0.65]
+    \vspace{0.3em}
+    Every measurement is corrupted by \alert{noise} $n$.
+    \begin{itemize}
+        \item Sensor bias, drift, quantization, vibration.
+        \item The controller sees $r - (y + n)$: it reacts to noise as if it were error.
+        \item Trade-off: fast feedback tracks better but amplifies noise.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Control System: Summary}
+    \loopSummary[0.70]
+    \vspace{0.2em}
+    \begin{columns}[t]
+        \begin{column}{0.48\textwidth}
+            \begin{tabular}{@{}r@{\;\;}l@{}}
+                $r$:   & reference (desired output) \\
+                $e$:   & error, $e = r - y_m$ \\
+                $u$:   & control command \\
+                $f$:   & actuator force or torque (effort) \\
+            \end{tabular}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{tabular}{@{}r@{\;\;}l@{}}
+                $d$:   & disturbance \\
+                $y$:   & actual output \\
+                $n$:   & measurement noise \\
+                $y_m$: & measured output, $y_m = y + n$ \\
+            \end{tabular}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{A Simplified Rocket Stabilization Analogy}
+    \centering
+    The Furuta Pendulum (AKA Rotational Inverted Pendulum)
+    \begin{columns}
+        \begin{column}{0.33\textwidth}
+            \centering
+            \includegraphics[height=3.5cm]{rocket_stability.png} \\ \tiny (Image Credit: \href{https://eaglepubs.erau.edu/introductiontoaerospaceflightvehicles/chapter/rocket-performance/stability-and-control/}{Introduction to Aerospace Flight Vehicles, J. Gordon Leishman, 2026})
+        \end{column}
+        \begin{column}{0.33\textwidth}
+            \centering
+            \includegraphics[height=3.5cm]{The-Furuta-pendulum.png} \\ \tiny (Image Credit: Aguilar-Ibáñez et al., 2010)
+        \end{column}
+        \begin{column}{0.33\textwidth}
+            \centering
+            \includegraphics[height=3.5cm]{furuta_pendulum_auto_control_II_project.png}
+            \\ \tiny (Project by Namo Ekpattharasakul, \href{https://youtu.be/qtClAbNr92E?si=gUyduqwmFPXvqZYV}{YouTube Video})
+        \end{column}
+    \end{columns}
+    % demo video of Furuta Pendulum (opens in the system's default player)
+    \begin{center}
+       \small \movie[externalviewer]{\alert{$\blacktriangleright$~Play Video: Furuta Pendulum Control Demo (.mp4)}}{videos/furuta_pendulum_demo.mp4}
+    \end{center}
+    What are the Actuator, Plant, Sensor, Controller, Reference, Disturbance, and Noise in this system?
+    % Aguilar-Ibáñez, Carlos & Suárez-Castañón, Miguel & Gutiérres-Frias, Oscar. (2010). The direct Lyapunov method for the stabilisation of the Furuta pendulum. International Journal of Control. 83. 2285-2293. 10.1080/00207179.2010.520029. 
 \end{frame}
 
 \begin{frame}{}
-    % \begin{tikzpicture}[remember picture, overlay]
-    % \node [anchor=north east, inner sep=0pt, label={[text width=4cm]below:My text is here, my very very long long text is here.}] (img) at (current page.north east)
-    % {\includegraphics[height=3cm]{example-image-a}};
-    % \end{tikzpicture}
-    Pictures of Elvators, Air Conditioners, Crane, Autonomous, Process Plants, Industrial Robots, Humanoid Robots, Biped Robots, Surgical Robots (Da Vinci), etc.
+    \centering
+    \Large What are the advantages and disadvantages of \newline \textbf{open-loop} vs \textbf{closed-loop} control?
+\end{frame}
+
+\begin{frame}{Open-Loop vs Closed-Loop}
+    \begin{columns}[t]
+        \begin{column}{0.5\textwidth}
+            \textbf{Open-loop (feedforward)}
+            \begin{itemize}
+                \item[\textcolor{brandred}{$+$}] Simple and cheap: no sensor needed
+                \item[\textcolor{brandred}{$-$}] Cannot detect or correct error
+                \item[\textcolor{brandred}{$-$}] Fails under disturbance or model error
+            \end{itemize}
+        \end{column}
+        \pause
+        \begin{column}{0.5\textwidth}
+            \textbf{Closed-loop (feedback)}
+                \begin{itemize}
+                    \item[\textcolor{brandred}{$+$}] Stability: can stabilize an unstable plant
+                    \item[\textcolor{brandred}{$+$}] Performance: precisely tracks reference and rejects disturbance
+                    \item[\textcolor{brandred}{$+$}] Automation: reduces human intervention
+                    \item[\textcolor{brandred}{$-$}] Needs sensors, actuators, and controllers: more complex and costly
+                    % \item[\textcolor{brandred}{$-$}] Feeds measurement noise back into the loop
+                \end{itemize}
+        \end{column}
+    \end{columns}
+    \vspace{1em}
+    \pause
+    \begin{center}
+        \alert{Feedback is not free}: a badly designed loop oscillates or diverges (\alert{Instability}).\\
+        Guaranteeing \alert{stability} comes first, performance second.
+    \end{center}
 \end{frame}
 
 \begin{frame}
-    The very first control system: Governor Mechanism
+    \begin{center}
+        \Large What are \textbf{Control Systems} in our everyday life?
+    % airflyer / oven
+    \end{center}
 \end{frame}
-% \footnotetext{\url{}} 
-    % SpaceX Rocket 
-    % Elevators
-    % Process Plant
-    % industrial robots
-    % Humanoid Robot (RL + PD stack)
-    % biped robot
-    % surgical robot (davinci) (teleoperation + precision, safety, stability)
 
-\begin{frame}{What you will learn in this course}
+\begin{frame}{Control Systems Are Everywhere}
+    % Pictures of
+    % Elevator Mechanism (elevator_mechanism.png)(Elevator Mechanism. Source: DENIS Starostin / Getty Images)
+    % Air Conditioners (air_conditioner.jpeg) (Air Conditioner. Source: KangeStudio / Getty Images)
+    % Crane (tower_crane.jpeg)(Tower Crane. Source: goldenwingsphotography / Getty Images)
+    % Autonomous Car (waymo_self-driving_car.jpeg)(Source: Waymo)
+    % Drones (Quadcopter_camera_dront_in_flight.jpeg)(canrail / Getty Images)
+    %  Process Plants (process_plant.jpeg) (Process Plant. Source: nui7711 / Getty Images)
+    \vspace{0.3em}
+    \begin{columns}[c]
+        \begin{column}{0.30\textwidth}
+            \centering
+            \includegraphics[width=\linewidth, height=2.5cm, keepaspectratio]{elevator_mechanism.jpeg}\\[3pt]
+            {\small Elevator}
+        \end{column}
+        \begin{column}{0.30\textwidth}
+            \centering
+            \includegraphics[width=\linewidth, height=2.5cm, keepaspectratio]{air-conditioner.jpeg}\\[3pt]
+            {\small Air Conditioner}
+        \end{column}
+        \begin{column}{0.30\textwidth}
+            \centering
+            \includegraphics[width=\linewidth, height=2.5cm, keepaspectratio]{tower_crane.jpeg}\\[3pt]
+            {\small Tower Crane}
+        \end{column}
+    \end{columns}
+    \vspace{0.6em}
+    \begin{columns}[c]
+        \begin{column}{0.30\textwidth}
+            \centering
+            \includegraphics[width=\linewidth, height=2.5cm, keepaspectratio]{Waymo_self-driving_car_front_view.gk.jpg}\\[3pt]
+            {\small Autonomous Car}
+        \end{column}
+        \begin{column}{0.30\textwidth}
+            \centering
+            \includegraphics[width=\linewidth, height=2.5cm, keepaspectratio]{Quadcopter_camera_drone_in_flight.jpg}\\[3pt]
+            {\small Drone}
+        \end{column}
+        \begin{column}{0.30\textwidth}
+            \centering
+            \includegraphics[width=\linewidth, height=2.5cm, keepaspectratio]{process_plant.jpeg}\\[3pt]
+            {\small Process Plant}
+        \end{column}
+    \end{columns}
+    \blfootnote{\tiny Image credits: Elevator: DENIS Starostin / Getty Images;
+        Air conditioner: KangeStudio / Getty Images;
+        Tower crane: goldenwingsphotography / Getty Images;
+        Autonomous car: Waymo; Drone: canrail / Getty Images;
+        Process plant: nui7711 / Getty Images}
+\end{frame}
+
+\begin{frame}{Control Systems Are Everywhere}
+    % industrial_robot.jpeg (Industrial Robotic Arm. Source: Mihajlo Maricic / Getty Images)
+    % Humanoid Robots (Atlas Robot. Source: Boston Dynamics)
+    % Surgical Robots (Da Vinci, Surgical Robot. Source: Intuitive Surgical)
+    % XoMotion_exoskeleton (XoMotion, The World's Most Advanced Exoskeleton. (CNW Group/Human in Motion Robotics Inc.))
+    \vspace{0.5em}
+    \begin{columns}[T]
+        \begin{column}{0.23\textwidth}
+            \centering
+            \parbox[c][3.7cm][c]{\linewidth}{\centering
+                \includegraphics[width=\linewidth, height=4.25cm, keepaspectratio]{industrial_robot.jpeg}}\\[3pt]
+            {\small Industrial Robot}
+        \end{column}
+        \begin{column}{0.23\textwidth}
+            \centering
+            \parbox[c][3.7cm][c]{\linewidth}{\centering
+                \includegraphics[width=\linewidth, height=4.25cm, keepaspectratio]{atlas_robot_working.jpg}}\\[3pt]
+            {\small Humanoid Robot}
+        \end{column}
+        \begin{column}{0.23\textwidth}
+            \centering
+            \parbox[c][3.7cm][c]{\linewidth}{\centering
+                \includegraphics[width=\linewidth, height=4.25cm, keepaspectratio]{davinci_robot.jpeg}}\\[3pt]
+            {\small Surgical Robot}
+        \end{column}
+        \begin{column}{0.23\textwidth}
+            \centering
+            \parbox[c][3.7cm][c]{\linewidth}{\centering
+                \includegraphics[width=\linewidth, height=3.8cm, keepaspectratio]{XoMotion_exokeleton.jpg}}\\[3pt]
+            {\small Exoskeleton}
+        \end{column}
+    \end{columns}
+    \blfootnote{\tiny Image credits: Industrial robotic arm: Mihajlo Maricic / Getty Images;
+        Atlas robot: Boston Dynamics; da Vinci surgical robot: Intuitive Surgical;
+        XoMotion exoskeleton: CNW Group / Human in Motion Robotics Inc.}
+\end{frame}
+
+% \begin{frame}{Brief History of Automatic Control Systems}
+    % \begin{itemize}
+    %     \item 1788: James Watt's centrifugal governor for steam engines
+    %     \item 1868: Maxwell's mathematical analysis of governors
+    %     \item 1922: Nyquist's stability criterion
+    %     \item 1930s: Bode's frequency response methods
+    %     \item 1940s: State-space methods and optimal control
+    %     \item 1950s: Digital control and computer-aided design
+    %     \item 1960s: Modern control theory and robust control
+    %     \item 1970s: Adaptive control and nonlinear control
+    %     \item 1980s: Fuzzy control and neural networks
+    %     \item 1990s: Intelligent control and hybrid systems
+    %     \item 2000s: Networked control systems and cyber-physical systems
+    % \end{itemize}
+% \end{frame}
+
+\begin{frame}{The Very First Automatic Feedback Control System}
+    James Watt's \alert{flyball governor} (1769): holds the speed of a steam engine
+    constant, entirely mechanically, with no electronics or computer.
+    \vspace{1em}
+    \begin{columns}[c]
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[width=0.75\textwidth]{james-watt-flyball-governer_Dorf-and-Bishop.png}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            % \footnotesize
+            \textbf{How it works}
+            \begin{itemize}
+                \setlength{\itemsep}{2pt}
+                \item Speed rises $\Rightarrow$ balls swing outward
+                \item Linkage closes the steam valve
+                \item Less steam $\Rightarrow$ engine slows down
+            \end{itemize}
+            % \vspace{0.4em}
+            % \textbf{The loop, in our terms}\\[2pt]
+            % \renewcommand{\arraystretch}{1.1}
+            % \begin{tabular}{@{}l@{\;\;}l@{}}
+            %     \alert{Sensor}      & spinning balls \\
+            %     \alert{Controller}  & mechanical linkage \\
+            %     \alert{Actuator}    & steam valve \\
+            %     \alert{Plant}       & steam engine \\
+            %     \alert{Disturbance} & change in load \\
+            % \end{tabular}
+        \end{column}
+    \end{columns}
+    \blfootnote{\tiny Image credit: Dorf \& Bishop, \emph{Modern Control Systems}, 2017, 13th ed., Pearson.}
+\end{frame}
+
+\begin{frame}
+    \centering
+    \Large What will you learn in this course? 
+\end{frame}
+
+\begin{frame}{What Will You Learn In This Course?}
     % What we will learn in this course:
     % \begin{itemize}
     %     \item How to model a dynamical system (plant) and its components (actuators, sensors, controllers, etc.)
@@ -180,10 +495,25 @@
     %     \item How to test and validate the system's performance (simulation, experiments, etc.)
     % \end{itemize}
 
-    By midterm, you will have enough knowledge to prevent your system from blowing up (System Stability).
-    \newline \newline \pause
-    By end of course, you will have enough knowledge to make your system work as intended.
+    %% adding falling humanoid and exploded rocket images
+    By \textbf{midterm}, you will have enough knowledge to prevent your system from blowing up (System Stability).
+    \newline
+    % \vspace{1em}
+    \begin{center}
+        \includegraphics[width=0.6\textwidth]{SpaceX_RocketExplosion.png} 
+        \\ Three previous explosions of Starship prototypes\blfootnote{\tiny Gene Blevins/Reuters; SPadre.com}
+    \end{center}
 \end{frame} 
+
+\begin{frame}{What Will You Learn In This Course?}
+    By \textbf{the end of the course}, you will be able to design a controller that makes your system behave as desired (System Performance).
+    \newline
+    % \vspace{1em}
+    \begin{center}
+        \includegraphics[width=0.5\textwidth]{step_response_of_2nd-order_system_Dorf-Bishop.png}
+        \\ Step response of a 2nd-order system and its transient-response specifications\blfootnote{\tiny Image credit: Dorf \& Bishop, \emph{Modern Control Systems}, 2017, 13th ed., Pearson.}
+    \end{center}
+\end{frame}
 
 \begin{frame}{Course Schedule (1st Semester 2026)}
 
@@ -272,7 +602,7 @@
     % Controllability \& observability; \alert{pole placement, Ackermann}; observer &
     % % \fillin{dry-run / checkoff?} \\
     % \hline
-    14 & 9 Nov & Project Demo Day & Group Presentations $\cdot$ Control Competition & \\
+    14 & 9 Nov & Project Demo Day & Group Presentations & \\
     % 14 & 10, 12 Nov & Project Demo Day & Group Presentations $\cdot$ Control Competition & \\
     % Diagnostic-fix presentations; tracking competition; judging &
     % % \alert{Demo + competition} \\
@@ -285,48 +615,62 @@
     \midrule
     \multicolumn{5}{l}{Final Exam: Monday, 30 Nov 2026, 8:30 - 11:30} \\
     \midrule
+    \multicolumn{6}{r}{\textbullet~\textit{Homework is due \textbf{ten days} after it is assigned unless otherwise specified.}} \\
     \multicolumn{6}{r}{\textbullet~\textit{Pre-lab handout released \textbf{one week} before each mini-lab; reading required before the session.}} \\
-    \multicolumn{6}{r}{\textbullet~\textit{Lab Report (Up to 4 people per group) is due \textbf{one week} after the lab session.}} \\
+    \multicolumn{6}{r}{\textbullet~\textit{Lab Report (4 people per group) is due \textbf{one week} after the lab session.}} \\
     \end{tabular} 
 \end{frame}
 
-\begin{frame}{Servo Mini-Lab}
+\begin{frame}{Servo Mini-Lab (10\% of the grade)}
     \begin{columns}
 
         \begin{column}{0.6\textwidth}
             \begin{itemize}
-                \item 45-minute hands-on mini-lab sessions
-                \item Must Bring Laptop with MATLAB/Simulink and Control System Toolbox installed
-                \item Learn how to model a dynamical system (plant) and its components (actuators, sensors, controllers, etc.)
-                \item Learn how to use MATLAB/Simulink and Control System Toolbox to model, analyze, and design control systems
-                \item Implement your controller on a real-time hardware setup (Brushed DC motor system)
-                \item Lab reports are due one week after the lab session
+                \item 45-minute hands-on sessions with a brushed DC motor system
+                % \item Learn how to model a dynamical system (plant) and its components (actuators, sensors, controllers, etc.)
+                % \item Implement your controller on a real-time hardware setup (Brushed DC motor system)
+                \item Learn how to use MATLAB/Simulink to model, analyze, and design control systems on a real-time hardware setup
+                % \item Lab reports are due one week after the lab session
+                \item \alert{Must Bring} at least one laptop (+ USB-C data cable) per group with MATLAB/Simulink and required toolboxes installed
                 \item \textbf{Note:} Lab sessions are mandatory and will be graded
             \end{itemize}
         \end{column}
 
         \begin{column}{0.4\textwidth}
-            Picture of Brushed DC Motor with Load (or other plant)
+            \includegraphics[width=0.75\textwidth]{graphic_files/minilab_dc_motor_plant.png}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}{Final Project}
-    \begin{columns}
-        \begin{column}{0.6\textwidth}
+\begin{frame}{Final Project (15\% of the grade)}
+    Groups of 4, starting after the midterm. 
+    \vspace{0.5em}
+    \begin{columns}[c]
+        \begin{column}{0.62\textwidth}
+            You will be given an electro-mechanical plant and must make it meet a target
+            performance specification:
             \begin{itemize}
-                \item Up to 4 people per group
-                \item Design and implement a controller for a given plant (Electro-Mechanical System)
-                \item Use the knowledge and skills learned in the course to achieve desired performance
-                \item Submit milestone reports and final report (starting after midterm)
+                \item \alert{Identify} the plant model from experiment
+                \item \alert{Simulate} it in Simulink and validate against hardware
+                \item \alert{Design and tune} a controller to meet the specification
+                \item \alert{Demonstrate} it on the real plant, and explain any
+                      simulation-vs-hardware mismatch
             \end{itemize}
         \end{column}
-
-        \begin{column}{0.4\textwidth}
-            Picture of Brushed DC Motor with Load (or other plant)
+        \begin{column}{0.38\textwidth}
+            \centering
+            \includegraphics[height=3.2cm, keepaspectratio]{Black_question_mark.png}\\[4pt]
+            {\small Plant: to be announced}
         \end{column}
-
     \end{columns}
+    % \vspace{0.6em}
+    % \begin{center}
+    %     \scriptsize
+    %     \textbf{Wk 9} System ID $\;\rightarrow\;$
+    %     \textbf{Wk 11} Design in simulation $\;\rightarrow\;$
+    %     \textbf{Wk 13} Hardware tuning $\;\rightarrow\;$
+    %     \textbf{Wk 14} Demo day \& report
+    % \end{center}
 \end{frame}
 
 \begin{frame}{}
@@ -343,13 +687,34 @@
         \end{column}
     \end{columns}
 \end{frame}
-
 \section{Dynamic System Modeling, ODEs, and Laplace Transform}
 
-\begin{frame}
-In a control system consist of subsystem blocks 
-How to model each of the subsystem (Plants, Actuators, Controllers, etc.)?
-Basically the input/output relationship
+\begin{frame}{How Do We Model Each Block?}
+    A control system is a set of interconnected subsystems. To design anything, we first
+    need a model of each one.
+    \begin{center}
+        \begin{tikzpicture}[
+            auto, >=latex',
+            scale=0.95, transform shape,
+            block/.style={draw, rectangle, minimum height=2.9em, minimum width=6.8em, align=center},
+            input/.style={coordinate},
+            output/.style={coordinate},
+        ]
+            \node [block, draw=brandred, text=brandred, very thick] (plant) at (0,0)
+                {Subsystem\\[1pt] \small (plant, actuator, sensor, \dots)};
+            \node [input]  (in)  at (-5.2,0) {};
+            \node [output] (out) at ( 5.2,0) {};
+            \draw [->, black, very thick] (in) -- node [above] {input $u$} (plant);
+            \draw [->, black, very thick] (plant) -- node [above] {output $y$} (out);
+        \end{tikzpicture}
+    \end{center}
+    \begin{itemize}
+        \item Every block is described the same way: by its
+              \alert{input--output relationship}.
+        \item That relationship is governed by a \alert{differential equation}
+              in the time domain %, or a \alert{transfer function} in the $s$-domain.
+        \item Next: how to compute the output $y(t)$ given an input $u(t)$ and a differential equation.
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Dynamic System Modeling}
@@ -362,7 +727,155 @@ Basically the input/output relationship
 \end{frame}
 
 \begin{frame}{Solving ODEs in Time Domain}
-    particular solution, homogeneous solution, and general solution 
+    \begin{columns}
+        \begin{column}{0.5\columnwidth}
+            \centering
+            \massSpringDamper[0.75] 
+        \end{column}
+        \begin{column}{0.5\columnwidth}
+            \centering
+            \begin{tikzpicture}
+                \begin{axis}[
+                    % Force markers to draw on top of grids/axis lines
+                    set layers, mark layer=axis foreground,
+                    width=\linewidth, height=3cm,
+                    xlabel={$t$}, ylabel={$f(t)$},
+                    xmin=0, xmax=4, ymin=-120, ymax=120,
+                    xtick={0,1,2,3}, ytick={-100,-50,0,50,100},
+                    axis lines=left,
+                    % axis lines=center,
+                    every axis x label/.style={at={(current axis.right of origin)},anchor=north west},
+                    every axis y label/.style={at={(current axis.above origin)},anchor=south east},
+                    clip=false,
+                ]
+                    % input f(t) = 100 sin(2 pi t)
+                    \addplot[very thick, red, smooth, samples=400, domain=0:4]{100*sin(deg(2*pi*x))};
+                \end{axis}
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
+    \vspace{1em}
+    From Newton's second law, the governing Ordinary Differential Equation (ODE) is
+    \[
+        m \ddot{x}(t) + c\dot{x}(t) + kx(t) = f(t), 
+    \] or with the given parameters, it becomes
+    \[
+        \ddot{x}(t) + 2\dot{x}(t) + 3x(t) = f(t), 
+    \]
+    Given the input force $f(t) = 100\,\sin(2\pi t)\,\text{N}$ , with all zero initial conditions $(x(0) = 0 \text{m}, \dot{x}(0) = 0 \text{m/s})$, solve the ODE to find the output $x(t)$.
+    % particular solution, homogeneous solution, and general solution 
+\end{frame}
+
+\begin{frame}{Solving ODEs in Time Domain: The Procedure}
+    For a linear ODE, the total solution is the sum of two parts:
+    \[
+        x(t) \;=\; \underbrace{x_h(t)}_{\text{homogeneous}} \;+\; \underbrace{x_p(t)}_{\text{particular}}
+    \]
+    \begin{enumerate}
+        \item \alert{Homogeneous solution} $x_h$: solve the ODE with $f(t) = 0$.
+              Its shape is set by the \emph{system} (contains the unknown constants).
+        \item \alert{Particular solution} $x_p$: find any one solution of the full ODE
+              with $f(t)$. Its shape is set by the \emph{input}.
+        \item Add them, then apply the \alert{initial conditions} to determine the
+              remaining constants.
+    \end{enumerate}
+    \vspace{0.3em}
+    \begin{center}
+        \alert{Careful:} the initial conditions apply to $x_h + x_p$, never to $x_h$ alone.
+    \end{center}
+\end{frame}
+
+\begin{frame}{Step 1: Homogeneous Solution (Transient)}
+    Set $f(t) = 0$ and try $x = e^{st}$:
+    \[
+        \ddot{x} + 2\dot{x} + 3x = 0
+        \;\;\Longrightarrow\;\;
+        \underbrace{(s^2 + 2s + 3)}_{\text{characteristic polynomial}} e^{st} = 0
+    \]
+    The exponential is never zero, so the \alert{characteristic equation} must hold:
+    \[
+        s^2 + 2s + 3 = 0 \;\;\Longrightarrow\;\; s = -1 \pm j\sqrt{2}
+    \]
+    Complex roots with a negative real part: the system is \alert{underdamped} and stable.
+    \[
+        x_h(t) = e^{-t}\left(A\cos\sqrt{2}\,t + B\sin\sqrt{2}\,t\right)
+    \]
+    \begin{itemize}
+        \item Real part $-1$: decay rate. Imaginary part $\sqrt{2}$: damped frequency.
+        \item $A$ and $B$ are still unknown, and $x_h \to 0$: this is the \alert{transient}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Step 2: Particular Solution (Steady State)}
+    The input is a sinusoid at $\omega = 2\pi$ rad/s, so try the same form
+    (\alert{method of undetermined coefficients}):
+    \[
+        x_p(t) = C\cos\omega t + D\sin\omega t
+    \]
+    Substituting into $\ddot{x} + 2\dot{x} + 3x = 100\sin\omega t$ and matching the
+    $\cos\omega t$ and $\sin\omega t$ terms:
+    \[
+        \begin{array}{rcl}
+            (3-\omega^2)\,C + 2\omega\,D &=& 0\\[2pt]
+            -2\omega\,C + (3-\omega^2)\,D &=& 100
+        \end{array}
+        \qquad
+        \begin{array}{l}
+            3-\omega^2 = -36.48\\[2pt]
+            2\omega = 12.57
+        \end{array}
+    \]
+    \[
+        \Longrightarrow\quad C = -0.844, \quad D = -2.451
+        \qquad
+        x_p(t) = 2.59\,\sin(2\pi t - 161^\circ)
+    \]
+    \begin{itemize}
+        \item Amplitude $=\dfrac{100}{\sqrt{(3-\omega^2)^2 + (2\omega)^2}} = 2.59$ m:
+              the same frequency as the input, but scaled and phase-shifted.
+        \item $x_p$ never decays: this is the \alert{steady-state} response.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Step 3: Apply the Initial Conditions}
+    \[
+        x(t) = e^{-t}\left(A\cos\sqrt{2}\,t + B\sin\sqrt{2}\,t\right)
+               - 0.844\cos 2\pi t - 2.451\sin 2\pi t
+    \]
+    With $x(0) = 0$ and $\dot{x}(0) = 0$: \quad $A = 0.844$, \quad $B = 11.48$.
+    \begin{columns}[c]
+        \begin{column}{0.56\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \begin{axis}[
+                    width=\linewidth, height=4cm,
+                    xlabel={$t$ (s)}, ylabel={$x(t)$ (m)},
+                    xmin=0, xmax=6, ymin=-13, ymax=13,
+                    xtick={0,1,2,3,4,5,6}, ytick={-10,0,10},
+                    axis lines=left,
+                    every axis x label/.style={at={(current axis.right of origin)},anchor=north west},
+                    every axis y label/.style={at={(current axis.above origin)},anchor=south east},
+                    clip=false,
+                ]
+                    \addplot[thick, black, dashed, smooth, samples=500, domain=0:6]
+                        {-0.8442*cos(deg(2*pi*x)) - 2.4505*sin(deg(2*pi*x))};
+                    \addplot[very thick, blue, smooth, samples=600, domain=0:6]
+                        {exp(-x)*(0.8442*cos(deg(sqrt(2)*x)) + 11.4844*sin(deg(sqrt(2)*x)))
+                         - 0.8442*cos(deg(2*pi*x)) - 2.4505*sin(deg(2*pi*x))};
+                \end{axis}
+            \end{tikzpicture}
+        \end{column}
+        \begin{column}{0.42\textwidth}
+            \small
+            \textcolor{blue}{\rule{1em}{1.2pt}} total response $x(t)$\\[3pt]
+            \textcolor{black}{\rule{1em}{0.8pt}} steady state $x_p(t)$
+            \begin{itemize}
+                \item The transient dominates early, then dies out with time
+                      constant $1/1 = 1$ s.
+                \item After $\approx 4$--$5$ s only $x_p$ remains.
+            \end{itemize}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1025,7 +1538,7 @@ Basically the input/output relationship
             every axis y label/.style={at={(current axis.above origin)},anchor=south},
             clip=false,
         ]
-            \nextgroupplot[ylabel={$f(t)$}, ymin=0, ymax=1.4]
+            \nextgroupplot[ylabel={$f(\tau)$}, ymin=0, ymax=1.4]
                     \addplot[very thick, red, const plot mark left] coordinates {
                         (-1.1,0) (1,0) (1,1) (2,1) (2,0) (3.5,0)
                     };
@@ -1070,7 +1583,7 @@ Basically the input/output relationship
             every axis y label/.style={at={(current axis.above origin)},anchor=south},
             clip=false,
         ]
-            \nextgroupplot[ylabel={$f(t)$}, ymin=0, ymax=1.4]
+            \nextgroupplot[ylabel={$f(\tau)$}, ymin=0, ymax=1.4]
                     \addplot[very thick, red, const plot mark left] coordinates {
                         (-1.1,0) (1,0) (1,1) (2,1) (2,0) (3.5,0)
                     };
@@ -1119,7 +1632,7 @@ Basically the input/output relationship
             every axis y label/.style={at={(current axis.above origin)},anchor=south},
             clip=false,
         ]
-            \nextgroupplot[ylabel={$f(t)$}, ymin=0, ymax=1.4]
+            \nextgroupplot[ylabel={$f(\tau)$}, ymin=0, ymax=1.4]
                     \addplot[very thick, red, const plot mark left] coordinates {
                         (-1.1,0) (1,0) (1,1) (2,1) (2,0) (3.5,0)
                     };
@@ -1171,7 +1684,7 @@ Basically the input/output relationship
             every axis y label/.style={at={(current axis.above origin)},anchor=south},
             clip=false,
         ]
-            \nextgroupplot[ylabel={$f(t)$}, ymin=0, ymax=1.4]
+            \nextgroupplot[ylabel={$f(\tau)$}, ymin=0, ymax=1.4]
                     \addplot[very thick, red, const plot mark left] coordinates {
                         (-1.1,0) (1,0) (1,1) (2,1) (2,0) (3.5,0)
                     };
@@ -1526,82 +2039,103 @@ Basically the input/output relationship
 % Revisit the square pulse solution using Laplace method
 % Revisit the sinuosolidal problem using the Laplace method
 
-\begin{frame}
-    % \begin{tikzpicture}
-    %     \begin{axis}[
-    %         xlabel={$n$},
-    %         ylabel={$x[n]$},
-    %         xmin=-0.5, xmax=10.5,
-    %         ymin=-1.2, ymax=1.2,
-    %         % grid=major,
-    %         axis lines=middle % Moves axes to center if desired
-    %     ]
-    %         % The 'ycomb' option handles the vertical lines
-    %         \addplot+[ycomb, samples=24, domain=0:10, thick, mark=*] 
-    %         {cos(deg(x * pi / 4))}; 
-            
-    %     \end{axis}
-    % \end{tikzpicture}
-    show general square wave input we show earlier and it's response (dont show solution yet)
-    Show multiple input responses from two pulses of different shape and sizes
-    show that the combined response is the solution since the system is LTI
+\begin{frame}{Solving ODEs with Convolution}
+    Back to our original problem: $\ddot{x} + 2\dot{x} + 3x = f(t)$ with
+    $f(t) = 100\sin(2\pi t)$ and zero initial conditions.
+    \vspace{0.3em}
+
+    Given that we know the impulse response of this system is
+    \[
+        h(t) = \frac{1}{\sqrt{2}}\,e^{-t}\sin\!\left(\sqrt{2}\,t\right), \qquad t \ge 0
+    \]
+    so convolution gives the output directly, with no homogeneous/particular split:
+    \[
+        x(t) = \int_{0}^{t} f(\tau)\,h(t-\tau)\,d\tau
+             = \frac{100}{\sqrt{2}}\int_{0}^{t}
+               \sin(2\pi\tau)\;e^{-(t-\tau)}\sin\!\left(\sqrt{2}(t-\tau)\right) d\tau
+    \]
+    \begin{center}
+        \alert{One formula, any input. But can we actually evaluate this integral?}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Solving ODEs with Convolution: Evaluating the Integral}
+    Pull the constant part of the exponential out of the integral ($e^{-(t-\tau)} = e^{-t}e^{\tau}$):
+    \[
+        x(t) = \frac{100}{\sqrt{2}}\,e^{-t}\int_{0}^{t}
+               e^{\tau}\,\sin(2\pi\tau)\,\sin\!\left(\sqrt{2}(t-\tau)\right) d\tau
+    \]
+    Product-to-sum,
+    $\sin A \sin B = \tfrac{1}{2}\!\left[\cos(A-B) - \cos(A+B)\right]$, splits it in two:
+    \[
+        x(t) = \frac{100\,e^{-t}}{2\sqrt{2}} \int_{0}^{t} e^{\tau}
+        \Big[ \cos\!\big((2\pi+\sqrt{2})\tau - \sqrt{2}t\big)
+            - \cos\!\big((2\pi-\sqrt{2})\tau + \sqrt{2}t\big) \Big] d\tau
+    \]
+    Each term needs \alert{integration by parts twice} (or the standard formula)
+    \[
+        \int e^{\tau}\cos(\beta\tau + \phi)\,d\tau
+        = \frac{e^{\tau}\left[\cos(\beta\tau+\phi) + \beta\sin(\beta\tau+\phi)\right]}{1+\beta^{2}},
+        \qquad \beta = 2\pi \pm \sqrt{2}
+    \]
+    \begin{center}
+        \alert{Correct, but painful} --- and $t$ appears inside \emph{and} outside the
+        integrand, so every new input restarts the whole calculation.
+    \end{center}
+\end{frame}
+
+
+\begin{frame}{Is There a Better Way?}
+    Every route we have taken so far ends in an \alert{integral in the time domain}:
+    \begin{itemize}
+        \item Classical method: a new particular solution for every new input.
+        \item Convolution: a new integral $\int_0^t f(\tau)\,h(t-\tau)\,d\tau$ for every
+              new input.
+    \end{itemize}
+    \vspace{0.3em}
+    What we want is a \alert{transformation that bypasses that integral}: move the
+    problem into another domain where the calculus becomes algebra, solve it there, and
+    transform the answer back.
+    \[
+        \underbrace{f(t),\;\text{ODE}}_{\text{time domain}}
+        \;\xrightarrow{\ \text{transform}\ }\;
+        \underbrace{\text{algebraic equation}}_{s\text{-domain}}
+        \;\xrightarrow{\ \text{solve}\ }\; X(s)
+        \;\xrightarrow{\ \text{inverse}\ }\; x(t)
+    \]
+\end{frame}
+
+\begin{frame}{What Should the Transformation Do?}
+    The impulse is the natural starting point: integrating it already gives a plain
+    number, $\int_{-\infty}^{\infty}\!\delta(t)\,dt = 1$, and every other output is built
+    from its response $h(t)$ by convolution.
+    \vspace{0.3em}
+
+    So we look for a transformation in which
+    \begin{itemize}
+        \item the \alert{impulse becomes the constant $1$}, and its response becomes the
+              system itself, $H(s)$;
+        \item \alert{convolution becomes multiplication}:
+              $x = f * h \;\longrightarrow\; X(s) = F(s)\,H(s)$;
+        \item \alert{differentiation becomes multiplication} by the new variable:
+              $\dot{x} \longrightarrow s\,X(s)$.
+    \end{itemize}
+    \vspace{0.3em}
+    Then solving the ODE is nothing but algebra:
+    \[
+        \ddot{x} + 2\dot{x} + 3x = f(t)
+        \;\;\longrightarrow\;\;
+        X(s) = \frac{F(s)}{s^2 + 2s + 3}
+    \]
 \end{frame}
 
 \begin{frame}
-    The most basic input function which is a building block of all other functions is a unit impulse function
-    Mathematically, impulse response (dirac delta) function has the following propterties
-    show a square wave of area = 1 with dt being shrunk to unit impulse 
-\end{frame}
-
-\begin{frame}
-    we can break down general input functions to small component of impulse functions
-    in other words, any input function is an infinite sum of the unit impulse function $h(t)$
-    Thus, the output is can be seen as the infinite sum of output function
-    where each output of unit impulse is multiplied by the "height" of the associated input 
-    By decomposing any input into impulses, we can find the system's response to any arbitrary input signal.
-\end{frame}
-
-\begin{frame}
-    To characterize the input and output relationship using the unit impulse response, we use Convolution
-    $y(t) = h(t) * u(t) = \int_{-\infty}^{\infty}h(\tau)u(t-\tau)d\tau$
-    Basically, you "poke" the system at different times and combine all the impulses response together
-    at a particular time $t$ (seen as a constant) the output response $y(t)$ is the infinite sum of all unit impulse responses that have started $\tau$ seconds earlier before that particular time $t$, where each impulse response is also multiplied by input function $u(t - \tau)$ (the input function at $\tau$ second before $t$)  
-    show visualization plots STEP-BY-STEP
-    (if we step back by time $\tau$ from $t$, we will see $y(t-\tau)$ and the impulse response value of interest from that input $y(t-\tau)$ is $h(\tau)$ or the response value after it has started $\tau$ second earlier)
-    hence summing $h(\tau)u(t-\tau)$ over $\tau$
-    Another way to see it is that the output at time $t$ is the sum of all the impulse responses that have started at different times $\tau$ before $t$, where the response depends only on the age of the impulse, $t - \tau$, so $h(t-\tau)$ multiplied by the input function at that time $u(\tau) $ at different times $\tau$ before $t$
-\end{frame}
-
-\begin{frame}
-    show a plant block with input and output and expand to a chain of subsystem
-    it's not convenient to do this way if there are multiple subsystems
-\end{frame}
-
-\begin{frame}
-    Let's get back to the dirac delta function definition
-    As the integration makes it become one.
-    Can be bypass the convolution computation and 
-\end{frame}
-
-\begin{frame}
-    the unit impulse response is the system's response to a Dirac delta function input 
-    in this case the unit impulse response is the solution to the ODE with a Dirac delta function input 
-    $h(t) = e^{-t}sin(t)$ for the mass-spring-damper system we show (show plot of impulse response)
-    intuition is the is the decaying amplitude oscillation of the system after a sudden impact and some oscillation before it settles down to zero
-    if you have a train of impulses, the system's response is the sum of the responses to each impulse (superposition principle)
-    (Show plot of discrete impulses and the system's response to each impulse and the sum of the responses)
-    show the convolution integral formula: $( y(t) = \int_{0}^{t} h(\tau)f(t-\tau)d\tau )$
-\end{frame}
-
-\begin{frame}
-    is there a better way to solve ODEs?
-    Let's assume there is a tranfrom operator that can transform the ODE into an algebraic equation in a new domain (from time-domain to s-domain) and then we can solve for the output in the s-domain and then transform back to the time domain
-    This is the idea behind the Laplace Transform
-\end{frame}
-
-\begin{frame}
-    what if we have a ``Magic Transformation'' that treats the dirac delta function as a unit function in another domain besides the time domain? How?
-    we ``integrate" the dirac delta function from 0 to infinity and we get 1, perhav
+    \begin{center}
+        This is the idea behind the \alert{Laplace transform} \\
+        \vspace{1em}
+        \includegraphics[width=0.3\textwidth]{graphic_files/Laplace_Pierre-Simon.jpg} \\
+        Pierre-Simon, Marquis de Laplace (3 March 1749 – 5 March 1827) \\
+    \end{center}
 \end{frame}
 
 \begin{frame}{Laplace Transform}
@@ -1614,10 +2148,6 @@ Basically the input/output relationship
         \item The integration involves a ``kernel'' $k(s,t) = e^{-st}$, a function of both the complex variable $s$ and the time variable $t$ in the two spaces.
         \item The term $e^{-st}$ is sometimes called the ``convergence factor" which makes the integral converges for a wide range of functions.
     \end{itemize}
-\end{frame}
-
-\begin{frame}
-    History of Pierre-Simon Laplace (3 March 1749 – 5 March 1827) and Oliver Heaviside (10 May 1850 – 3 August 1925)
 \end{frame}
 
 \begin{frame}
@@ -1659,8 +2189,10 @@ Basically the input/output relationship
 \end{frame}
 
 \begin{frame}{Announcement}
-    Form a group of 3-4 student and register in MCV for Mini-Lab 1
+    Form a group of 4 student and register for Mini-Lab 1
+    Each group must bring a data cable (one end with USB-C to connect with the board) next week for the mini-lab session
     HW 1 (due 10 days after publishing) and Lab 1 Handout will be published this week
+    Scan QR Code for providing feedback on lecture today
 \end{frame}
 
 \end{document}

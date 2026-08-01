@@ -40,6 +40,9 @@
 \usepackage{nicefrac}
 \usepackage{booktabs}
 
+% video playback in beamer: \movie[externalviewer]{link text}{file.mp4}
+\usepackage{multimedia}
+
 % set up chula color theme
 \usepackage{xcolor}
 \usepackage{colortbl}
@@ -124,6 +127,14 @@
 
 % Fill-in convention: \fillin{...} renders a gray italic placeholder.
 \newcommand{\fillin}[1]{\textcolor{gray}{\textit{[#1]}}}
+
+% Unnumbered footnote (e.g. image credits): \blfootnote{...}
+\newcommand\blfootnote[1]{
+    \begingroup
+    \renewcommand\thefootnote{}\footnote{#1}
+    \addtocounter{footnote}{-1}
+    \endgroup
+}
 
 % Show a section-outline frame at the start of each \section
 \AtBeginSection[]
