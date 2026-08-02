@@ -72,3 +72,8 @@ Desktop.ini
 # (logos, figures, the course plan). Add specific generated lecture
 # PDFs below if you want to exclude them, e.g.:
 # Lecture/**/lecture_*.pdf
+# ---- LaTeX Workshop out dir & TikZ externalization cache ----
+build/
+tikz_cache/
+*.figlist
+*.makefile

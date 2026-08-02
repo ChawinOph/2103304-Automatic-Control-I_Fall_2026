@@ -16,6 +16,16 @@
 \input{tex_files/diagram_loop_6_noise}
 \input{tex_files/diagram_loop_7_summary}
 
+% ------------------------------------------------------------------
+% TikZ/PGF externalization: each picture is compiled once into its own
+% cached PDF under tikz_cache/, so unchanged figures are not re-rendered.
+% Requires -shell-escape (set in .latexmkrc) and the tikz_cache/ folder.
+% Delete tikz_cache/ after changing a column width or any other length a
+% picture inherits from its surroundings. Currently DISABLED: uncomment the
+% line below to turn caching back on (and delete tikz_cache/ first).
+% ------------------------------------------------------------------
+% \tikzexternalize[prefix=tikz_cache/]
+
 % https://www.overleaf.com/learn/latex/Beamer#Beamer_main_features
 %------------------------------------------------------------
 %This block of code defines the information to appear in the
@@ -1845,20 +1855,21 @@
 \end{frame}
 
 % Convolution
-\begin{frame}{Convolution: Definition}
+\begin{frame}{Convolution}
+    %  \begin{alertblock}{Definition}
     The output of an LTI system is the \textbf{convolution} of the input $f(t)$ with the impulse response $h(t)$:
     \[
         x(t) \;=\; \int_{-\infty}^{\infty}\!\! f(\tau)\,h(t-\tau)\,d\tau \;\triangleq\; (f * h)(t)
     \]
+    % \end{alertblock}
     \begin{itemize}
         \item $f(\tau)\,d\tau$: area (weight) of the impulse applied at time $\tau$
         \item $h(t-\tau)$: what that impulse contributes at the later time $t$
         \item Commutative: $(f*h)(t) = (h*f)(t) = \displaystyle\int_{-\infty}^{\infty}\!\! h(\tau)\,f(t-\tau)\,d\tau$
     \end{itemize}
-    \vspace{0.5em}
     For a causal system ($h(t) = 0$ for $t<0$) with input starting at $t = 0$:
     \[
-        x(t) = \int_{0}^{t}\! f(\tau)\,h(t-\tau)\,d\tau, \qquad t \ge 0
+    x(t) = \int_{0}^{t}\! f(\tau)\,h(t-\tau)\,d\tau, \qquad t \ge 0
     \]
 \end{frame}
 
@@ -2131,11 +2142,12 @@
 
 \begin{frame}
     \begin{center}
-        This is the idea behind the \alert{Laplace transform} \\
+        This is the idea behind the \href{https://en.wikipedia.org/wiki/Laplace_transform}{\alert{Laplace Transform}}\\
         \vspace{1em}
         \includegraphics[width=0.3\textwidth]{graphic_files/Laplace_Pierre-Simon.jpg} \\
-        Pierre-Simon, Marquis de Laplace (3 March 1749 – 5 March 1827) \\
+        Pierre-Simon, Marquis de Laplace \\ (3 March 1749 -- 5 March 1827) \\
     \end{center}
+    \blfootnote{\tiny Image credit: \href{https://en.wikipedia.org/wiki/Laplace_transform}{Wikipedia}}
 \end{frame}
 
 \begin{frame}{Laplace Transform}
@@ -2150,49 +2162,589 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}
-    complex frequency-domain
-    and then $h(t) = e^{-t}sin(t) = e^{\sigma t}sin(\omega t) = e^{\sigma t}e^{j\omega t} = e^{(\sigma + j\omega)t} = e^{st}$
-    The Laplace transform of the Dirac delta function is 1 $\mathcal{L}[\delta(t)] = 1$, which simplifies the analysis of systems with impulsive inputs.
-    Now it sees the system's response to a Dirac delta function as a unit function in the s-domain and see a unit step function as a 1/s function in the s-domain
-    The Transfer Funcition is simply the Laplace transform of the system's unit impulse response
+\begin{frame}{Laplace Transform of the Dirac Delta Function}
+    % complex frequency-domain
+    Back to the Dirac delta function $\delta(t)$:
+    \[
+        \delta(t) =
+        \begin{cases}
+            \infty & \text{at } t = 0 \\
+            0                     & \text{for } t \neq 0 \\
+        \end{cases}
+        \quad\text{such that}\quad
+        \int_{-\infty}^{\infty}\!\delta(t)\,dt = 1
+    \]
+    The Laplace transform of $\delta(t)$ is    
+    $$\mathcal{L}\{\delta(t)\} = \int_{0}^{\infty} \delta(t)\,e^{-st}dt = e^{-s \cdot 0} = 1$$
 \end{frame}
 
-\begin{frame}
-    u(t) is the unit step function, telling that the input is applied at t=0 and the system is at rest before t=0
-    so when it multiplies with the input, it will make sure that the input is zero before t=0
+% Single-input single-output block with equal-length arrows on both sides, so the
+% block sits at the centre of the picture's bounding box.
+%   \sisoBlock{block label}{input label}{output label}
+\newcommand{\sisoBlock}[3]{%
+    \begin{tikzpicture}[>=latex',
+        block/.style={draw, rectangle, minimum height=2.8em, minimum width=6.5em}]
+        \node [block] (sys) {#1};
+        \draw [->] ([xshift=-3.4cm]sys.west) -- node [above] {#2} (sys.west);
+        \draw [->] (sys.east) -- node [above] {#3} ([xshift=3.4cm]sys.east);
+    \end{tikzpicture}%
+}
+
+\begin{frame}{Convolution Theorem for Laplace Transforms}
+    The Laplace transform of a convolution is the \alert{product} of the individual
+    transforms:
+    \[
+        \mathcal{L}\{f(t) * g(t)\}
+        = \mathcal{L}\left\{\int_{0}^{t}\! f(\tau)\,g(t-\tau)\,d\tau\right\}
+        = F(s)\,G(s)
+    \]
+    \vspace{-0.4em}
+    \begin{center}
+        {\small \textbf{Time domain: an integral}}\\[2pt]
+        \sisoBlock{$h(t)$}{$f(t)$}{$x(t) = (f*h)(t)$}\\[6pt]
+        {\small \textbf{$s$-domain: a multiplication}}\\[2pt]
+        \sisoBlock{$H(s)$}{$F(s)$}{$X(s) = F(s)\,H(s)$}
+    \end{center}
 \end{frame}
 
-\begin{frame}
-    the Laplace transform make it easier to analyze the system's behavior in the s-domain.
-    block diagram of the system in the s-domain with input, output, and transfer function
-    description becomes algebraic equation in the s-domain, which is easier to solve than the ODE in the time domain
-    from the idea of convolution integral, we can see that the output of the system is the convolution of the input and the impulse response
-    in the s-domain, convolution becomes multiplication, which simplifies the analysis of systems with arbitrary inputs
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Impulse Response and Transfer Function}
+    \begin{center}
+        \sisoBlock{$H(s)$}{$F(s)$}{$X(s) = F(s)\,H(s)$}
+    \end{center}
+    \vspace{0.4em}
+    Now drive the system with an impulse, $f(t) = \delta(t)$. Since
+    $\mathcal{L}\{\delta(t)\} = 1$,
+    \[
+        X(s) = F(s)\,H(s) = 1 \cdot H(s) = H(s)
+    \]
+    \begin{center}
+        Hence, the \alert{transfer function} $H(s) = \mathcal{L}\{h(t)\}$ \\
+        \alert{\emph{is} the Laplace transform of the unit impulse response.}
+    \end{center}
+    \vspace{0.3em}
+    \small It is the complete $s$-domain description of the system: given any input
+    $F(s)$, a single multiplication returns the output.
 \end{frame}
 
-\begin{frame}
-    Relating back to convolution integral, the Laplace transform of the convolution of two functions is the product of their individual Laplace transforms: $$\mathcal{L}\{f(t) * g(t)\} = F(s)G(s).$$
-    $$ \mathcal{L}\{f(t) * g(t)\} = \int_{0}^{t} f(\tau)g(t-\tau) d\tau = \int_{0}^{t} g(\tau)f(t-\tau) d\tau= F(s)G(s)$$
+\begin{frame}{Unit Step Function}
+    \begin{columns}
+        \begin{column}{0.52\textwidth}
+            The \emph{unit step} (Heaviside) function is
+            \vspace{-0.4em}
+            \[
+                u(t) =
+                \begin{cases}
+                    0 & \text{for } t < 0 \\
+                    1 & \text{for } t \ge 0
+                \end{cases}
+            \]
+            \vspace{-1.2em}
+            \small
+            \begin{itemize}\itemsep2pt
+                \item It switches a signal \alert{on} at $t = 0$ and holds it there.
+                \item Multiplying by $u(t)$ enforces the \alert{rest condition}: nothing
+                      happens before $t = 0$.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \begin{axis}[
+                    set layers, mark layer=axis foreground,
+                    width=\linewidth, height=4.2cm,
+                    xlabel={$t$}, ylabel={$u(t)$},
+                    xmin=-1.5, xmax=3.5, ymin=-0.3, ymax=1.5,
+                    xtick={0,1,2,3}, ytick={1},
+                    axis lines=center,
+                    every axis x label/.style={at={(current axis.right of origin)},anchor=south west},
+                    every axis y label/.style={at={(current axis.above origin)},anchor=south east},
+                    clip=false,
+                ]
+                    \addplot[very thick, red] coordinates {(-1.5,0) (0,0)};
+                    \addplot[very thick, red] coordinates {(0,1) (3.5,1)};
+                    \addplot[only marks, mark=*, red] coordinates {(0,1)};
+                    \addplot[only marks, mark=o, red, fill=white] coordinates {(0,0)};
+                \end{axis}
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Laplace Transform of the Unit Step Function}
+    Apply the definition with $f(t) = 1$ for $t \ge 0$:
+    \[
+        \mathcal{L}\{u(t)\} = \int_{0}^{\infty}\!\! 1 \cdot e^{-st}\,dt
+        = \left[-\frac{1}{s}e^{-st}\right]_{0}^{\infty}
+        = 0 - \left(-\frac{1}{s}\right)
+        = \frac{1}{s}, \qquad \operatorname{Re}(s) > 0
+    \]
+    \begin{columns}
+        \begin{column}{0.46\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \begin{axis}[
+                    width=\linewidth, height=3.9cm,
+                    xlabel={$t$}, ylabel={$u(t)\,e^{-st}$},
+                    xmin=0, xmax=5, ymin=0, ymax=1.25,
+                    xtick={0}, ytick={1},
+                    axis lines=left,
+                    every axis x label/.style={at={(current axis.right of origin)},anchor=north west},
+                    every axis y label/.style={at={(current axis.above origin)},anchor=south west},
+                    clip=false,
+                ]
+                    \addplot[very thick, blue, fill=blue!15, smooth, samples=100, domain=0:5]
+                        {exp(-x)} \closedcycle;
+                    \addplot[thick, brandgray60, dashed, smooth, samples=100, domain=0:5]
+                        {exp(-0.4*x)};
+                    \node[blue, anchor=west, fill=white, inner sep=1pt]
+                        at (axis cs:0.7,0.22) {\small area $= 1/s$};
+                    \node[brandgray60, anchor=west] at (axis cs:3.0,0.42) {\small smaller $s$};
+                \end{axis}
+            \end{tikzpicture}
+        \end{column}
+        \begin{column}{0.54\textwidth}
+            % \footnotesize
+            \begin{itemize}\itemsep3pt
+                \item The area under $u(t)$ alone is infinite; the convergence factor
+                      $e^{-st}$ makes it finite.
+                \item Faster decay (larger $s$) leaves less area, giving exactly $1/s$.
+                % \item $s = 0$ marks a signal that never decays.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Step and Impulse Relationship}
+    \centering
+    The step and the impulse are two views of the same event: 
+    % \newline
+    % $\frac{d}{dt}u(t) = \delta(t)$ and $\int_{-\infty}^{t}\delta(\tau)\,d\tau = u(t)$.
+    % \newline
+    \centering
+    \begin{tikzpicture}
+        \begin{groupplot}[
+            group style={
+                group size=1 by 2,
+                vertical sep=40pt,
+                x descriptions at=all, 
+            },
+            width=0.6\linewidth, height=3.2cm,
+            xmin=-1.1, xmax=4,
+            % ticks=none,
+            xtick={-1, 1, 2}, ytick={1},
+            xlabel={$t$},
+            axis lines=center,
+            axis line style={-{Stealth[length=2mm]}},
+            every axis x label/.style={at={(current axis.right of origin)},anchor=north west},
+            every axis y label/.style={at={(current axis.above origin)},anchor=south},
+            clip=false,
+        ]
+            \nextgroupplot[ylabel={$u(t) = \int_{-\infty}^{t}\delta(\tau)\,d\tau$}, ymin=0, ymax=1.4]
+                    \addplot[very thick, red] coordinates {(-1.5,0) (0,0)};
+                    \addplot[very thick, red] coordinates {(0,1) (3.5,1)};
+                    \addplot[only marks, mark=*, red] coordinates {(0,1)};
+                    \addplot[only marks, mark=o, red, fill=white] coordinates {(0,0)};
+            \nextgroupplot[ylabel={$\frac{d}{dt}u(t) = \delta(t)$}, ymin=0, ymax=1.4]
+                \addplot[very thick, red, -{Stealth[length=2.5mm]}] coordinates {(0,0) (0,1)};
+        \end{groupplot}
+    \end{tikzpicture}
 \end{frame}
 
 
-\begin{frame}
-    Laplace transform table 
-    loopback to the source of $h(t) = e^{-t}sin(t)$ from unit impulse response of the mass-spring-damper system
-    showing the Laplace transform of the ODE and the solution in the s-domain and then inverse Laplace transform to get back to the time domain
-    you get the same solution as before, but now you can see that the Laplace transform makes it easier to solve ODEs with arbitrary inputs
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Time-Shifted Unit Step Function}
+    A delayed step picks up an exponential:
+    \[
+        \mathcal{L}\{u(t-a)\} = \int_{a}^{\infty}\!\! 1 \cdot e^{-st}\,dt
+        = \left[-\frac{1}{s}e^{-st}\right]_{a}^{\infty}
+        = 0 - \left(-\frac{e^{-as}}{s}\right)
+        = \frac{e^{-as}}{s}, \qquad \operatorname{Re}(s) > 0
+    \]
+    % \begin{columns}
+    %     \begin{column}{0.52\textwidth}
+    %         Shifting delays it: $u(t-a)$ turns on at $t = a$.
+    %                   $\mathcal{L}\{u(t-a)\} = e^{-as}/s$.
+    %     \end{column}
+    %     \begin{column}{0.48\textwidth}
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            % set layers, mark layer=axis foreground,
+            width=0.5\linewidth, height=3.6cm,
+            xlabel={$t$}, ylabel={$u(t-a)$},
+            xmin=-1.5, xmax=3.5, ymin=-0.3, ymax=1.5,
+            xtick={1}, ytick={1},
+            xticklabels={$a$},
+            axis lines=center,
+            every axis x label/.style={at={(current axis.right of origin)},anchor=south west},
+            every axis y label/.style={at={(current axis.above origin)},anchor=south},
+            clip=false,
+        ]
+            \addplot[very thick, red] coordinates {(-1.5,0) (1,0)};
+            \addplot[very thick, red] coordinates {(1,1) (3.5,1)};
+            \addplot[only marks, mark=*, red] coordinates {(1,1)};
+            \addplot[only marks, mark=o, red, fill=white] coordinates {(1,0)};
+        \end{axis}
+    \end{tikzpicture}
+    %     \end{column}
+    % \end{columns}
 \end{frame}
 
-\begin{frame}
-    MATLAB DEMO: Laplace Transform and Inverse Laplace Transform
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Laplace Transform of Sinusoidal Functions}
+    % f(t) = sin(wt)
+    % convert sinusoidal functions into exponential form using Euler's formula
+    Start from the exponential,
+    $\mathcal{L}\{e^{at}\} = \int_{0}^{\infty}\! e^{(a-s)t}\,dt = \dfrac{1}{s-a}$,
+    and rewrite the sinusoids with Euler's formula $e^{j\theta} = \cos\theta + j\sin\theta$:
+    \[
+        \sin(\omega t) = \frac{e^{j\omega t} - e^{-j\omega t}}{2j}, \qquad
+        \cos(\omega t) = \frac{e^{j\omega t} + e^{-j\omega t}}{2}
+    \]
+    Linearity then gives, with $a = \pm j\omega$,
+    \[
+        \mathcal{L}\{\sin \omega t\}
+        = \frac{1}{2j}\left(\frac{1}{s-j\omega} - \frac{1}{s+j\omega}\right)
+        = \frac{\omega}{s^2 + \omega^2},
+        \qquad
+        \mathcal{L}\{\cos \omega t\} = \frac{s}{s^2 + \omega^2}
+    \]
+    \begin{columns}
+        \begin{column}{0.52\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \begin{axis}[
+                    width=\linewidth, height=3.6cm,
+                    xlabel={$t$},
+                    xmin=0, xmax=6.5, ymin=-1.4, ymax=1.4,
+                    xtick={0}, ytick={-1,1},
+                    axis lines=center,
+                    every axis x label/.style={at={(current axis.right of origin)},anchor=south west},
+                    clip=false,
+                ]
+                    \addplot[very thick, red, smooth, samples=200, domain=0:6.5]
+                        {sin(deg(2*x))};
+                    \addplot[very thick, blue, smooth, samples=200, domain=0:6.5]
+                        {cos(deg(2*x))};
+                \end{axis}
+            \end{tikzpicture}\\[-2pt]
+            {\small \textcolor{red}{\rule{1em}{1.2pt}} $\sin\omega t$ \quad
+             \textcolor{blue}{\rule{1em}{1.2pt}} $\cos\omega t$}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \small
+            Both share the denominator $s^2+\omega^2$, so both have poles at
+            $s = \pm j\omega$: purely imaginary, meaning \alert{oscillation that never decays}.
+        \end{column}
+    \end{columns}
 \end{frame}
 
-\begin{frame}{Announcement}
-    Form a group of 4 student and register for Mini-Lab 1
-    Each group must bring a data cable (one end with USB-C to connect with the board) next week for the mini-lab session
-    HW 1 (due 10 days after publishing) and Lab 1 Handout will be published this week
-    Scan QR Code for providing feedback on lecture today
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{frame}{Laplace Transform Pairs (1/2): Basic Functions}
+    \begin{center}
+        \scriptsize
+        \setlength{\tabcolsep}{2em}
+        \renewcommand{\arraystretch}{1.7}
+        \begin{tabular}{@{}ll@{}}
+            \toprule
+            $f(t)$ & $F(s)$ \\
+            \midrule
+            Step function, $u(t)$        & $\dfrac{1}{s}$ \\
+            $e^{-at}$                    & $\dfrac{1}{s+a}$ \\
+            $\sin \omega t$              & $\dfrac{\omega}{s^2+\omega^2}$ \\
+            $\cos \omega t$              & $\dfrac{s}{s^2+\omega^2}$ \\
+            Ramp Function, $t$           & $\dfrac{1}{s^2}$ \\
+            Parabolic Function, $t^2$    & $\dfrac{2}{s^3}$ \\
+            Power Function, $t^n$        & $\dfrac{n!}{s^{n+1}}$ \\
+            % $f^{(k)}(t) = \dfrac{d^k f(t)}{dt^k}$
+            %     & \begin{tabular}[t]{@{}l@{}}
+            %           $s^k F(s) - s^{k-1}f(0^-) - s^{k-2}f'(0^-)$ \\
+            %           $\qquad - \cdots - f^{(k-1)}(0^-)$
+            %       \end{tabular} \\
+            % $\displaystyle\int_{-\infty}^{t}\! f(t)\,dt$
+            %     & $\dfrac{F(s)}{s} + \dfrac{1}{s}\displaystyle\int_{-\infty}^{0}\! f(t)\,dt$ \\
+            Impulse function, $\delta(t)$ & $1$ \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Laplace Transform Pairs (2/2): Damped and Second-Order}
+    \begin{center}
+        \scriptsize
+        \setlength{\tabcolsep}{1.6em}
+        \renewcommand{\arraystretch}{1.05}
+        \begin{tabular}{@{}ll@{}}
+            \toprule
+            $f(t)$ & $F(s)$ \\
+            \midrule
+            $e^{-at}\sin \omega t$ & $\dfrac{\omega}{(s+a)^2+\omega^2}$ \\
+            $e^{-at}\cos \omega t$ & $\dfrac{s+a}{(s+a)^2+\omega^2}$ \\
+            \begin{tabular}[t]{@{}l@{}}
+                $\frac{1}{\omega}\left[(\alpha-a)^2+\omega^2\right]^{1/2}e^{-at}\sin(\omega t+\phi)$, \\
+                $\phi = \tan^{-1}\frac{\omega}{\alpha-a}$
+            \end{tabular}
+                & $\dfrac{s+\alpha}{(s+a)^2+\omega^2}$ \\
+            $\frac{\omega_n}{\sqrt{1-\zeta^2}}\,e^{-\zeta\omega_n t}\sin \omega_n\sqrt{1-\zeta^2}\,t$, \; $\zeta<1$
+                & $\dfrac{\omega_n^2}{s^2+2\zeta\omega_n s+\omega_n^2}$ \\
+            \begin{tabular}[t]{@{}l@{}}
+                $\frac{1}{a^2+\omega^2} + \frac{1}{\omega\sqrt{a^2+\omega^2}}\,e^{-at}\sin(\omega t-\phi)$, \\
+                $\phi = \tan^{-1}\frac{\omega}{-a}$
+            \end{tabular}
+                & $\dfrac{1}{s\left[(s+a)^2+\omega^2\right]}$ \\
+            \begin{tabular}[t]{@{}l@{}}
+                $1 - \frac{1}{\sqrt{1-\zeta^2}}\,e^{-\zeta\omega_n t}\sin\!\left(\omega_n\sqrt{1-\zeta^2}\,t+\phi\right)$, \\
+                $\phi = \cos^{-1}\zeta$, \; $\zeta<1$
+            \end{tabular}
+                & $\dfrac{\omega_n^2}{s\left(s^2+2\zeta\omega_n s+\omega_n^2\right)}$ \\
+            \begin{tabular}[t]{@{}l@{}}
+                $\frac{\alpha}{a^2+\omega^2} + \frac{1}{\omega}\left[\frac{(\alpha-a)^2+\omega^2}{a^2+\omega^2}\right]^{1/2}e^{-at}\sin(\omega t+\phi)$, \\
+                $\phi = \tan^{-1}\frac{\omega}{\alpha-a} - \tan^{-1}\frac{\omega}{-a}$
+            \end{tabular}
+                & $\dfrac{s+\alpha}{s\left[(s+a)^2+\omega^2\right]}$ \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Laplace Transform Theorems}
+    \begin{center}
+        \scriptsize
+        \setlength{\tabcolsep}{1.6em}
+        \renewcommand{\arraystretch}{1.25}
+        \begin{tabular}{@{}rlr@{}}
+            \toprule
+            No. & Theorem & Name \\
+            \midrule
+            1.  & $\mathcal{L}[f(t)] = F(s) = \displaystyle\int_{0^-}^{\infty}\! f(t)e^{-st}dt$ & Definition \\
+            2.  & $\mathcal{L}[k f(t)] = k F(s)$                          & Linearity theorem \\
+            3.  & $\mathcal{L}[f_1(t) + f_2(t)] = F_1(s) + F_2(s)$        & Linearity theorem \\
+            4.  & $\mathcal{L}[e^{-at}f(t)] = F(s+a)$                     & Frequency shift theorem \\
+            5.  & $\mathcal{L}[f(t-T)] = e^{-sT}F(s)$                     & Time shift theorem \\
+            6.  & $\mathcal{L}[f(at)] = \frac{1}{a}F\!\left(\frac{s}{a}\right)$ & Scaling theorem \\
+            7.  & $\mathcal{L}\!\left[\frac{df}{dt}\right] = sF(s) - f(0^-)$ & Differentiation theorem \\
+            8.  & $\mathcal{L}\!\left[\frac{d^2f}{dt^2}\right] = s^2F(s) - sf(0^-) - f'(0^-)$ & Differentiation theorem \\
+            9.  & $\mathcal{L}\!\left[\frac{d^nf}{dt^n}\right] = s^nF(s) - \sum_{k=1}^{n} s^{n-k}f^{(k-1)}(0^-)$ & Differentiation theorem \\
+            10. & $\mathcal{L}\!\left[\int_{0^-}^{t}\! f(\tau)d\tau\right] = \frac{F(s)}{s}$ & Integration theorem \\
+            11. & $f(\infty) = \lim_{s \to 0} sF(s)$                      & Final value theorem\,$^\dagger$ \\
+            12. & $f(0^+) = \lim_{s \to \infty} sF(s)$                    & Initial value theorem\,$^\ddagger$ \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    \vspace{0.1em}
+    {\scriptsize $^\dagger$, $^\ddagger$ Conditions for theorems 11 and 12: see the next slide.}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Initial and Final Value Theorems}
+    Both theorems allow determination of time-domain initial and steady-state values straight off $F(s)$, with no inverse transform.
+    \begin{columns}[t]
+        \begin{column}{0.48\textwidth}
+            \centerline{\textbf{Initial Value Theorem}}
+            \[
+                \boxed{f(0^+) = \lim_{s \to \infty} s F(s)}
+            \]
+            \small
+            Valid when $f(t)$ is continuous or has a step discontinuity at $t = 0$, that is,
+            no impulses or their derivatives at $t = 0$.
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \centerline{\textbf{Final Value Theorem}}
+            \[
+                \boxed{f(\infty) = \lim_{s \to 0} s F(s)}
+            \]
+            \small
+            Valid only when all poles of $sF(s)$ lie in the left half-plane, with at most one
+            pole at the origin (i.e., system is stable).
+        \end{column}
+    \end{columns}
+    \vspace{0.6em}
+    \begin{itemize}
+        % \item \alert{Use with care.} Applied to an unstable or purely oscillating system the
+        %       final value theorem returns a finite number that the signal never reaches.
+        \item Example: $F(s) = \dfrac{\omega}{s^2+\omega^2}$ \\ $\lim_{s\to 0} sF(s) = 0$,
+              but $f(t) = \sin\omega t$ \alert{has no final value}.
+    \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Inverse Laplace Transform}
+    Having solved for $X(s)$ algebraically, we still need $x(t)$. The two directions are
+    \begin{center}
+        \textbf{Forward}
+        \[
+            \boxed{\mathcal{L}\{f(t)\} = F(s) = \int_{0}^{\infty}\! f(t)\,e^{-st}\,dt}
+        \]
+        % \vspace{0.5em}
+        \newline
+        \textbf{Inverse}
+        \[
+            \boxed{\mathcal{L}^{-1}\{F(s)\} = f(t)
+            = \frac{1}{2\pi j}\int_{\sigma - j\infty}^{\sigma + j\infty}\! F(s)\,e^{st}\,ds
+            }
+        \]
+    \end{center}
+    \begin{itemize}
+        \item The inverse is a contour integral in the complex plane. \alert{We never evaluate it.} 
+        \item Instead we use \alert{partial fraction expansion} to break $F(s)$ into terms that appear in the transform table, then read each
+              term backwards.
+        % \item The transform is unique, so a match in the table \emph{is} the answer.
+    \end{itemize}
+    % \begin{columns}[c]
+    %     \begin{column}{0.6\textwidth}
+    %     \end{column}
+    %     \begin{column}{0.4\textwidth}
+    %     \end{column}
+    % \end{columns}
+    % \vspace{0.3em}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Inverse Laplace Transform Table}
+    \begin{center}
+        \scriptsize
+        \setlength{\tabcolsep}{1.1em}
+        \renewcommand{\arraystretch}{1.05}
+        \begin{tabular}{@{}rlcl@{}}
+            \toprule
+            No. & $F(s)$ & & $f(t) = \mathcal{L}^{-1}\{F(s)\}$ \\
+            \midrule
+            1. & $1$                              & $\longrightarrow$ & $\delta(t)$ \\
+            2. & $\dfrac{1}{s}$                   & $\longrightarrow$ & $u(t)$ \\
+            3. & $\dfrac{1}{s^{n+1}}$             & $\longrightarrow$ & $\dfrac{t^n}{n!}\,u(t), \quad n \ge 0$ \\
+            4. & $\dfrac{1}{s+a}$                 & $\longrightarrow$ & $e^{-at}u(t)$ \\
+            5. & $\dfrac{\omega}{s^2+\omega^2}$   & $\longrightarrow$ & $\sin(\omega t)\,u(t)$ \\
+            6. & $\dfrac{s}{s^2+\omega^2}$        & $\longrightarrow$ & $\cos(\omega t)\,u(t)$ \\
+            7. & $\dfrac{\omega}{(s+a)^2+\omega^2}$ & $\longrightarrow$ & $e^{-at}\sin(\omega t)\,u(t)$ \\
+            8. & $\dfrac{s+a}{(s+a)^2+\omega^2}$  & $\longrightarrow$ & $e^{-at}\cos(\omega t)\,u(t)$ \\
+            9. & $\dfrac{\omega_n^2}{s^2+2\zeta\omega_n s+\omega_n^2}$ & $\longrightarrow$
+               & $\frac{\omega_n}{\sqrt{1-\zeta^2}}\,e^{-\zeta\omega_n t}\sin\!\left(\omega_n\sqrt{1-\zeta^2}\,t\right)u(t)$ \\
+            10. & $\dfrac{\omega_n^2}{s\left(s^2+2\zeta\omega_n s+\omega_n^2\right)}$ & $\longrightarrow$
+               & \begin{tabular}[t]{@{}l@{}}
+                     $\left[1 - \frac{1}{\sqrt{1-\zeta^2}}\,e^{-\zeta\omega_n t}\sin\!\left(\omega_n\sqrt{1-\zeta^2}\,t+\phi\right)\right]u(t)$, \\
+                     $\phi = \cos^{-1}\zeta$
+                 \end{tabular} \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    \vspace{0.1em}
+    {\scriptsize Every $u(t)$ enforces the rest condition $f(t) = 0$ for $t < 0$.}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Back to the Mass-Spring-Damper: Step 1, Transform}
+    The same problem that defeated us in the time domain:
+    \[
+        \ddot{x} + 2\dot{x} + 3x = 100\sin(2\pi t), \qquad x(0) = \dot{x}(0) = 0
+    \]
+    Transform both sides. With zero initial conditions the differentiation theorem gives
+    $\mathcal{L}\{\dot{x}\} = sX(s)$ and $\mathcal{L}\{\ddot{x}\} = s^2X(s)$, so
+    \[
+        \left(s^2 + 2s + 3\right)X(s) = F(s),
+        \qquad
+        F(s) = 100 \cdot \frac{2\pi}{s^2 + 4\pi^2} = \frac{200\pi}{s^2 + 4\pi^2}
+    \]
+    \vspace{-0.6em}
+    \[
+        \boxed{\;X(s) = \frac{200\pi}{\left(s^2+2s+3\right)\left(s^2+4\pi^2\right)}\;}
+    \]
+    \begin{center}
+        The differential equation is solved. No integral, no guessing a particular solution.
+    \end{center}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Step 2: Partial Fraction Expansion}
+    Split $X(s)$ into pieces the table can invert. Both factors are irreducible quadratics,
+    so each gets a linear numerator:
+    \[
+        \frac{200\pi}{\left(s^2+2s+3\right)\left(s^2+4\pi^2\right)}
+        = \frac{As+B}{s^2+2s+3} + \frac{Cs+D}{s^2+4\pi^2}
+    \]
+    Clearing denominators and matching powers of $s$,
+    \[
+        \begin{aligned}
+            s^3&: & A + C &= 0 &\qquad
+            s^1&: & 4\pi^2 A + 3C + 2D &= 0 \\
+            s^2&: & B + 2C + D &= 0 &\qquad
+            s^0&: & 4\pi^2 B + 3D &= 200\pi
+        \end{aligned}
+    \]
+    which gives
+    \[
+        A = 0.844, \qquad B = 17.09, \qquad C = -0.844, \qquad D = -15.40
+    \]
+    \begin{center}
+        \small The two fractions are exactly the \alert{transient} and the
+        \alert{steady state}: one carries the system's poles, the other the input's.
+    \end{center}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Step 3: Invert Term by Term}
+    Complete the square, $s^2+2s+3 = (s+1)^2 + 2$, and arrange each term to match a table
+    entry:
+    \[
+        X(s) = 0.844\,\frac{s+1}{(s+1)^2+2}
+             + 11.48\,\frac{\sqrt{2}}{(s+1)^2+2}
+             - 0.844\,\frac{s}{s^2+4\pi^2}
+             - 2.451\,\frac{2\pi}{s^2+4\pi^2}
+    \]
+    Reading rows 8, 7, 6 and 5 of the inverse table backwards,
+    \[
+        x(t) = \underbrace{e^{-t}\left(0.844\cos\sqrt{2}\,t + 11.48\sin\sqrt{2}\,t\right)}_{\text{transient, from the system poles } -1 \pm j\sqrt{2}}
+             \; \underbrace{-\, 0.844\cos 2\pi t - 2.451\sin 2\pi t}_{\text{steady state, at the input frequency}}
+    \]
+    \vspace{-0.4em}
+    \begin{center}
+        or $x_{ss}(t) = 2.59\sin(2\pi t - 161^\circ)$, \alert{identical to the classical
+        solution} obtained earlier.
+    \end{center}
+    \vspace{0.2em}
+    {\small Two algebraic steps replaced a particular-solution guess and an intractable
+    convolution integral.}
+\end{frame}
+
+\begin{frame}{Further Reading}
+    Nise, N. S. (2011). \emph{Control Systems Engineering} (6th ed.). Wiley.
+    \begin{itemize}
+        \item Read Chapter 2, Sections 2.1 and 2.2.
+        \item Work through the MATLAB \textbf{TryIt} examples in the text. Highly recommended.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Announcements}
+    \begin{itemize}
+        \item \textbf{Homework 1} will be posted on MyCourseVille this week and is due
+              10 days after posting.
+        \item \textbf{Mini-Lab 1} is scheduled next week.
+        \begin{itemize}
+            \item The handout will be posted this week.
+            \item Form groups of four.
+            \item Each group must bring a data cable with a USB-C end to connect to the board.
+        \end{itemize}
+    \end{itemize}
+    % Scan QR Code for providing feedback on lecture today
 \end{frame}
 
 \end{document}
