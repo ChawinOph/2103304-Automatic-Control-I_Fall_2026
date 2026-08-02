@@ -696,12 +696,28 @@
         \end{column}
         \begin{column}{0.85\textwidth}
             \centering
-            \only<1>{\includegraphics[width=0.9\textwidth]{Control_Map_ver5.png}}%
-            \only<2>{\includegraphics[width=0.9\textwidth]{Control_Map_Annotated.png}}%
+            \includegraphics[width=0.9\textwidth]{Control_Map_ver5.png}%
+            % \only<2>{\includegraphics[width=0.9\textwidth]{Control_Map_Annotated.png}}%
             \\ \tiny (Image Credit: Brian Douglas)
         \end{column}
     \end{columns}
 \end{frame}
+
+\begin{frame}{}
+    \begin{columns}
+        \begin{column}{0.15\textwidth}
+        The Bigger Picture... \newline \newline
+        How much of this do you think we cover?
+        \end{column}
+        \begin{column}{0.85\textwidth}
+            \centering
+            % \only<1>{\includegraphics[width=0.9\textwidth]{Control_Map_ver5.png}}%
+            \includegraphics[width=0.9\textwidth]{Control_Map_Annotated.png}%
+            \\ \tiny (Image Credit: Brian Douglas)
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \section{Dynamic System Modeling, ODEs, and Laplace Transform}
 
 \begin{frame}{How Do We Model Each Block?}
@@ -756,7 +772,7 @@
                     width=\linewidth, height=3cm,
                     xlabel={$t$}, ylabel={$f(t)$},
                     xmin=0, xmax=4, ymin=-120, ymax=120,
-                    xtick={0,1,2,3}, ytick={-100,-50,0,50,100},
+                    xtick={0,1,2,3}, ytick={-100,0,100},
                     axis lines=left,
                     % axis lines=center,
                     every axis x label/.style={at={(current axis.right of origin)},anchor=north west},
@@ -770,7 +786,7 @@
         \end{column}
     \end{columns}
     \vspace{1em}
-    From Newton's second law, the governing Ordinary Differential Equation (ODE) is
+    From Newton's second law, the Ordinary Differential Equation (ODE) is
     \[
         m \ddot{x}(t) + c\dot{x}(t) + kx(t) = f(t), 
     \] or with the given parameters, it becomes
@@ -801,15 +817,15 @@
 \end{frame}
 
 \begin{frame}{Step 1: Homogeneous Solution (Transient)}
-    Set $f(t) = 0$ and try $x = e^{st}$:
+    Set $f(t) = 0$ and try $x = e^{\lambda t}$:
     \[
         \ddot{x} + 2\dot{x} + 3x = 0
         \;\;\Longrightarrow\;\;
-        \underbrace{(s^2 + 2s + 3)}_{\text{characteristic polynomial}} e^{st} = 0
+        \underbrace{(\lambda^2 + 2\lambda + 3)}_{\text{characteristic polynomial}} e^{\lambda t} = 0
     \]
     The exponential is never zero, so the \alert{characteristic equation} must hold:
     \[
-        s^2 + 2s + 3 = 0 \;\;\Longrightarrow\;\; s = -1 \pm j\sqrt{2}
+        \lambda^2 + 2\lambda + 3 = 0 \;\;\Longrightarrow\;\; \lambda = -1 \pm j\sqrt{2}
     \]
     Complex roots with a negative real part: the system is \alert{underdamped} and stable.
     \[
@@ -853,6 +869,7 @@
 \end{frame}
 
 \begin{frame}{Step 3: Apply the Initial Conditions}
+    The response of the system is
     \[
         x(t) = e^{-t}\left(A\cos\sqrt{2}\,t + B\sin\sqrt{2}\,t\right)
                - 0.844\cos 2\pi t - 2.451\sin 2\pi t
@@ -899,6 +916,16 @@
     \begin{columns}
         \begin{column}{0.5\textwidth}
             How do we solve ODEs if the forcing function is a square pulse like this?
+            \[
+                f(t) =
+                \begin{cases}
+                    0 & \text{for } t < 1 \\
+                    1 & \text{for } 1 \le t < 2 \\
+                    0 & \text{for } t \ge 2
+                \end{cases}
+            \]
+            The forcing function is defined piecewise, and it is
+            \alert{discontinuous} at $t = 1$ and $t = 2$.
             % \[
             %     u(t-1) - u(t-2)
             % \]
@@ -913,9 +940,10 @@
                 \begin{axis}[
                     % Force markers to draw on top of grids/axis lines
                     set layers, mark layer=axis foreground,
+                    x=1.5cm, y=1.5cm,
                     width=\linewidth, height=5cm,
                     xlabel={$t$}, ylabel={$f(t)$},
-                    xmin=0, xmax=3.5, ymin=-0.3, ymax=1.4,
+                    xmin=0, xmax=3.5, ymin=-0.3, ymax=2.0,
                     xtick={0,1,2,3}, ytick={0,1},
                     axis lines=left,
                     every axis x label/.style={at={(current axis.right of origin)},anchor=north west},
@@ -961,7 +989,76 @@
         \end{column}
     \end{columns}
     \vspace{1em}
-    It is the basic building block for constructing any input signal. So how does a system respond to it?
+    % It is the basic building block for constructing any input signal. So how does a system respond to it?
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{The Impulse as a Limit of a Narrow Pulse}
+    \begin{columns}[c]
+        \begin{column}{0.44\textwidth}
+            Take a rectangular pulse of width $\epsilon$ and height $1/\epsilon$:
+            \vspace{-0.3em}
+            \[
+                \delta_\epsilon(t) =
+                \begin{cases}
+                    \dfrac{1}{\epsilon} & \text{for } |t| < \dfrac{\epsilon}{2} \\[6pt]
+                    0                   & \text{otherwise}
+                \end{cases}
+            \]
+            \vspace{-1.0em}
+            \small
+            \begin{itemize}\itemsep2pt
+                \item Its area is $\dfrac{1}{\epsilon}\cdot\epsilon = 1$ for \alert{every} $\epsilon$.
+                \item Squeezing $\epsilon \to 0$ makes it taller and narrower, but the area
+                      never changes.
+            \end{itemize}
+            \vspace{-0.3em}
+            \[
+                \delta(t) = \lim_{\epsilon \to 0}\, \delta_\epsilon(t)
+            \]
+        \end{column}
+        \begin{column}{0.56\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \begin{axis}[
+                    set layers, mark layer=axis foreground,
+                    % x=y=1cm makes one t-unit and one height-unit the same length, so the
+                    % epsilon=1 pulse is a true unit square and all three areas look equal
+                    x=1cm, y=1cm,
+                    xlabel={$t$}, ylabel={$\delta_\epsilon(t)$},
+                    xmin=-1.5, xmax=3.1, ymin=0, ymax=5.0,
+                    xtick={-1,0,1}, ytick={1,2,4},
+                    % axis lines=left keeps the y ticks clear of the pulses at t=0
+                    axis lines=left,
+                    every axis x label/.style={at={(current axis.right of origin)},anchor=north west},
+                    every axis y label/.style={at={(current axis.above origin)},anchor=south east},
+                    clip=false,
+                ]
+                    % epsilon = 1, height 1
+                    \addplot[very thick, brandgray60, opacity=0.25] coordinates
+                        {(-0.5,0) (-0.5,1) (0.5,1) (0.5,0)};
+                    % epsilon = 1/2, height 2
+                    \addplot[very thick, brandred80, opacity=0.375] coordinates
+                        {(-0.25,0) (-0.25,2) (0.25,2) (0.25,0)};
+                    % epsilon = 1/4, height 4
+                    \addplot[very thick, brandred, opacity=0.5] coordinates
+                        {(-0.125,0) (-0.125,4) (0.125,4) (0.125,0)};
+                    % the limit: the impulse itself
+                    \addplot[ultra thick, red, -{Stealth[length=3mm]}] coordinates {(0,0) (0,4.7)};
+                    % leader lines carry the labels clear of the pulses
+                    \draw[thin, brandgray60] (axis cs:0.5,1)   -- (axis cs:1.2,1);
+                    \draw[thin, brandred80]  (axis cs:0.25,2)  -- (axis cs:1.2,2);
+                    \draw[thin, brandred]    (axis cs:0.125,4) -- (axis cs:1.2,4);
+                    \node[brandgray60, anchor=west] at (axis cs:1.3,1.0) {\small $\epsilon = 1$};
+                    \node[brandred80,  anchor=west] at (axis cs:1.3,2.0) {\small $\epsilon = \tfrac{1}{2}$};
+                    \node[brandred,    anchor=west] at (axis cs:1.3,4.0) {\small $\epsilon = \tfrac{1}{4}$};
+                    \node[red, anchor=west] at (axis cs:0.15,4.6) {\small $\delta(t)$};
+                \end{axis}
+            \end{tikzpicture}\\[2pt]
+            {\small Every rectangle encloses \alert{unit area}.}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1545,7 +1642,9 @@
                 x descriptions at=all, 
             },
             width=0.6\linewidth, height=3.2cm,
-            xmin=-1.1, xmax=4,
+            % xmin left of the -1 tick so the delta label fits inside the axis; keeping
+            % every frame in this series identical stops the plot jumping between slides
+            xmin=-2.0, xmax=4,
             % ticks=none,
             xtick={-1, 1, 2}, ytick={1},
             xlabel={$\tau$},
@@ -1557,7 +1656,7 @@
         ]
             \nextgroupplot[ylabel={$f(\tau)$}, ymin=0, ymax=1.4]
                     \addplot[very thick, red, const plot mark left] coordinates {
-                        (-1.1,0) (1,0) (1,1) (2,1) (2,0) (3.5,0)
+                        (-2.0,0) (1,0) (1,1) (2,1) (2,0) (3.5,0)
                     };
                     \addplot[very thick, blue, -{Stealth[length=2.5mm]}] coordinates {(-1,0) (-1,1)};
                     \addplot[very thick, black, opacity=0.25, -{Stealth[length=2.5mm]}] coordinates {(-0.9,0.5) (-0.3,0.5)};
@@ -1590,7 +1689,9 @@
                 x descriptions at=all, 
             },
             width=0.6\linewidth, height=3.2cm,
-            xmin=-1.1, xmax=4,
+            % xmin left of the -1 tick so the delta label fits inside the axis; keeping
+            % every frame in this series identical stops the plot jumping between slides
+            xmin=-2.0, xmax=4,
             % ticks=none,
             xtick={-1, 1, 2}, ytick={1},
             xlabel={$\tau$},
@@ -1602,7 +1703,7 @@
         ]
             \nextgroupplot[ylabel={$f(\tau)$}, ymin=0, ymax=1.4]
                     \addplot[very thick, red, const plot mark left] coordinates {
-                        (-1.1,0) (1,0) (1,1) (2,1) (2,0) (3.5,0)
+                        (-2.0,0) (1,0) (1,1) (2,1) (2,0) (3.5,0)
                     };
                     \addplot[very thick, blue, -{Stealth[length=2.5mm]}] coordinates {(1.5,0) (1.5,1)};
                     \addplot[very thick, black, opacity=0.25, -{Stealth[length=2.5mm]}] coordinates {(1.6,0.5) (2.2,0.5)};
@@ -1639,7 +1740,9 @@
                 x descriptions at=all, 
             },
             width=0.6\linewidth, height=3.2cm,
-            xmin=-1.1, xmax=4,
+            % xmin left of the -1 tick so the delta label fits inside the axis; keeping
+            % every frame in this series identical stops the plot jumping between slides
+            xmin=-2.0, xmax=4,
             % ticks=none,
             xtick={-1, 1, 2}, ytick={1},
             xlabel={$\tau$},
@@ -1651,7 +1754,7 @@
         ]
             \nextgroupplot[ylabel={$f(\tau)$}, ymin=0, ymax=1.4]
                     \addplot[very thick, red, const plot mark left] coordinates {
-                        (-1.1,0) (1,0) (1,1) (2,1) (2,0) (3.5,0)
+                        (-2.0,0) (1,0) (1,1) (2,1) (2,0) (3.5,0)
                     };
                     \addplot[very thick, blue, -{Stealth[length=2.5mm]}] coordinates {(3.0,0) (3.0,1)};
                     \addplot[very thick, black, opacity=0.25, -{Stealth[length=2.5mm]}] coordinates {(3.1,0.5) (3.7,0.5)};
@@ -1691,7 +1794,9 @@
                 x descriptions at=all, 
             },
             width=0.6\linewidth, height=3.2cm,
-            xmin=-1.1, xmax=4,
+            % xmin left of the -1 tick so the delta label fits inside the axis; keeping
+            % every frame in this series identical stops the plot jumping between slides
+            xmin=-2.0, xmax=4,
             % ticks=none,
             xtick={-1, 1, 2}, ytick={1},
             xlabel={$\tau$},
@@ -1703,14 +1808,17 @@
         ]
             \nextgroupplot[ylabel={$f(\tau)$}, ymin=0, ymax=1.4]
                     \addplot[very thick, red, const plot mark left] coordinates {
-                        (-1.1,0) (1,0) (1,1) (2,1) (2,0) (3.5,0)
+                        (-2.0,0) (1,0) (1,1) (2,1) (2,0) (3.5,0)
                     };
                     % \addplot[very thick, blue, -{Stealth[length=2.5mm]}] coordinates {(3.0,0) (3.0,1)};
                     % \node[blue, anchor=center] at (axis cs:3.0,1.2) {\small $\delta(3.0 - \tau)$};
-            \nextgroupplot[ylabel={$\int_{-\infty}^{\infty}~\!\! f(\tau)\,\delta(t-\tau)\,d\tau \textcolor{red}{\,= f(t)}$}, ymin=0, ymax=1.4]
+            % ylabel kept identical to the other t-values so the axes do not shift between
+            % slides; the "= f(t)" punchline is a node inside the plot instead
+            \nextgroupplot[ylabel={$\int_{-\infty}^{\infty}~\!\! f(\tau)\,\delta(t-\tau)\,d\tau$}, ymin=0, ymax=1.4]
                 \addplot[very thick, black, const plot mark left] coordinates {
-                        (-1.1,0) (1,0) (1,1) (2,1) (2,0) (3.5,0)
+                        (-2.0,0) (1,0) (1,1) (2,1) (2,0) (3.5,0)
                 };
+                \node[red, anchor=west] at (axis cs:2.2,1.0) {$= f(t)$};
                 % \addplot[very thick, blue, smooth, samples=200, domain=0:4] {1/sqrt(2) * exp(-x) * sin(deg(sqrt(2)*x))};
                 % \node[blue, anchor=south west] at (axis cs:0.4,0.3) {\small $h(t)$};
         \end{groupplot}
@@ -1738,33 +1846,11 @@
                     clip=false,
                 ]
 
-                    \only{
-                        \addplot[thick, red,   opacity=0.5, -{Stealth[length=2.5mm]}] coordinates {(1,0) (1,1)};
-                        \addplot[thick, red,   opacity=0.5, -{Stealth[length=2.5mm]}] coordinates {(1.2,0) (1.2,1)};
-                        \addplot[thick, red,   opacity=0.5, -{Stealth[length=2.5mm]}] coordinates {(1.4,0) (1.4,1)};
-                        \addplot[thick, red,   opacity=0.5, -{Stealth[length=2.5mm]}] coordinates {(1.6,0) (1.6,1)};
-                        \addplot[thick, red,   opacity=0.5, -{Stealth[length=2.5mm]}] coordinates {(1.8,0) (1.8,1)};
-                    }<1>
-
-                    % sample f(t) every \Delta\tau = 0.2: impulse of area f(\tau_i)\Delta\tau at each \tau_i
-                    \only{
-                        \addplot[very thick, red, opacity=1.0, const plot mark left] coordinates {
-                            (0,0) (1,0) (1,1) (2,1) (2,0) (6,0)
-                        };
-                        \addplot[thick, red,    opacity=0.4, -{Stealth[length=2.5mm]}] coordinates {(1.1,0) (1.1,1)};
-                        \addplot[thick, red,    opacity=0.4, -{Stealth[length=2.5mm]}] coordinates {(1.3,0) (1.3,1)};
-                        \addplot[thick, red,    opacity=0.4, -{Stealth[length=2.5mm]}] coordinates {(1.5,0) (1.5,1)};
-                        \addplot[thick, red,    opacity=0.4, -{Stealth[length=2.5mm]}] coordinates {(1.7,0) (1.7,1)};
-                        \addplot[thick, red,    opacity=0.4, -{Stealth[length=2.5mm]}] coordinates {(1.9,0) (1.9,1)};
-                        \draw[|-|, thin] (axis cs:1.7,1.12) -- (axis cs:1.9,1.12);
-                        \draw[thin, gray] (axis cs:1.8,1.12) -- (axis cs:2.5,1.3)
-                            node[anchor=west, inner sep=1pt, black] {\scriptsize $\Delta\tau$};
-                    }<2>
-
-                    \only{\addplot[very thick, red, const plot mark left] coordinates {
-                        (0,0) (1,0) (1,1) (2,1) (2,0) (6,0)
-                    };}<3>
-
+                    \addplot[thick, red, opacity=0.5, -{Stealth[length=2.5mm]}] coordinates {(1,0) (1,1)};
+                    \addplot[thick, red, opacity=0.5, -{Stealth[length=2.5mm]}] coordinates {(1.2,0) (1.2,1)};
+                    \addplot[thick, red, opacity=0.5, -{Stealth[length=2.5mm]}] coordinates {(1.4,0) (1.4,1)};
+                    \addplot[thick, red, opacity=0.5, -{Stealth[length=2.5mm]}] coordinates {(1.6,0) (1.6,1)};
+                    \addplot[thick, red, opacity=0.5, -{Stealth[length=2.5mm]}] coordinates {(1.8,0) (1.8,1)};
                 \end{axis}
             \end{tikzpicture}
         \end{column}
@@ -1792,73 +1878,180 @@
                     clip=false,
                 ]
 
-                    \only{
-                        \addplot[thick, red,   opacity=0.5, smooth, samples=200, domain=1:6]
-                        {1/sqrt(2) * exp(-x + 1) * sin(deg(sqrt(2)*(x - 1)))};
-                        \addplot[thick, red,   opacity=0.5, smooth, samples=200, domain=1.2:6]
-                        {1/sqrt(2) * exp(-x + 1.2) * sin(deg(sqrt(2)*(x-1.2)))};
-                        \addplot[thick, red,   opacity=0.5, smooth, samples=200, domain=1.4:6]
-                        {1/sqrt(2) * exp(-x + 1.4) * sin(deg(sqrt(2)*(x - 1.4)))};
-                        \addplot[thick, red,   opacity=0.5, smooth, samples=200, domain=1.6:6]
-                        {1/sqrt(2) * exp(-x + 1.6) * sin(deg(sqrt(2)*(x - 1.6)))};
-                         \addplot[thick, red,  opacity=0.5, smooth, samples=200, domain=1.8:6]
-                        {1/sqrt(2) * exp(-x + 1.8) * sin(deg(sqrt(2)*(x - 1.8)))};
-                        % \addplot[very thick, red,   opacity=1.0, smooth, samples=200, domain=1:6]
-                        % {(x>=1)*1/sqrt(2) * exp(-x + 1) * sin(deg(sqrt(2)*(x - 1))) + 
-                        % (x>=1.2)*1/sqrt(2) * exp(-x + 1.2) * sin(deg(sqrt(2)*(x-1.2))) + 
-                        % (x>=1.4)*1/sqrt(2) * exp(-x + 1.4) * sin(deg(sqrt(2)*(x - 1.4))) + 
-                        % (x>=1.6)*1/sqrt(2) * exp(-x + 1.6) * sin(deg(sqrt(2)*(x - 1.6))) + 
-                        % (x>=1.8)*1/sqrt(2) * exp(-x + 1.8) * sin(deg(sqrt(2)*(x - 1.8)))};
-                    }<1>
-
-                    % each impulse of area f(\tau_i)\Delta\tau = 0.2 gives 0.2\,h(t-\tau_i);
-                    % their sum is the Riemann approximation of the exact response on <3>
-                    \only{
-                        \addplot[thick, red, opacity=0.4, smooth, samples=200, domain=1.1:6]
-                        {0.2/sqrt(2) * exp(-(x-1.1)) * sin(deg(sqrt(2)*(x-1.1)))};
-                        \addplot[thick, red, opacity=0.4, smooth, samples=200, domain=1.3:6]
-                        {0.2/sqrt(2) * exp(-(x-1.3)) * sin(deg(sqrt(2)*(x-1.3)))};
-                        \addplot[thick, red, opacity=0.4, smooth, samples=200, domain=1.5:6]
-                        {0.2/sqrt(2) * exp(-(x-1.5)) * sin(deg(sqrt(2)*(x-1.5)))};
-                        \addplot[thick, red, opacity=0.4, smooth, samples=200, domain=1.7:6]
-                        {0.2/sqrt(2) * exp(-(x-1.7)) * sin(deg(sqrt(2)*(x-1.7)))};
-                        \addplot[thick, red, opacity=0.4, smooth, samples=200, domain=1.9:6]
-                        {0.2/sqrt(2) * exp(-(x-1.9)) * sin(deg(sqrt(2)*(x-1.9)))};
-                        \addplot[very thick, red, smooth, samples=300, domain=0:6]
-                        {(x>=1.1)*0.2/sqrt(2) * exp(-(x-1.1)) * sin(deg(sqrt(2)*(x-1.1))) +
-                         (x>=1.3)*0.2/sqrt(2) * exp(-(x-1.3)) * sin(deg(sqrt(2)*(x-1.3))) +
-                         (x>=1.5)*0.2/sqrt(2) * exp(-(x-1.5)) * sin(deg(sqrt(2)*(x-1.5))) +
-                         (x>=1.7)*0.2/sqrt(2) * exp(-(x-1.7)) * sin(deg(sqrt(2)*(x-1.7))) +
-                         (x>=1.9)*0.2/sqrt(2) * exp(-(x-1.9)) * sin(deg(sqrt(2)*(x-1.9)))};
-                    }<2>
-
-                    % response to the unit pulse f(t) = u(t-1) - u(t-2)
-                    % = step response s(t-1) - s(t-2), with
-                    % s(t) = 1/3 - 1/3 e^{-t} cos(sqrt(2) t) - sqrt(2)/6 e^{-t} sin(sqrt(2) t)
-                    \only{
-                        \addplot[very thick, red, smooth, samples=300, domain=0:6]
-                        {(x>=1)*(1/3 - 1/3*exp(-(x-1))*cos(deg(sqrt(2)*(x-1))) - sqrt(2)/6*exp(-(x-1))*sin(deg(sqrt(2)*(x-1))))
-                         - (x>=2)*(1/3 - 1/3*exp(-(x-2))*cos(deg(sqrt(2)*(x-2))) - sqrt(2)/6*exp(-(x-2))*sin(deg(sqrt(2)*(x-2))))};
-                    }<3>
-
+                    \addplot[thick, red, opacity=0.5, smooth, samples=200, domain=1:6]
+                    {1/sqrt(2) * exp(-x + 1) * sin(deg(sqrt(2)*(x - 1)))};
+                    \addplot[thick, red, opacity=0.5, smooth, samples=200, domain=1.2:6]
+                    {1/sqrt(2) * exp(-x + 1.2) * sin(deg(sqrt(2)*(x-1.2)))};
+                    \addplot[thick, red, opacity=0.5, smooth, samples=200, domain=1.4:6]
+                    {1/sqrt(2) * exp(-x + 1.4) * sin(deg(sqrt(2)*(x - 1.4)))};
+                    \addplot[thick, red, opacity=0.5, smooth, samples=200, domain=1.6:6]
+                    {1/sqrt(2) * exp(-x + 1.6) * sin(deg(sqrt(2)*(x - 1.6)))};
+                    \addplot[thick, red, opacity=0.5, smooth, samples=200, domain=1.8:6]
+                    {1/sqrt(2) * exp(-x + 1.8) * sin(deg(sqrt(2)*(x - 1.8)))};
                 \end{axis}
             \end{tikzpicture}
         \end{column}
     \end{columns}
     % \centering
     \vspace{1em}
-    \only{LTI system: a weighted sum of shifted impulses produces the same weighted sum of shifted impulse responses}<1>
-    \only{Any input is a train of impulses with areas $f(\tau_i)\,\Delta\tau$, so the output is the same weighted sum of shifted impulse responses}<2>
-    \only{As $\Delta \tau \to 0$, both sums become integrals: the output is an integral of shifted impulse responses weighted by the input}<3>
-    \only{\[
+    LTI system: a weighted sum of shifted impulses produces the same weighted sum of
+    shifted impulse responses
+    \[
         f(t) = \sum_i a_i\,\delta(t - t_i) \;\longrightarrow\; x(t) = \sum_i a_i\,h(t - t_i)
-    \]}<1>
-    \only{\[
+    \]
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% LTI: Input-Output, step 2 of 3 -- sample f(t) every \Delta\tau
+\begin{frame}{LTI: Input-Output}
+    \begin{columns}[c]
+        % --- input: the pulse sampled by a train of impulses ---
+        \begin{column}{0.33\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \begin{axis}[
+                    width=\linewidth, height=4cm,
+                    xmin=0, xmax=6, ymin=-0.1, ymax=1.4,
+                    xtick={1, 2}, ytick={1},
+                    xlabel={$t$}, ylabel={$f(t)$},
+                    axis lines=center,
+                    axis line style={-{Stealth[length=2mm]}},
+                    every axis x label/.style={at={(current axis.right of origin)},anchor=north west},
+                    every axis y label/.style={at={(current axis.above origin)},anchor=south},
+                    clip=false,
+                ]
+                    % sample f(t) every \Delta\tau = 0.2: impulse of area f(\tau_i)\Delta\tau at each \tau_i
+                    \addplot[very thick, red, opacity=1.0, const plot mark left] coordinates {
+                        (0,0) (1,0) (1,1) (2,1) (2,0) (6,0)
+                    };
+                    \addplot[thick, red, opacity=0.4, -{Stealth[length=2.5mm]}] coordinates {(1.1,0) (1.1,1)};
+                    \addplot[thick, red, opacity=0.4, -{Stealth[length=2.5mm]}] coordinates {(1.3,0) (1.3,1)};
+                    \addplot[thick, red, opacity=0.4, -{Stealth[length=2.5mm]}] coordinates {(1.5,0) (1.5,1)};
+                    \addplot[thick, red, opacity=0.4, -{Stealth[length=2.5mm]}] coordinates {(1.7,0) (1.7,1)};
+                    \addplot[thick, red, opacity=0.4, -{Stealth[length=2.5mm]}] coordinates {(1.9,0) (1.9,1)};
+                    \draw[|-|, thin] (axis cs:1.7,1.12) -- (axis cs:1.9,1.12);
+                    \draw[thin, gray] (axis cs:1.8,1.12) -- (axis cs:2.5,1.3)
+                        node[anchor=west, inner sep=1pt, black] {\scriptsize $\Delta\tau$};
+                \end{axis}
+            \end{tikzpicture}
+        \end{column}
+        % --- block diagram ---
+        \begin{column}{0.33\textwidth}
+            \begin{center}
+                \massSpringDamper[0.5]
+                \ioDiagram[$f(t)$][\shortstack{LTI\\System}][$x(t)$][0.9]
+            \end{center}
+        \end{column}
+        % --- output: scaled shifted responses and their sum ---
+        \begin{column}{0.33\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \begin{axis}[
+                    width=\linewidth, height=3.6cm,
+                    xmin=0, xmax=6, ymin=-0.1, ymax=0.6,
+                    xtick={1, 2}, ytick={0.25, 0.5},
+                    xlabel={$t$}, ylabel={$x(t)$},
+                    axis lines=center,
+                    axis line style={-{Stealth[length=2mm]}},
+                    every axis x label/.style={at={(current axis.right of origin)},anchor=north west},
+                    every axis y label/.style={at={(current axis.above origin)},anchor=south},
+                    clip=false,
+                ]
+                    % each impulse of area f(\tau_i)\Delta\tau = 0.2 gives 0.2\,h(t-\tau_i);
+                    % their sum is the Riemann approximation of the exact response
+                    \addplot[thick, red, opacity=0.4, smooth, samples=200, domain=1.1:6]
+                    {0.2/sqrt(2) * exp(-(x-1.1)) * sin(deg(sqrt(2)*(x-1.1)))};
+                    \addplot[thick, red, opacity=0.4, smooth, samples=200, domain=1.3:6]
+                    {0.2/sqrt(2) * exp(-(x-1.3)) * sin(deg(sqrt(2)*(x-1.3)))};
+                    \addplot[thick, red, opacity=0.4, smooth, samples=200, domain=1.5:6]
+                    {0.2/sqrt(2) * exp(-(x-1.5)) * sin(deg(sqrt(2)*(x-1.5)))};
+                    \addplot[thick, red, opacity=0.4, smooth, samples=200, domain=1.7:6]
+                    {0.2/sqrt(2) * exp(-(x-1.7)) * sin(deg(sqrt(2)*(x-1.7)))};
+                    \addplot[thick, red, opacity=0.4, smooth, samples=200, domain=1.9:6]
+                    {0.2/sqrt(2) * exp(-(x-1.9)) * sin(deg(sqrt(2)*(x-1.9)))};
+                    \addplot[very thick, red, smooth, samples=300, domain=0:6]
+                    {(x>=1.1)*0.2/sqrt(2) * exp(-(x-1.1)) * sin(deg(sqrt(2)*(x-1.1))) +
+                     (x>=1.3)*0.2/sqrt(2) * exp(-(x-1.3)) * sin(deg(sqrt(2)*(x-1.3))) +
+                     (x>=1.5)*0.2/sqrt(2) * exp(-(x-1.5)) * sin(deg(sqrt(2)*(x-1.5))) +
+                     (x>=1.7)*0.2/sqrt(2) * exp(-(x-1.7)) * sin(deg(sqrt(2)*(x-1.7))) +
+                     (x>=1.9)*0.2/sqrt(2) * exp(-(x-1.9)) * sin(deg(sqrt(2)*(x-1.9)))};
+                \end{axis}
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
+    \vspace{1em}
+    Any input is a train of impulses with areas $f(\tau_i)\,\Delta\tau$, so the output is the
+    same weighted sum of shifted impulse responses
+    \[
         f(t) = \textcolor{red}{ \lim_{\Delta \tau \to 0}\sum_{i=-\infty}^{\infty} f(\tau_i)}\,\delta(t - \tau_i)\, \textcolor{red}{\Delta \tau} \;\longrightarrow\; x(t) = \textcolor{red}{ \lim_{\Delta \tau \to 0}\sum_{i=-\infty}^{\infty} f(\tau_i)}\,h(t - \tau_i)\, \textcolor{red}{\Delta \tau}
-    \]}<2>
-    \only{\[
+    \]
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% LTI: Input-Output, step 3 of 3 -- \Delta\tau \to 0, the sums become integrals
+\begin{frame}{LTI: Input-Output}
+    \begin{columns}[c]
+        % --- input: the continuous pulse ---
+        \begin{column}{0.33\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \begin{axis}[
+                    width=\linewidth, height=4cm,
+                    xmin=0, xmax=6, ymin=-0.1, ymax=1.4,
+                    xtick={1, 2}, ytick={1},
+                    xlabel={$t$}, ylabel={$f(t)$},
+                    axis lines=center,
+                    axis line style={-{Stealth[length=2mm]}},
+                    every axis x label/.style={at={(current axis.right of origin)},anchor=north west},
+                    every axis y label/.style={at={(current axis.above origin)},anchor=south},
+                    clip=false,
+                ]
+                    \addplot[very thick, red, const plot mark left] coordinates {
+                        (0,0) (1,0) (1,1) (2,1) (2,0) (6,0)
+                    };
+                \end{axis}
+            \end{tikzpicture}
+        \end{column}
+        % --- block diagram ---
+        \begin{column}{0.33\textwidth}
+            \begin{center}
+                \massSpringDamper[0.5]
+                \ioDiagram[$f(t)$][\shortstack{LTI\\System}][$x(t)$][0.9]
+            \end{center}
+        \end{column}
+        % --- output: the exact response ---
+        \begin{column}{0.33\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \begin{axis}[
+                    width=\linewidth, height=3.6cm,
+                    xmin=0, xmax=6, ymin=-0.1, ymax=0.6,
+                    xtick={1, 2}, ytick={0.25, 0.5},
+                    xlabel={$t$}, ylabel={$x(t)$},
+                    axis lines=center,
+                    axis line style={-{Stealth[length=2mm]}},
+                    every axis x label/.style={at={(current axis.right of origin)},anchor=north west},
+                    every axis y label/.style={at={(current axis.above origin)},anchor=south},
+                    clip=false,
+                ]
+                    % response to the unit pulse f(t) = u(t-1) - u(t-2)
+                    % = step response s(t-1) - s(t-2), with
+                    % s(t) = 1/3 - 1/3 e^{-t} cos(sqrt(2) t) - sqrt(2)/6 e^{-t} sin(sqrt(2) t)
+                    \addplot[very thick, red, smooth, samples=300, domain=0:6]
+                    {(x>=1)*(1/3 - 1/3*exp(-(x-1))*cos(deg(sqrt(2)*(x-1))) - sqrt(2)/6*exp(-(x-1))*sin(deg(sqrt(2)*(x-1))))
+                     - (x>=2)*(1/3 - 1/3*exp(-(x-2))*cos(deg(sqrt(2)*(x-2))) - sqrt(2)/6*exp(-(x-2))*sin(deg(sqrt(2)*(x-2))))};
+                \end{axis}
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
+    \vspace{1em}
+    As $\Delta \tau \to 0$, both sums become integrals: the output is an integral of shifted
+    impulse responses weighted by the input
+    \[
         f(t) =\,\int_{-\infty}^{\infty}\!\! f(\tau)\,\delta(t-\tau)\,d\tau \;\longrightarrow\; x(t) =\,\int_{-\infty}^{\infty}\!\! f(\tau)\, h(t-\tau)\,d\tau.
-    \]}<3>
+    \]
 \end{frame}
 
 % Convolution
@@ -1907,7 +2100,9 @@
                 };
                 \addplot[very thick, blue, smooth, samples=200, domain=-2.6:-1]
                     {1/sqrt(2) * exp(-(-1-x)) * sin(deg(sqrt(2)*(-1-x)))};
-                \node[blue, anchor=south east] at (axis cs:-1.6,0.32) {\small $h(-1-\tau)$};
+                % anchor=south west keeps the label inside the axis range, so this frame's
+                % bounding box matches the other t-values and the plot does not shift
+                \node[blue, anchor=south west] at (axis cs:-2.6,0.32) {\small $h(-1-\tau)$};
             \nextgroupplot[xlabel={$t$}, ylabel={$x(t) =\,\int_{-\infty}^{\infty}\!\! f(\tau)\,h(t-\tau)\,d\tau$},
                            ymin=-0.1, ymax=0.4, ytick={0.25}]
                 \addplot[very thick, red] coordinates {(-2.6,0) (-1,0)};
@@ -2033,7 +2228,7 @@
                 \node[blue, anchor=south] at (axis cs:5.3,0.33) {\small $h(6-\tau)$};
             \nextgroupplot[xlabel={$t$}, ylabel={$x(t) =\,\int_{-\infty}^{\infty}\!\! f(\tau)\,h(t-\tau)\,d\tau$},
                            ymin=-0.1, ymax=0.4, ytick={0.25}]
-                \node[anchor=west] at (axis cs:3.0,0.3) {\small $h$ has decayed $\Rightarrow x(6) \approx 0$};
+                \node[anchor=west] at (axis cs:2.5,0.325) {\small $h$ has decayed $\Rightarrow x(6) \approx 0$};
                 \addplot[very thick, red] coordinates {(-2.6,0) (1,0)};
                 \addplot[very thick, red, smooth, samples=400, domain=1:6]
                     {(x>=1)*(1/3 - 1/3*exp(-(x-1))*cos(deg(sqrt(2)*(x-1))) - sqrt(2)/6*exp(-(x-1))*sin(deg(sqrt(2)*(x-1))))
@@ -2073,34 +2268,35 @@
                \sin(2\pi\tau)\;e^{-(t-\tau)}\sin\!\left(\sqrt{2}(t-\tau)\right) d\tau
     \]
     \begin{center}
-        \alert{One formula, any input. But can we actually evaluate this integral?}
+        % \alert{One formula, any input. But can we actually evaluate this integral?}
+        \alert{One formula, any input. But this integral to not easy evaluate.}
     \end{center}
 \end{frame}
 
-\begin{frame}{Solving ODEs with Convolution: Evaluating the Integral}
-    Pull the constant part of the exponential out of the integral ($e^{-(t-\tau)} = e^{-t}e^{\tau}$):
-    \[
-        x(t) = \frac{100}{\sqrt{2}}\,e^{-t}\int_{0}^{t}
-               e^{\tau}\,\sin(2\pi\tau)\,\sin\!\left(\sqrt{2}(t-\tau)\right) d\tau
-    \]
-    Product-to-sum,
-    $\sin A \sin B = \tfrac{1}{2}\!\left[\cos(A-B) - \cos(A+B)\right]$, splits it in two:
-    \[
-        x(t) = \frac{100\,e^{-t}}{2\sqrt{2}} \int_{0}^{t} e^{\tau}
-        \Big[ \cos\!\big((2\pi+\sqrt{2})\tau - \sqrt{2}t\big)
-            - \cos\!\big((2\pi-\sqrt{2})\tau + \sqrt{2}t\big) \Big] d\tau
-    \]
-    Each term needs \alert{integration by parts twice} (or the standard formula)
-    \[
-        \int e^{\tau}\cos(\beta\tau + \phi)\,d\tau
-        = \frac{e^{\tau}\left[\cos(\beta\tau+\phi) + \beta\sin(\beta\tau+\phi)\right]}{1+\beta^{2}},
-        \qquad \beta = 2\pi \pm \sqrt{2}
-    \]
-    \begin{center}
-        \alert{Correct, but painful} --- and $t$ appears inside \emph{and} outside the
-        integrand, so every new input restarts the whole calculation.
-    \end{center}
-\end{frame}
+% \begin{frame}{Solving ODEs with Convolution: Evaluating the Integral}
+%     Pull the constant part of the exponential out of the integral ($e^{-(t-\tau)} = e^{-t}e^{\tau}$):
+%     \[
+%         x(t) = \frac{100}{\sqrt{2}}\,e^{-t}\int_{0}^{t}
+%                e^{\tau}\,\sin(2\pi\tau)\,\sin\!\left(\sqrt{2}(t-\tau)\right) d\tau
+%     \]
+%     Product-to-sum,
+%     $\sin A \sin B = \tfrac{1}{2}\!\left[\cos(A-B) - \cos(A+B)\right]$, splits it in two:
+%     \[
+%         x(t) = \frac{100\,e^{-t}}{2\sqrt{2}} \int_{0}^{t} e^{\tau}
+%         \Big[ \cos\!\big((2\pi+\sqrt{2})\tau - \sqrt{2}t\big)
+%             - \cos\!\big((2\pi-\sqrt{2})\tau + \sqrt{2}t\big) \Big] d\tau
+%     \]
+%     Each term needs \alert{integration by parts twice} (or the standard formula)
+%     \[
+%         \int e^{\tau}\cos(\beta\tau + \phi)\,d\tau
+%         = \frac{e^{\tau}\left[\cos(\beta\tau+\phi) + \beta\sin(\beta\tau+\phi)\right]}{1+\beta^{2}},
+%         \qquad \beta = 2\pi \pm \sqrt{2}
+%     \]
+%     \begin{center}
+%         \alert{Correct, but painful} --- and $t$ appears inside \emph{and} outside the
+%         integrand, so every new input restarts the whole calculation.
+%     \end{center}
+% \end{frame}
 
 
 \begin{frame}{Is There a Better Way?}
@@ -2233,7 +2429,7 @@
     \]
     \begin{center}
         Hence, the \alert{transfer function} $H(s) = \mathcal{L}\{h(t)\}$ \\
-        \alert{\emph{is} the Laplace transform of the unit impulse response.}
+        \alert{\emph{is} the Laplace transform of the system's unit impulse response.}
     \end{center}
     \vspace{0.3em}
     \small It is the complete $s$-domain description of the system: given any input
@@ -2347,7 +2543,9 @@
                 x descriptions at=all, 
             },
             width=0.6\linewidth, height=3.2cm,
-            xmin=-1.1, xmax=4,
+            % xmin left of the -1 tick so the delta label fits inside the axis; keeping
+            % every frame in this series identical stops the plot jumping between slides
+            xmin=-2.0, xmax=4,
             % ticks=none,
             xtick={-1, 1, 2}, ytick={1},
             xlabel={$t$},
@@ -2728,7 +2926,7 @@
     \vspace{-0.4em}
     \begin{center}
         % or $x_{ss}(t) = 2.59\sin(2\pi t - 161^\circ)$, 
-        \alert{identical to the classical solution} obtained earlier.
+        \alert{Identical to the classical solution} obtained earlier.
     \end{center}
     \vspace{0.1em}
     {\small Two algebraic steps replaced a particular-solution guess and a hard convolution integral.}
