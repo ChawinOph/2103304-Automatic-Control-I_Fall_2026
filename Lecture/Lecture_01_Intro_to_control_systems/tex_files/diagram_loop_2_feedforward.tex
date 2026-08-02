@@ -1,0 +1,32 @@
+% ---------------------------------------------------------------------
+% Control-loop build-up, step 2 of 6: add the reference and a
+% feedforward-only controller (pre-scheduled commands).
+%   r -> [Controller (feedforward)] -u-> [Plant / Process] -> y
+% New elements are drawn in brandred.
+% Optional argument: #1 = scale (default 1)
+% ---------------------------------------------------------------------
+\NewDocumentCommand{\loopFeedforward}{ O{1} }{%
+\begin{center}
+\begin{tikzpicture}[
+    auto, >=latex',
+    scale=#1, transform shape,
+    block/.style={draw, rectangle, minimum height=2.9em, minimum width=6.8em, align=center},
+    newblock/.style={block, draw=brandred, text=brandred, very thick},
+    newline/.style={brandred, very thick},
+    input/.style={coordinate},
+    output/.style={coordinate},
+]
+    \node [newblock] (ctrl)  at (-3.9,0) {Controller\\[1pt] \small (feedforward)};
+    \node [block]    (plant) at ( 0,0)   {Plant / Process\\[1pt] \small (Rocket)};
+    \node [input]  (r)   at (-6.6,0) {};
+    \node [output] (out) at ( 2.7,0) {};
+
+    \draw [->, newline] (r) -- node [above] {$r$} (ctrl);
+    \draw [->] (ctrl)  -- node [above] {$u$} (plant);
+    \draw [->] (plant) -- node [above] {$y$} (out);
+
+    \node [brandred, anchor=north, align=center] at ([yshift=-4pt]$(r)!0.5!(ctrl.west)$)
+        {\small desired\\[-2pt] \small trajectory};
+\end{tikzpicture}
+\end{center}%
+}

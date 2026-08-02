@@ -1,0 +1,344 @@
+%=======================================================================
+%  2103304 Automatic Control I -- Course Syllabus (Fall 2026)
+%  STUDENT VERSION (no CLO/PI mapping)
+%  Department of Mechanical Engineering, Chulalongkorn University
+%  Compiles with pdfLaTeX.
+%=======================================================================
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{titlesec}
+\usepackage{mathptmx}      % Times-like serif, clean academic look
+\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+
+% ---- Document version / date (edit here) --------------------------
+\newcommand{\docversion}{1.0}
+\newcommand{\docdate}{1 August 2026}
+
+% ---- Brand colors (Chula ME) --------------------------------------
+\definecolor{brandred}{HTML}{8B2332}
+\definecolor{brandred20}{HTML}{ECD7D9}
+\definecolor{brandgray}{HTML}{6F6D6E}
+\definecolor{boxbg}{HTML}{F7F2F3}
+
+% ---- Section styling ----------------------------------------------
+\titleformat{\section}
+  {\color{brandred}\normalfont\Large\bfseries}{}{0pt}{}[{\color{brandred!40}\titlerule[1pt]}]
+\titlespacing*{\section}{0pt}{16pt}{8pt}
+
+\titleformat{\subsection}
+  {\color{brandred}\normalfont\large\bfseries}{}{0pt}{}
+\titlespacing*{\subsection}{0pt}{12pt}{4pt}
+
+\setlist[enumerate]{leftmargin=1.5em, itemsep=4pt, topsep=4pt}
+\setlist[itemize]{leftmargin=1.4em, itemsep=4pt, topsep=4pt}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+\renewcommand{\arraystretch}{1.3}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\linespread{1.06}\selectfont
+
+% Absorb occasional tight lines by micro-stretching instead of overflowing
+\setlength{\emergencystretch}{1em}
+
+% Light horizontal rule between weeks in the schedule
+\newcommand{\weekline}{\arrayrulecolor{black!18}\hline\arrayrulecolor{black}}
+
+% Shaded callout box spanning the text width
+\newcommand{\callout}[1]{%
+  \par\vspace{4pt}%
+  \noindent\colorbox{boxbg}{%
+    \begin{minipage}{\dimexpr\textwidth-2\fboxsep\relax}
+      \vspace{4pt}#1\vspace{4pt}
+    \end{minipage}}%
+  \par\vspace{6pt}}
+
+% ---- Running header / footer on every page ------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhead[L]{\small\color{brandgray}2103304 Automatic Control I: Course Syllabus (Fall 2026)}
+\fancyhead[R]{\small\color{brandgray}Chawin Ophaswongse, Ph.D.}
+\fancyfoot[L]{\small\color{brandgray}Version \docversion}
+\fancyfoot[C]{\small\color{brandgray}\thepage}
+\fancyfoot[R]{\small\color{brandgray}\docdate}
+\setlength{\headheight}{14pt}
+\setlength{\headsep}{18pt}
+
+\begin{document}
+
+%=======================================================================
+%  Title block
+%=======================================================================
+\begin{center}
+    {\LARGE\bfseries Course Syllabus}\\[6pt]
+    {\large Department of Mechanical Engineering}\\
+    {\large Chulalongkorn University}\\[4pt]
+    {\normalsize Academic Year: Fall 2026 (First Semester)}
+\end{center}
+
+%=======================================================================
+\section*{\color{brandred}Course Information}
+\vspace{-2pt}
+\begin{tabular}{@{}>{\bfseries}L{5.0cm} L{11.0cm}@{}}
+    Course Number   & 2103304 \\
+    Course Title    & Automatic Control I \\
+    Credits         & 3 (3--0--9) \\
+    Semester        & Fall 2026 (First Semester) \\
+    Instructor      & Chawin Ophaswongse, Ph.D. \\
+    Co-Instructor   & Assoc.\ Prof.\ Thitima Jintanawan, Ph.D. \\
+%     Teaching Assistants (TAs) & \dots\\
+    Class Time      & Monday, 13:00--16:00 \\
+    Location        & Room 409, Building 3, Faculty of Engineering \\
+%     Office Hours    & TBD, Hans Bunthli Building, 4th Floor, Room 407 \\
+%     Prerequisite    & \dots \\
+\end{tabular}
+
+%=======================================================================
+\section{Course Description}
+
+\textbf{Official course description.}
+\callout{\itshape
+Introduction to control systems; mathematical models of systems; feedback control
+system characteristics; the performance of feedback control systems; the stability of
+linear feedback systems; essential principles of feedback; the root locus method;
+frequency response method; stability of the frequency domain, time-domain analysis of
+control systems: the design and compensation of feedback control system.}
+
+\textbf{Scope of the course.}
+Control engineering is concerned with making a physical system behave in a prescribed
+manner, typically faster, more stable, and more accurate than it would be without
+control. This course develops the complete workflow, from a physical system to a
+validated controller:
+
+\begin{enumerate}
+    \item \textbf{Modeling.} Represent a dynamic system of any physical domain, whether
+          mechanical, electrical, electro-mechanical, thermal, fluid, or a combination of
+          these, by differential equations, transfer functions, and state-space models,
+          derived either from first principles or fitted to measured data
+          (\emph{system identification}).
+    \item \textbf{Analysis.} Determine how the system responds in the time and frequency
+          domains, including transient response, steady-state error, and stability.
+    \item \textbf{Design.} Select and tune a controller (P, PI, PD, PID, lead/lag, or
+          full-state feedback) so that the closed-loop system satisfies specifications
+          such as rise time, overshoot, and settling time.
+\end{enumerate}
+
+\textbf{Software and hardware.}
+All techniques are practiced in \textbf{MATLAB/Simulink} with the Control System
+Toolbox. The \emph{Servo Mini-labs} and the \emph{Final Project} extend this work to a
+physical servo plant (a brushed DC motor), which students identify, simulate, control,
+and tune. All interaction with the hardware takes place through MATLAB/Simulink;
+\textbf{no low-level or embedded programming is required}, so that coursework remains
+focused on control-engineering decisions rather than firmware implementation.
+
+%=======================================================================
+\section{Course Objectives}
+Upon successful completion of this course, students will be able to:
+
+\begin{itemize}
+    \item \textbf{Derive the governing equations} of a mechanical or electro-mechanical
+          system and establish a systematic procedure for analyzing a real engineering
+          problem.
+    \item \textbf{Construct engineering models} (free-body diagrams, kinematics and
+          kinetics diagrams, and control block diagrams) and translate them into
+          differential-equation, transfer-function, and state-space representations.
+    \item \textbf{Analyze system behavior} in the time and frequency domains, including
+          transient response, steady-state error, and stability.
+    \item \textbf{Design and tune feedback controllers} (P/PI/PD/PID, lead/lag, and
+          full-state feedback) to meet performance specifications, using root-locus and
+          frequency-response methods.
+    \item \textbf{Apply MATLAB/Simulink} to identify, model, simulate, analyze, and
+          design control systems, and validate a controller on a physical servo plant.
+\end{itemize}
+
+%=======================================================================
+\section{References}
+\textbf{Primary}
+\begin{itemize}
+      \item Nise, N. S. (2011). \emph{Control Systems Engineering} (6th ed.). Wiley.
+      % \\\hfill\textit{(Beginner-friendly)}
+      \item Lecture and Handout Notes (provided on MyCourseVille)
+\end{itemize}
+\textbf{Supplementary}
+\begin{itemize}
+    \item Ogata, K. (2010). \emph{Modern Control Engineering} (5th ed.). Prentice Hall.
+          \\\hfill\textit{(State space; MATLAB; more mathematically rigorous)}
+    \item Dorf, R. C., \& Bishop, R. H. (2017). \emph{Modern Control Systems} (13th ed.). Pearson.
+          \\\hfill\textit{(Design emphasis; rich in illustrative examples)}
+\end{itemize}
+
+%=======================================================================
+\newpage
+\section{Course Schedule}
+\begin{center}
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{@{}C{0.6cm} C{1.3cm} L{2.9cm} X C{0.7cm} L{3.7cm}@{}}
+\toprule
+\textbf{Wk} & \textbf{Date} & \textbf{Topic} & \textbf{Key Content} & \textbf{HW} & \textbf{Servo Mini-lab} \\
+\midrule
+1  & 3 Aug  & Intro \& Math Primer   & Open-/closed-loop $\cdot$ ODEs $\cdot$ LTI $\cdot$ Laplace Transform    & HW1 & \\
+\weekline
+% 2  & 10 Aug & System Modeling I      & LTI $\cdot$ transfer functions $\cdot$ elec./mech.  & & Lab 1: Intro \& Setup \\
+2  & 10 Aug & System Modeling I      & Transfer functions $\cdot$ Electrical/mechanical systems  & & Lab 1: Intro \& Setup \\
+\weekline
+3  & 17 Aug & System Modeling II     & State space $\cdot$ Nonlinearities $\cdot$ Linearization & HW2 & \\
+\weekline
+4  & 24 Aug & Time Response          & 1st/2nd-order $\cdot$ Transient-response specifications     & HW3 & Lab 2: Time Response \\
+\weekline
+5  & 31 Aug & Block Diagrams         & Diagram Reduction $\cdot$ Equivalent forms $\cdot$ Feedback & & \\
+\weekline
+6  & 7 Sep  & Stability              & Routh--Hurwitz $\cdot$ Gain range for stability   & HW4 & Lab 3: P-Control \& Stability \\
+\weekline
+7  & 14 Sep & Midterm Review         & Review of Weeks 1--6                               & & \\
+\midrule
+\multicolumn{6}{@{}l}{\textit{Midterm Examination: Wednesday, 23 September 2026, 13:00--16:00}} \\
+\midrule
+8  & 28 Sep & Steady-State Errors    & System type $\cdot$ Gain design $\cdot$ Disturbances & HW5 & \\
+\weekline
+9  & 5 Oct  & Root Locus I           & Sketching rules $\cdot$ Transient response via gain & HW6 & \\
+\weekline
+10 & 12 Oct & Root Locus II          & PI/PD/PID $\cdot$ Lead/lag compensation            & & Lab 4: Root Locus \\
+\weekline
+11 & 19 Oct & Frequency Response I    & Asymptotic Bode plots $\cdot$ Bandwidth           & HW7 & \\
+\weekline
+12 & 26 Oct & Frequency Response II   & Nyquist \& margins $\cdot$ Lead/lag $\cdot$ PID     & & Lab 5: Frequency Response \\
+\weekline
+13 & 2 Nov  & Design via State Space & Controllability $\cdot$ Full-state feedback         & HW8 & Lab 6: Pole Placement \\
+\weekline
+14 & 9 Nov  & Project Demo Day       & Group presentations                                & & \\
+\weekline
+15 & 16 Nov & Final Review           & Review of all topics                              & & \\
+\midrule
+\multicolumn{6}{@{}l}{\textit{Final Examination: Monday, 30 November 2026, 08:30--11:30}} \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+%=======================================================================
+\section{Course Policies}
+\begin{itemize}
+    \item \textbf{Communication.} Announcements and course materials are posted on
+          MyCourseVille. %; day-to-day discussion takes place on the course Discord.
+    \item \textbf{Attendance.} Attendance at mini-lab sessions is \textbf{mandatory and graded}.
+    \item \textbf{Mini-labs.} Pre-lab handouts are released one week before each session
+          and constitute required reading. Lab reports (groups of up to four) are due \textbf{one
+          week} after the session.
+    \item \textbf{Assignments.} Homework is due \textbf{ten days} after it is assigned unless
+          otherwise specified. Late submissions are penalized according to the stated
+          policy.
+    \item \textbf{Academic integrity.} Collaboration is encouraged; however, all
+          submitted work must be the individual's or the group's own. Plagiarism and
+          examination misconduct are handled under Faculty of Engineering regulations.
+    \item \textbf{Software.} MATLAB/Simulink and the Control System Toolbox must be
+          installed before Week 2.
+\end{itemize}
+
+\newpage
+%=======================================================================
+\section{Assessment}
+\begin{center}
+\begin{tabular}{@{}L{9cm} C{2cm}@{}}
+\toprule
+\textbf{Component} & \textbf{Weight} \\
+\midrule
+Assignments (Homework)      & 10\% \\
+Servo Mini-labs             & 10\% \\
+Midterm Examination         & 30\% \\
+Final Project               & 15\% \\
+Final Examination           & 35\% \\
+\midrule
+\textbf{Total}              & \textbf{100\%} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+%=======================================================================
+% \newpage
+\section{Servo Mini-labs}
+Six 45-minute hands-on sessions are conducted at the end of the lectures. Students
+identify a plant model experimentally (system identification), model its components
+(actuator, sensor, and controller), and then design and tune controllers in
+\textbf{MATLAB/Simulink} for validation on a real-time servo setup consisting of a
+brushed DC motor with an interchangeable inertia-disk or pendulum load. From Lab 2
+onward, each session compares the no-load and inertia-disk conditions, so that the
+effect of an added load on the same system can be observed directly.
+
+\callout{\textbf{Requirements.} A laptop with MATLAB/Simulink and the Control System
+Toolbox is required. Sessions are mandatory and graded. All interaction with the
+hardware takes place through the Simulink control interface;
+\emph{no low-level or embedded programming is required}.}
+
+% \emph{Tentative session plan (subject to adjustment):}
+\begin{itemize}
+    \item \textbf{Lab 1: Introduction \& Setup (Wk 2).} Connect the DC-motor and
+          inertia-disk plant to Simulink; become familiar with the control interface,
+          encoder sensing, and actuation; conduct open-loop step tests and an initial
+          system identification of the motor parameters.
+    \item \textbf{Lab 2: Time Response (Wk 4).} Measure open- and closed-loop step
+          responses; extract first- and second-order parameters together with the
+          transient specifications (rise time, overshoot, and settling time) and compare
+          them against the identified model, with and without the inertia disk.
+    \item \textbf{Lab 3: P-Control \& Stability (Wk 6).} Implement proportional position
+          and speed control; observe how the gain shapes the transient response and the
+          onset of instability, and how the added inertia changes both.
+    \item \textbf{Lab 4: Root Locus (Wk 10).} Design the controller gain (P/PD/PID) by
+          root locus to meet transient specifications and validate the design on the
+          plant under both load conditions.
+    \item \textbf{Lab 5: Frequency Response (Wk 12).} Measure the frequency response of
+          the plant (Bode) with and without the inertia disk; evaluate the gain and phase
+          margins and tune a lead/lag or PID controller.
+    \item \textbf{Lab 6: Pole Placement (Wk 13).} Design full-state feedback by pole
+          placement for the DC motor with a load and validate the closed-loop
+          response.
+\end{itemize}
+
+%=======================================================================
+\newpage
+\section{Final Project}
+Beginning after the midterm, students work in groups of 3--4 to carry out the
+complete workflow on an assigned electro-mechanical plant: performing system
+identification to obtain the plant model, constructing a \textbf{Simulink simulation
+model} and validating it against the measured hardware response, and then designing,
+tuning, and demonstrating a controller that meets the target performance specifications.
+The comparison between simulation and hardware is a central theme; students are expected
+to explain and reconcile the discrepancies they observe.
+
+\emph{Tentative milestones (subject to adjustment):}
+\begin{itemize}
+    \item \textbf{Milestone 1: System Identification \& Simulation Model (Week 9,
+          5 Oct).} Conduct experiments to identify the plant parameters; construct a
+          Simulink simulation model and validate it against the measured open-loop
+          hardware response.
+    \item \textbf{Milestone 2: Controller Design in Simulation (Week 11, 19 Oct).}
+          Specify the target performance, design and tune the controller in simulation,
+          and verify that the specifications are met on the simulation model.
+    \item \textbf{Milestone 3: Hardware Implementation \& Tuning (Week 13, 2 Nov).}
+          Deploy the controller on the physical plant, retune as required, and document
+          the discrepancies between simulation and hardware.
+    \item \textbf{Final Deliverable: Demo Day \& Report (Week 14, 9 Nov).} Present the
+          final closed-loop performance at the demo-day and submit the final
+          project report.
+\end{itemize}
+
+\vspace{6pt}
+{\small\color{brandgray}\textit{This syllabus is subject to minor adjustment;
+any changes will be announced in class and on MyCourseVille.}}
+
+\end{document}

@@ -1,0 +1,60 @@
+% ---------------------------------------------------------------------
+% Control-loop build-up, step 4 of 6: close the loop with a sensor and
+% the error comparator.
+%   r -> (+/-) -e-> [Controller] -u-> (+) -> [Plant] -> y
+%   y -> [Sensor] -y_m-> back to the comparator
+% New elements are drawn in brandred.
+% Optional argument: #1 = scale (default 1)
+% ---------------------------------------------------------------------
+\NewDocumentCommand{\loopFeedback}{ O{1} }{%
+\begin{center}
+\begin{tikzpicture}[
+    auto, >=latex',
+    scale=#1, transform shape,
+    block/.style={draw, rectangle, minimum height=2.9em, minimum width=6.8em, align=center},
+    newblock/.style={block, draw=brandred, text=brandred, very thick},
+    sum/.style={draw, circle, minimum size=6.6mm, inner sep=0pt,
+        path picture={
+            \draw
+                (path picture bounding box.south west) -- (path picture bounding box.north east)
+                (path picture bounding box.north west) -- (path picture bounding box.south east);
+        }},
+    newsum/.style={sum, draw=brandred, very thick,
+        path picture={
+            \draw[brandred, very thick]
+                (path picture bounding box.south west) -- (path picture bounding box.north east)
+                (path picture bounding box.north west) -- (path picture bounding box.south east);
+        }},
+    newline/.style={brandred, very thick},
+    input/.style={coordinate},
+    output/.style={coordinate},
+]
+    \node [newsum] (sume)  at (-8.2,0) {};
+    \node [block]  (ctrl)  at (-5.2,0) {Controller\\[1pt] \small (feedback)};
+    \node [sum]    (sumd)  at (-2.3,0) {};
+    \node [block]  (plant) at ( 0.6,0) {Plant / Process\\[1pt] \small (Rocket)};
+    \node [input]  (r)   at (-10.0,0) {};
+    \node [input]  (d)   at (-2.3,1.6) {};
+    \coordinate (ytap) at (3.2,0);
+    \node [output] (out) at ( 4.1,0) {};
+    \node [newblock] (sensor) at (-2.3,-1.7) {Sensor\\[1pt] \small (IMU / GPS)};
+
+    \draw [->] (r) -- node [above] {$r$} (sume);
+    \draw [->, newline] (sume) -- node [above] {$e$} (ctrl);
+    \draw [->] (ctrl) -- node [above] {$u$} (sumd);
+    \draw [->] (sumd) -- (plant);
+    \draw [->] (plant) -- node [above] {$y$} (out);
+    \draw [->] (d) -- node [pos=0.5, left] {$d$} (sumd);
+
+    % feedback path
+    \draw [->, newline] (ytap) -- (ytap |- sensor) -- (sensor);
+    \draw [->, newline] (sensor) -- node [below] {$y_m$} (sume |- sensor) -- (sume);
+
+    % summing-junction signs
+    \node [brandred, anchor=south east, inner sep=1pt] at (sume.north west) {$+$};
+    \node [brandred, anchor=north east, inner sep=1pt] at (sume.south west) {$-$};
+    \node [anchor=north east, inner sep=1pt] at (sumd.south west) {$+$};
+    \node [anchor=south west, inner sep=1pt] at (sumd.north east) {$+$};
+\end{tikzpicture}
+\end{center}%
+}

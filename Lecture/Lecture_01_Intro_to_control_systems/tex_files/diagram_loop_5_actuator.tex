@@ -1,0 +1,67 @@
+% ---------------------------------------------------------------------
+% Control-loop build-up, step 5 of 6: split the plant into the actuator
+% and the dynamic system. The disturbance junction sits before the
+% actuator (Dorf convention).
+%   r -> (+/-) -e-> [Controller] -u-> (+) -> [Actuator] -> [Dynamic
+%   System] -> y ,  fed back through the sensor
+% New elements are drawn in brandred.
+% Optional argument: #1 = scale (default 1)
+% NOTE: must be \input before \begin{document} (loads tikz libraries).
+% ---------------------------------------------------------------------
+\usetikzlibrary{fit,backgrounds}
+
+\NewDocumentCommand{\loopActuatorPlant}{ O{1} }{%
+\begin{center}
+\begin{tikzpicture}[
+    auto, >=latex',
+    scale=#1, transform shape,
+    block/.style={draw, rectangle, minimum height=3.8em, minimum width=6.8em, align=center},
+    newblock/.style={block, draw=brandred, text=brandred, very thick},
+    sum/.style={draw, circle, minimum size=6.6mm, inner sep=0pt,
+        path picture={
+            \draw
+                (path picture bounding box.south west) -- (path picture bounding box.north east)
+                (path picture bounding box.north west) -- (path picture bounding box.south east);
+        }},
+    newline/.style={brandred, very thick},
+    input/.style={coordinate},
+    output/.style={coordinate},
+]
+    \node [sum]      (sume) at (-9.6,0) {};
+    \node [block]    (ctrl) at (-6.8,0) {Controller\\[1pt] \small (feedback)};
+    \node [sum]      (sumd) at (-4.0,0) {};
+    \node [newblock] (act)  at (-1.3,0) {Actuator\\[1pt] \small (engines, fins,\\[-1pt] \small thrusters)};
+    \node [newblock] (dyn)  at ( 2.6,0) {Dynamic System\\[1pt] \small (rocket body)};
+    \node [input]  (r) at (-11.4,0) {};
+    \node [input]  (d) at (-4.0,1.6) {};
+    \coordinate (ytap) at (5.3,0);
+    \node [output] (out) at ( 6.2,0) {};
+    \node [block]  (sensor) at (-2.2,-2.5) {Sensor\\[1pt] \small (IMU / GPS)};
+
+    % plant boundary
+    \begin{scope}[on background layer]
+        \node [draw=brandgray60, dashed, thick, rounded corners,
+               fit=(act) (dyn), inner sep=7pt,
+               label={[brandgray60]above:\small Plant / Process}] (plantbox) {};
+    \end{scope}
+
+    \draw [->] (r) -- node [above] {$r$} (sume);
+    \draw [->] (sume) -- node [above] {$e$} (ctrl);
+    \draw [->] (ctrl) -- node [above] {$u$} (sumd);
+    \draw [->, newline] (sumd) -- (act);
+    \draw [->, newline] (act) -- node [above] {$f$} (dyn);
+    \draw [->] (dyn) -- node [above] {$y$} (out);
+    \draw [->] (d) -- node [pos=0.5, left] {$d$} (sumd);
+
+    % feedback path
+    \draw [->] (ytap) -- (ytap |- sensor) -- (sensor);
+    \draw [->] (sensor) -- node [below] {$y_m$} (sume |- sensor) -- (sume);
+
+    % summing-junction signs
+    \node [anchor=south east, inner sep=1pt] at (sume.north west) {$+$};
+    \node [anchor=north east, inner sep=1pt] at (sume.south west) {$-$};
+    \node [anchor=north east, inner sep=1pt] at (sumd.south west) {$+$};
+    \node [anchor=south west, inner sep=1pt] at (sumd.north east) {$+$};
+\end{tikzpicture}
+\end{center}%
+}

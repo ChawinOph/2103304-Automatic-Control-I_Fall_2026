@@ -73,7 +73,12 @@ Desktop.ini
 # PDFs below if you want to exclude them, e.g.:
 # Lecture/**/lecture_*.pdf
 # ---- LaTeX Workshop out dir & TikZ externalization cache ----
-build/
+# build/
 tikz_cache/
 *.figlist
 *.makefile
+
+*.docx
+*.zip
+*.latexmkrc
+*.txt

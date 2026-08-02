@@ -35,6 +35,11 @@
 
 \subtitle{Analysis, Design, and Applications}
 
+\date[Mech. Eng., Chulalongkorn University] % (optional)
+{2103304 Automatic Control I (Fall 2026) \newline \newline Department of Mechanical Engineering 
+\newline Faculty of Engineering, Chulalongkorn University
+\newline \newline August 3, 2026}
+
 %------------------------------------------------------------
 \begin{document}
 
@@ -73,7 +78,7 @@
             \item Namo Ekpattharasakul (Namo)
             \item Kantanat Phochanasombut (Mix)
         \end{itemize}
-        \item Office Hours: [TBD] at Hans Buntli Building, 3th Floor, Room 301/1
+        \item Office Hours: [TBD] at Hans Bunthli Building, 3rd Floor, Room 301/1
     \end{itemize}
     \begin{center}
         \alert{Refer to the syllabus and MyCourseVille for further information}
@@ -307,7 +312,7 @@
     \begin{center}
        \small \movie[externalviewer]{\alert{$\blacktriangleright$~Play Video: Furuta Pendulum Control Demo (.mp4)}}{videos/furuta_pendulum_demo.mp4}
     \end{center}
-    What are the Actuator, Plant, Sensor, Controller, Reference, Disturbance, and Noise in this system?
+    What are the Actuator, Plant, Reference, Controller, Disturbance, Sensor, and Noise in this system?
     % Aguilar-Ibáñez, Carlos & Suárez-Castañón, Miguel & Gutiérres-Frias, Oscar. (2010). The direct Lyapunov method for the stabilisation of the Furuta pendulum. International Journal of Control. 83. 2285-2293. 10.1080/00207179.2010.520029. 
 \end{frame}
 
@@ -458,7 +463,7 @@
 % \end{frame}
 
 \begin{frame}{The Very First Automatic Feedback Control System}
-    James Watt's \alert{flyball governor} (1769): holds the speed of a steam engine
+    James Watt's \alert{flyball governor} (1788): holds the speed of a steam engine
     constant, entirely mechanically, with no electronics or computer.
     \vspace{1em}
     \begin{columns}[c]
@@ -623,7 +628,7 @@
     % % \fillin{final report due?} \\
     % % \hline
     \midrule
-    \multicolumn{5}{l}{Final Exam: Monday, 30 Nov 2026, 8:30 - 11:30} \\
+    \multicolumn{6}{l}{Final Exam: Monday, 30 Nov 2026, 8:30 - 11:30} \\
     \midrule
     \multicolumn{6}{r}{\textbullet~\textit{Homework is due \textbf{ten days} after it is assigned unless otherwise specified.}} \\
     \multicolumn{6}{r}{\textbullet~\textit{Pre-lab handout released \textbf{one week} before each mini-lab; reading required before the session.}} \\
@@ -722,7 +727,7 @@
         \item Every block is described the same way: by its
               \alert{input--output relationship}.
         \item That relationship is governed by a \alert{differential equation}
-              in the time domain %, or a \alert{transfer function} in the $s$-domain.
+              in the time domain. %, or a \alert{transfer function} in the $s$-domain.
         \item Next: how to compute the output $y(t)$ given an input $u(t)$ and a differential equation.
     \end{itemize}
 \end{frame}
@@ -733,7 +738,7 @@
         \massSpringDamper[1.0] 
     \end{center}
     with mass $m = \SI{1}{kg}$, damping $c = \SI{2}{N.s/m}$, and stiffness $k = \SI{3}{N/m}$.\newline
-    Here $f(t)$ is the applied force (input) and $x(t)$ is the displacement from equilibrium (output). All surfaces are smooth and frictionless.
+    Here $f(t)$ is the applied force (input) and $x(t)$ is the displacement from equilibrium (output). The surface is frictionless; all damping is in the dashpot.
 \end{frame}
 
 \begin{frame}{Solving ODEs in Time Domain}
@@ -772,7 +777,7 @@
     \[
         \ddot{x}(t) + 2\dot{x}(t) + 3x(t) = f(t), 
     \]
-    Given the input force $f(t) = 100\,\sin(2\pi t)\,\text{N}$ , with all zero initial conditions $(x(0) = 0 \text{m}, \dot{x}(0) = 0 \text{m/s})$, solve the ODE to find the output $x(t)$.
+    Given the input force $f(t) = 100\,\sin(2\pi t)\,\text{N}$, with all zero initial conditions $(x(0) = 0\,\text{m}, \; \dot{x}(0) = 0\,\text{m/s})$, solve the ODE to find the output $x(t)$.
     % particular solution, homogeneous solution, and general solution 
 \end{frame}
 
@@ -956,7 +961,7 @@
         \end{column}
     \end{columns}
     \vspace{1em}
-    It is the basic building block for constructing any input signal. So how does a system response to it?
+    It is the basic building block for constructing any input signal. So how does a system respond to it?
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1001,7 +1006,8 @@
                         % \node[brandred, anchor=south west] at (axis cs:0.15,0.9) {\small (area $=1$)};
                         \node[red, anchor=west] at (axis cs:0.2,1.0) {\small $\delta(t)$};
                     % bottom: output -- impulse response h(t)
-                    \nextgroupplot[ylabel={$x(t)$}, ymin=0, ymax=0.6]
+                    % ymin < 0 so the underdamped undershoot of h(t) is visible
+                    \nextgroupplot[ylabel={$x(t)$}, ymin=-0.12, ymax=0.6]
                         % \addplot[gray, opacity=0.5, thick, domain=0:8] {0};
                         \addplot[very thick, blue, smooth, samples=200, domain=0:8]
                             {1/sqrt(2) * exp(-x) * sin(deg(sqrt(2)*x))};
@@ -1047,7 +1053,8 @@
             \begin{tikzpicture}
                 \begin{axis}[
                     width=\linewidth, height=3.2cm,
-                    xmin=0, xmax=8, ymin=0, ymax=0.6,
+                    % ymin < 0 so the underdamped undershoot of h(t) is visible
+                    xmin=0, xmax=8, ymin=-0.12, ymax=0.6,
                     ticks=none,
                     xlabel={$t$}, ylabel={$x(t)$},
                     axis lines=center,
@@ -1522,7 +1529,7 @@
     \[
         f(t)\,=\,\int_{-\infty}^{\infty}\!\! f(\tau)\,\delta(t-\tau)\,d\tau 
     \]
-    \alert{\emph{The impulse decomposition property}}: An arbitrary function (continuous or discrete) $f(t)$ can be decomposed into an infinite continuum of scaled and shifted unit impulse function.
+    \alert{\emph{The impulse decomposition property}}: An arbitrary function (continuous or discrete) $f(t)$ can be decomposed into an infinite continuum of scaled and shifted unit impulse functions.
 \end{frame}
 
 % t = -1
@@ -1608,7 +1615,7 @@
                     mark size=1.5pt
                 ] coordinates {
                         (-1.1,0) (-1,0) (-0.9,0) (-0.8,0) (-0.7,0) (-0.6,0) 
-                        (-0.5,0) (0.-0.4,0) (-0.3,0) (-0.2,0) (-0.1,0) 
+                        (-0.5,0) (-0.4,0) (-0.3,0) (-0.2,0) (-0.1,0)
                         (0,0) (0.1,0) (0.2,0) (0.3,0) (0.4,0) (0.5,0)
                         (0.6,0) (0.7,0) (0.8,0) (0.9,0) (1,1) 
                         (1.1,1) (1.2,1) (1.3,1) (1.4,1) (1.5,1) 
@@ -1657,7 +1664,7 @@
                     mark size=1.5pt
                 ] coordinates {
                         (-1.1,0) (-1,0) (-0.9,0) (-0.8,0) (-0.7,0) (-0.6,0) 
-                        (-0.5,0) (0.-0.4,0) (-0.3,0) (-0.2,0) (-0.1,0) 
+                        (-0.5,0) (-0.4,0) (-0.3,0) (-0.2,0) (-0.1,0)
                         (0,0) (0.1,0) (0.2,0) (0.3,0) (0.4,0) (0.5,0)
                         (0.6,0) (0.7,0) (0.8,0) (0.9,0) (1,1) 
                         (1.1,1) (1.2,1) (1.3,1) (1.4,1) (1.5,1) 
@@ -2152,13 +2159,13 @@
 
 \begin{frame}{Laplace Transform}
     \begin{alertblock}{Definition}
-        The Laplace transform $F(s)$ of a function $f(t)$ is defined as $$\mathcal{L}\{f(t)\} = F(s) = \int_{0}^{\infty} f(t)e^{-st}dt,$$
-        where $s = \sigma + j\omega$ is a complex variable
+        The Laplace transform $F(s)$ of a function $f(t)$ is defined as $$\mathcal{L}\{f(t)\} = F(s) = \int_{0^-}^{\infty} f(t)e^{-st}dt,$$
+        where $s = \sigma + j\omega$ is a complex variable.
     \end{alertblock} 
     \begin{itemize}
-        \item It transforms a \textbf{time-domain} $f(t)$ into a \textbf{complex frequency-domain} function $F(s)$ through the process of integration.
+        \item It transforms a \textbf{time-domain} function $f(t)$ into a \textbf{complex frequency-domain} function $F(s)$ through the process of integration.
         \item The integration involves a ``kernel'' $k(s,t) = e^{-st}$, a function of both the complex variable $s$ and the time variable $t$ in the two spaces.
-        \item The term $e^{-st}$ is sometimes called the ``convergence factor" which makes the integral converges for a wide range of functions.
+        \item The term $e^{-st}$ is sometimes called the ``convergence factor,'' which makes the integral converge for a wide range of functions.
     \end{itemize}
 \end{frame}
 
@@ -2175,7 +2182,12 @@
         \int_{-\infty}^{\infty}\!\delta(t)\,dt = 1
     \]
     The Laplace transform of $\delta(t)$ is    
-    $$\mathcal{L}\{\delta(t)\} = \int_{0}^{\infty} \delta(t)\,e^{-st}dt = e^{-s \cdot 0} = 1$$
+    $$\mathcal{L}\{\delta(t)\} = \int_{0^-}^{\infty} \delta(t)\,e^{-st}dt = e^{-s \cdot 0} = 1$$
+    \vspace{-0.5em}
+    \begin{center}
+        \small The lower limit $0^-$ matters here: it keeps the impulse \emph{inside} the
+        interval of integration.
+    \end{center}
 \end{frame}
 
 % Single-input single-output block with equal-length arrows on both sides, so the
@@ -2454,7 +2466,7 @@
     \begin{center}
         \scriptsize
         \setlength{\tabcolsep}{2em}
-        \renewcommand{\arraystretch}{1.7}
+        \renewcommand{\arraystretch}{1.9}
         \begin{tabular}{@{}ll@{}}
             \toprule
             $f(t)$ & $F(s)$ \\
@@ -2482,40 +2494,36 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}{Laplace Transform Pairs (2/2): Damped and Second-Order}
+    % \makebox[\textwidth][c] lets the table spill symmetrically into the side margins,
+    % which buys the width needed to keep each $\phi = \ldots$ on its main equation's line.
     \begin{center}
+    \makebox[\textwidth][c]{%
         \scriptsize
-        \setlength{\tabcolsep}{1.6em}
-        \renewcommand{\arraystretch}{1.05}
+        \setlength{\tabcolsep}{1.2em}
+        \renewcommand{\arraystretch}{1.9}
         \begin{tabular}{@{}ll@{}}
             \toprule
             $f(t)$ & $F(s)$ \\
             \midrule
             $e^{-at}\sin \omega t$ & $\dfrac{\omega}{(s+a)^2+\omega^2}$ \\
             $e^{-at}\cos \omega t$ & $\dfrac{s+a}{(s+a)^2+\omega^2}$ \\
-            \begin{tabular}[t]{@{}l@{}}
-                $\frac{1}{\omega}\left[(\alpha-a)^2+\omega^2\right]^{1/2}e^{-at}\sin(\omega t+\phi)$, \\
-                $\phi = \tan^{-1}\frac{\omega}{\alpha-a}$
-            \end{tabular}
+            $\frac{1}{\omega}\left[(\alpha-a)^2+\omega^2\right]^{1/2}e^{-at}\sin(\omega t+\phi)$, \;
+            $\phi = \tan^{-1}\frac{\omega}{\alpha-a}$
                 & $\dfrac{s+\alpha}{(s+a)^2+\omega^2}$ \\
             $\frac{\omega_n}{\sqrt{1-\zeta^2}}\,e^{-\zeta\omega_n t}\sin \omega_n\sqrt{1-\zeta^2}\,t$, \; $\zeta<1$
                 & $\dfrac{\omega_n^2}{s^2+2\zeta\omega_n s+\omega_n^2}$ \\
-            \begin{tabular}[t]{@{}l@{}}
-                $\frac{1}{a^2+\omega^2} + \frac{1}{\omega\sqrt{a^2+\omega^2}}\,e^{-at}\sin(\omega t-\phi)$, \\
-                $\phi = \tan^{-1}\frac{\omega}{-a}$
-            \end{tabular}
+            $\frac{1}{a^2+\omega^2} + \frac{1}{\omega\sqrt{a^2+\omega^2}}\,e^{-at}\sin(\omega t-\phi)$, \;
+            $\phi = \tan^{-1}\frac{\omega}{-a}$
                 & $\dfrac{1}{s\left[(s+a)^2+\omega^2\right]}$ \\
-            \begin{tabular}[t]{@{}l@{}}
-                $1 - \frac{1}{\sqrt{1-\zeta^2}}\,e^{-\zeta\omega_n t}\sin\!\left(\omega_n\sqrt{1-\zeta^2}\,t+\phi\right)$, \\
-                $\phi = \cos^{-1}\zeta$, \; $\zeta<1$
-            \end{tabular}
+            $1 - \frac{1}{\sqrt{1-\zeta^2}}\,e^{-\zeta\omega_n t}\sin\!\left(\omega_n\sqrt{1-\zeta^2}\,t+\phi\right)$, \;
+            $\phi = \cos^{-1}\zeta$, \; $\zeta<1$
                 & $\dfrac{\omega_n^2}{s\left(s^2+2\zeta\omega_n s+\omega_n^2\right)}$ \\
-            \begin{tabular}[t]{@{}l@{}}
-                $\frac{\alpha}{a^2+\omega^2} + \frac{1}{\omega}\left[\frac{(\alpha-a)^2+\omega^2}{a^2+\omega^2}\right]^{1/2}e^{-at}\sin(\omega t+\phi)$, \\
-                $\phi = \tan^{-1}\frac{\omega}{\alpha-a} - \tan^{-1}\frac{\omega}{-a}$
-            \end{tabular}
+            $\frac{\alpha}{a^2+\omega^2} + \frac{1}{\omega}\left[\frac{(\alpha-a)^2+\omega^2}{a^2+\omega^2}\right]^{1/2}e^{-at}\sin(\omega t+\phi)$, \;
+            $\phi = \tan^{-1}\frac{\omega}{\alpha-a} - \tan^{-1}\frac{\omega}{-a}$
                 & $\dfrac{s+\alpha}{s\left[(s+a)^2+\omega^2\right]}$ \\
             \bottomrule
-        \end{tabular}
+        \end{tabular}%
+    }
     \end{center}
 \end{frame}
 
@@ -2553,6 +2561,7 @@
 
 \begin{frame}{Initial and Final Value Theorems}
     Both theorems allow determination of time-domain initial and steady-state values straight off $F(s)$, with no inverse transform.
+    \vspace{0.2em}
     \begin{columns}[t]
         \begin{column}{0.48\textwidth}
             \centerline{\textbf{Initial Value Theorem}}
@@ -2569,8 +2578,9 @@
                 \boxed{f(\infty) = \lim_{s \to 0} s F(s)}
             \]
             \small
-            Valid only when all poles of $sF(s)$ lie in the left half-plane, with at most one
-            pole at the origin (i.e., system is stable).
+            Valid only when all poles of $s F(s)$ lie strictly in the left half-plane, that is,
+            $F(s)$ may have at most one pole at the origin and no others outside the left
+            half-plane.
         \end{column}
     \end{columns}
     \vspace{0.6em}
@@ -2589,7 +2599,7 @@
     \begin{center}
         \textbf{Forward}
         \[
-            \boxed{\mathcal{L}\{f(t)\} = F(s) = \int_{0}^{\infty}\! f(t)\,e^{-st}\,dt}
+            \boxed{\mathcal{L}\{f(t)\} = F(s) = \int_{0^-}^{\infty}\! f(t)\,e^{-st}\,dt}
         \]
         % \vspace{0.5em}
         \newline
@@ -2717,12 +2727,17 @@
     \]
     \vspace{-0.4em}
     \begin{center}
-        or $x_{ss}(t) = 2.59\sin(2\pi t - 161^\circ)$, \alert{identical to the classical
-        solution} obtained earlier.
+        % or $x_{ss}(t) = 2.59\sin(2\pi t - 161^\circ)$, 
+        \alert{identical to the classical solution} obtained earlier.
     \end{center}
-    \vspace{0.2em}
-    {\small Two algebraic steps replaced a particular-solution guess and an intractable
-    convolution integral.}
+    \vspace{0.1em}
+    {\small Two algebraic steps replaced a particular-solution guess and a hard convolution integral.}
+\end{frame}
+
+\begin{frame}{Questions?}
+    \centering
+    \includegraphics[width=0.5\textwidth]{graphic_files/question-mark.jpg}
+    % https://pixabay.com/illustrations/question-mark-question-response-1019820/
 \end{frame}
 
 \begin{frame}{Further Reading}
@@ -2736,13 +2751,15 @@
 \begin{frame}{Announcements}
     \begin{itemize}
         \item \textbf{Homework 1} will be posted on MyCourseVille this week and is due
-              10 days after posting.
-        \item \textbf{Mini-Lab 1} is scheduled next week.
+        10 days after posting.
+        \item \textbf{Mini-Lab 1} is scheduled for next week.
         \begin{itemize}
-            \item The handout will be posted this week.
+            \item The lab handout will be posted this week.
             \item Form groups of four.
-            \item Each group must bring a data cable with a USB-C end to connect to the board.
+            \item Each group must bring at least one laptop and a data cable with a USB-C end to connect to the microcontroller board.
+            \item Install MATLAB/Simulink and the required toolboxes beforehand; a guide is included in the handout.
         \end{itemize}
+        \item Please complete the questionnaire on your preferred communication platform.
     \end{itemize}
     % Scan QR Code for providing feedback on lecture today
 \end{frame}

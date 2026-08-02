@@ -1,0 +1,25 @@
+% ---------------------------------------------------------------------
+% Control-loop build-up, step 1 of 6: the plant / process alone.
+%   u -> [Plant / Process] -> y
+% Optional argument: #1 = scale (default 1)
+% Usage: \loopPlant  or  \loopPlant[0.9]
+% ---------------------------------------------------------------------
+\NewDocumentCommand{\loopPlant}{ O{1} }{%
+\begin{center}
+\begin{tikzpicture}[
+    auto, >=latex',
+    scale=#1, transform shape,
+    block/.style={draw, rectangle, minimum height=2.9em, minimum width=6.8em, align=center},
+    input/.style={coordinate},
+    output/.style={coordinate},
+]
+    \node [block, draw=brandred, text=brandred, very thick] (plant) at (0,0)
+        {Plant / Process\\[1pt] \small (Rocket)};
+    \node [input]  (in)  at (-2.7,0) {};
+    \node [output] (out) at ( 2.7,0) {};
+
+    \draw [->, brandred, very thick] (in) -- node [above] {$u$} (plant);
+    \draw [->, brandred, very thick] (plant) -- node [above] {$y$} (out);
+\end{tikzpicture}
+\end{center}%
+}
